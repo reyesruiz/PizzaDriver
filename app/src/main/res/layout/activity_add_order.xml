@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddOrder">
+
+    <EditText
+        android:id="@+id/orderTotal"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="99dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="176dp"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:numeric="decimal"
+        app:layout_constraintBottom_toTopOf="@+id/placeChip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipCreditStatic"
+        app:layout_constraintVertical_bias="0.169" />
+
+    <EditText
+        android:id="@+id/cashReceived"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="99dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="132dp"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:numeric="decimal"
+        app:layout_constraintBottom_toTopOf="@+id/placeChip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
+        app:layout_constraintVertical_bias="0.319" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/orderNumberChip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Order Number"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/orderType"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderNumberChip"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/creditAutoType"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit Auto" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/creditManualType"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit Manual" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cashType"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/grubhubType"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grubhub" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/otherType"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/placeChip"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cashReceivedStatic"
+        app:layout_constraintVertical_bias="0.156"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/tracyChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tracy" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/mountainHouseChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mountain House" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <EditText
+        android:id="@+id/tipCredit"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="101dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:numeric="decimal"
+        app:layout_constraintStart_toEndOf="@+id/tipCreditStatic"
+        app:layout_constraintTop_toBottomOf="@+id/orderType" />
+
+    <TextView
+        android:id="@+id/tipCreditStatic"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="60dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="32dp"
+        android:text="Tip: $"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderType" />
+
+    <TextView
+        android:id="@+id/cashReceivedStatic"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Cash Received: $"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toStartOf="@+id/cashReceived"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic" />
+
+    <TextView
+        android:id="@+id/orderTotalStatic"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Order Total: $"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toStartOf="@+id/orderTotal"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipCreditStatic" />
+
+    <CheckBox
+        android:id="@+id/cashCheckedBox"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Cash?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tipCredit"
+        app:layout_constraintTop_toBottomOf="@+id/orderType" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
