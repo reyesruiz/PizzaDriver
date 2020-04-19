@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,9 +28,22 @@ public class AddOrder extends AppCompatActivity {
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
 
-    public double TipCredit;
-    public double OrderTotal;
-    public double CashReceived;
+    Integer orderNumber;
+    Boolean locationTracy;
+    Boolean locationMountainHouse;
+    String orderType;
+    double TipCredit;
+    double TipCash;
+    double OrderTotal;
+    double CashReceived;
+    String location;
+
+    SQLiteDBHelper pizzaDriverDB;
+
+    Button SaveButton;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +51,13 @@ public class AddOrder extends AppCompatActivity {
         setContentView(R.layout.activity_add_order);
 
         Intent intent = getIntent();
-        final Integer orderNumber = intent.getExtras().getInt("orderNumber");
-        final Boolean locationTracy = intent.getExtras().getBoolean("locationTracy");
-        final Boolean locationMountainHouse = intent.getExtras().getBoolean("locationMountainHouse");
+        orderNumber = intent.getExtras().getInt("orderNumber");
+        locationTracy = intent.getExtras().getBoolean("locationTracy");
+        locationMountainHouse = intent.getExtras().getBoolean("locationMountainHouse");
 
+        pizzaDriverDB = new SQLiteDBHelper(this);
 
+        SaveButton = (Button)findViewById(R.id.saveButton);
 
         final Chip orderNumberChip = (Chip)this.findViewById(R.id.orderNumberChip);
 
@@ -274,7 +290,25 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
+        SaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                orderType = "CreditAuto";
+                TipCredit = 10.00d;
+                TipCash = 0d;
+                OrderTotal = 0d;
+                CashReceived = 0d;
+                location = "Tracy";
+                Boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, TipCredit, TipCash, OrderTotal, CashReceived, location);
+                if (result){
+                    Log.v("Test", "Data inserted" + result);
+                }
+                else {
+                    Log.v("Test", "ERROR inserting data");
+                }
+            }
+        });
 
 
     }

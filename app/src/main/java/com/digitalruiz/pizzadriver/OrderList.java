@@ -1,6 +1,8 @@
 package com.digitalruiz.pizzadriver;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -13,6 +15,8 @@ import android.view.View;
 
 public class OrderList extends AppCompatActivity {
 
+    SQLiteDBHelper pizzaDriverDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,16 +24,25 @@ public class OrderList extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton addOrder = findViewById(R.id.add);
+        pizzaDriverDB = new SQLiteDBHelper(this);
+
+        FloatingActionButton addOrder = (FloatingActionButton)findViewById(R.id.add);
+        FloatingActionButton startStop = (FloatingActionButton)findViewById(R.id.startStopShift);
+
         addOrder.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent addOrderIntent = new Intent(OrderList.this, addOrderNumber.class);
                 OrderList.this.startActivity(addOrderIntent);
+            }
+        });
+
+        startStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
