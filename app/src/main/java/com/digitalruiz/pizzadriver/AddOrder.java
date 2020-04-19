@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -28,10 +29,11 @@ public class AddOrder extends AppCompatActivity {
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
 
+    String orderType;
+    String OrderLocation;
     Integer orderNumber;
     Boolean locationTracy;
     Boolean locationMountainHouse;
-    String orderType;
     double TipCredit;
     double TipCash;
     double OrderTotal;
@@ -69,7 +71,7 @@ public class AddOrder extends AppCompatActivity {
         final Chip grubhubChip = (Chip)this.findViewById(R.id.grubhubType);
         final Chip otherChip = (Chip)this.findViewById(R.id.otherType);
 
-        final ChipGroup placeChipGroup = (ChipGroup)findViewById(R.id.placeChip);
+        final ChipGroup orderLocationChipGroup = (ChipGroup)findViewById(R.id.OrderLocation);
 
         final Chip tracyChip = (Chip)this.findViewById(R.id.tracyChip);
         final Chip mountainHouseChip = (Chip)this.findViewById(R.id.mountainHouseChip);
@@ -293,19 +295,79 @@ public class AddOrder extends AppCompatActivity {
         SaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
+                int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
 
-                orderType = "CreditAuto";
-                TipCredit = 10.00d;
-                TipCash = 0d;
-                OrderTotal = 0d;
-                CashReceived = 0d;
-                location = "Tracy";
-                Boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, TipCredit, TipCash, OrderTotal, CashReceived, location);
-                if (result){
-                    Log.v("Test", "Data inserted" + result);
+                Boolean error = false;
+
+                if (OrderTypeSelectedChipID == -1) {
+                    error = true;
                 }
                 else {
-                    Log.v("Test", "ERROR inserting data");
+                    Chip OrderTypeSelectedChip = (Chip)findViewById(OrderTypeSelectedChipID);
+                    orderType = OrderTypeSelectedChip.getText().toString();
+                }
+
+                int OrderLocationSelectedChipID = orderLocationChipGroup.getCheckedChipId();
+                if (OrderLocationSelectedChipID == -1){
+                    error = true;
+                }
+                else {
+                    Chip OrderLocationSelectedChip = (Chip) findViewById(OrderLocationSelectedChipID);
+                    OrderLocation = OrderLocationSelectedChip.getText().toString();
+                }
+                if (error == true){
+                    Toast toast = Toast.makeText(getApplicationContext(), "Please select all options", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else {
+                    if (cashCheckedBox.isChecked()) {
+                        if (TextUtils.isEmpty(tipCreditEditText.getText().toString())){
+                            TipCash = 0.00d;
+                        }
+                        else {
+                            TipCash = Double.parseDouble(tipCreditEditText.getText().toString());
+                        }
+
+                    }
+                    else {
+                        if (TextUtils.isEmpty(tipCreditEditText.getText().toString())){
+                            TipCredit = 0.00d;
+                        }
+                        else {
+                            TipCredit = Double.parseDouble(tipCreditEditText.getText().toString());
+                        }
+
+                    }
+                    if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
+                        OrderTotal = 0.00d;
+                    }
+                    else {
+                        OrderTotal = Double.parseDouble(orderTotalEditText.getText().toString());
+                    }
+                    if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
+                        CashReceived = 0.00d;
+                    }
+                    else {
+                        CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
+                    }
+
+                    Boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, TipCredit, TipCash, OrderTotal, CashReceived, OrderLocation);
+                    if (result){
+                        Log.v("Test", "Data inserted" + result);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
+                        startActivity(BackToMain);
+
+
+                    }
+                    else {
+                        Log.v("Test", "ERROR inserting data");
+                        Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
                 }
             }
         });

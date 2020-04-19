@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="30062629-dbd2-4bf9-86b6-9f4c7cde596d">
-        <schema name="main" object-types="view, constraint, index, table, dataset trigger, column" />
+        <schema name="main" object-types="view, table, constraint, dataset trigger, index, column" />
       </connection>
     </loaded-nodes>
   </component>
@@ -83,7 +83,7 @@
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="C:\Users\reyes\Documents\AndroidStudio\DeviceExplorer\emulator-5554\data\data\com.digitalruiz.pizzadriver\databases\current_orders" schema="main" />
+            <file path="C:\Users\reyes\Documents\AndroidStudio\DeviceExplorer\Nexus_5X_API_29_x86 [emulator-5554]\data\data\com.digitalruiz.pizzadriver\databases\pizza_driver" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />

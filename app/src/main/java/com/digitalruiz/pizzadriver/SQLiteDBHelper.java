@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "current_orders";
+    public static final String DATABASE_NAME = "pizza_driver";
     public static final String TABLE = "Orders";
     public static final String ORDER_NUMBER = "OrderNumber";
     public static final String ORDER_TYPE = "OrderType";

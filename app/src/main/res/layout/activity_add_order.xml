@@ -16,7 +16,7 @@
         android:hint="0.00"
         android:inputType="numberDecimal"
         android:numeric="decimal"
-        app:layout_constraintBottom_toTopOf="@+id/placeChip"
+        app:layout_constraintBottom_toTopOf="@+id/OrderLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tipCreditStatic"
         app:layout_constraintVertical_bias="0.169" />
@@ -31,7 +31,7 @@
         android:hint="0.00"
         android:inputType="numberDecimal"
         android:numeric="decimal"
-        app:layout_constraintBottom_toTopOf="@+id/placeChip"
+        app:layout_constraintBottom_toTopOf="@+id/OrderLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
         app:layout_constraintVertical_bias="0.319" />
@@ -101,7 +101,7 @@
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/placeChip"
+        android:id="@+id/OrderLocation"
         style="@style/Widget.MaterialComponents.Chip.Filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -200,6 +200,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/placeChip" />
+        app:layout_constraintTop_toBottomOf="@+id/OrderLocation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
