@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,29 +46,28 @@ public class FirstFragment extends Fragment {
         Log.v("Test", "Array is " + orders);
 
 
-        LinearLayout WrapperLinerLayout = (LinearLayout)view.findViewById(R.id.wrapperLinerLayout);
+        TableLayout WrapperTable = (TableLayout) view.findViewById(R.id.wrapperTableLayout);
 
-        LinearLayout WrapperHorizontalLinerLayoutHeadLine = new LinearLayout(getContext());
-        WrapperHorizontalLinerLayoutHeadLine.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
+        TableRow HeadLine = new TableRow(getContext());
+        HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
         TextView OrderNumberStatic = new TextView(getContext());
         OrderNumberStatic.setText("Order Number");
-        OrderNumberStatic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        OrderNumberStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView OrderTypeStatic = new TextView(getContext());
         OrderTypeStatic.setText("Order Type");
-        OrderTypeStatic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        OrderTypeStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView TipTextStatic = new TextView(getContext());
         TipTextStatic.setText("Tip");
-        TipTextStatic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        TipTextStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-        WrapperHorizontalLinerLayoutHeadLine.addView(OrderNumberStatic);
-        WrapperHorizontalLinerLayoutHeadLine.addView(OrderTypeStatic);
-        WrapperHorizontalLinerLayoutHeadLine.addView(TipTextStatic);
+        HeadLine.addView(OrderNumberStatic);
+        HeadLine.addView(OrderTypeStatic);
+        HeadLine.addView(TipTextStatic);
 
-        WrapperLinerLayout.addView(WrapperHorizontalLinerLayoutHeadLine);
+        WrapperTable.addView(HeadLine);
 
         for (Integer orderNumber: orders ){
             Log.v("Test", "Order number is " + orderNumber);
@@ -77,27 +78,27 @@ public class FirstFragment extends Fragment {
             String Tip = result.getString(result.getColumnIndex("Tip"));
             Log.v("Test", "cursor " + result);
 
-            LinearLayout WrapperHorizontalLinerLayout = new LinearLayout(getContext());
-            WrapperHorizontalLinerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            TableRow Row = new TableRow(getContext());
+            Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
             Chip orderNumberChip = new Chip(getContext());
             orderNumberChip.setText(orderNumber.toString());
-            orderNumberChip.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
 
             TextView OrderTypeText = new TextView(getContext());
             OrderTypeText.setText(OrderType);
-            OrderTypeText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView TipText = new TextView(getContext());
             TipText.setText(Tip);
-            TipText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            TipText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-            WrapperHorizontalLinerLayout.addView(orderNumberChip);
-            WrapperHorizontalLinerLayout.addView(OrderTypeText);
-            WrapperHorizontalLinerLayout.addView(TipText);
+            Row.addView(orderNumberChip);
+            Row.addView(OrderTypeText);
+            Row.addView(TipText);
 
-            WrapperLinerLayout.addView(WrapperHorizontalLinerLayout);
+            WrapperTable.addView(Row);
         }
 
 
