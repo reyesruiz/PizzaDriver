@@ -18,8 +18,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String TABLE = "Orders";
     public static final String ORDER_NUMBER = "OrderNumber";
     public static final String ORDER_TYPE = "OrderType";
-    public static final String TIP_CREDIT = "TipCredit";
-    public static final String TIP_CASH = "TipCash";
+    public static final String TIP = "Tip";
+    public static final String TIP_CASH_BOOL = "TipCashBool";
     public static final String ORDER_TOTAL = "OrderTotal";
     public static final String CASH_RECEIVED = "CashReceived";
     public static final String LOCATION = "Location";
@@ -34,8 +34,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.execSQL("CREATE TABLE " + TABLE + " (" +
                 ORDER_NUMBER + " INTEGER PRIMARY KEY UNIQUE, " +
                 ORDER_TYPE + " TEXT, " +
-                TIP_CREDIT + " REAL, " +
-                TIP_CASH + " REAL, " +
+                TIP + " REAL, " +
+                TIP_CASH_BOOL + " INTEGER, " +
                 ORDER_TOTAL + " REAL, " +
                 CASH_RECEIVED + " REAL, " +
                 LOCATION + " TEXT" + ")");
@@ -47,13 +47,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  TABLE);
     }
 
-    public boolean insertOrder (Integer OrderNumber,  String OrderType, double TipCredit, double TipCash, double OrderTotal, double CashReceived, String Location){
+    public boolean insertOrder (Integer OrderNumber,  String OrderType, double Tip, Integer TipCashBool, double OrderTotal, double CashReceived, String Location){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);
         contentValues.put(ORDER_TYPE, OrderType);
-        contentValues.put(TIP_CREDIT, TipCredit);
-        contentValues.put(TIP_CASH, TipCash);
+        contentValues.put(TIP, Tip);
+        contentValues.put(TIP_CASH_BOOL, TipCashBool);
         contentValues.put(ORDER_TOTAL, OrderTotal);
         contentValues.put(CASH_RECEIVED, CashReceived);
         contentValues.put(LOCATION, Location);
@@ -79,13 +79,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateOrder (Integer OrderNumber,  String OrderType, double TipCredit, double TipCash, double OrderTotal, double CashReceived, String Location) {
+    public boolean updateOrder (Integer OrderNumber,  String OrderType, double Tip, Integer TipCashBool, double OrderTotal, double CashReceived, String Location) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);
         contentValues.put(ORDER_TYPE, OrderType);
-        contentValues.put(TIP_CREDIT, TipCredit);
-        contentValues.put(TIP_CASH, TipCash);
+        contentValues.put(TIP, Tip);
+        contentValues.put(TIP_CASH_BOOL, TipCashBool);
         contentValues.put(ORDER_TOTAL, OrderTotal);
         contentValues.put(CASH_RECEIVED, CashReceived);
         contentValues.put(LOCATION, Location);
@@ -100,8 +100,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 new String[] { Integer.toString(OrderNumber) });
     }
 
-    public ArrayList<String> getAllOrders() {
-        ArrayList<String> array_list = new ArrayList<String>();
+    public ArrayList<Integer> getAllOrders() {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -109,7 +109,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(ORDER_NUMBER)));
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
         return array_list;

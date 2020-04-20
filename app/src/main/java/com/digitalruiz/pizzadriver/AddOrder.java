@@ -21,8 +21,8 @@ import com.google.android.material.chip.ChipGroup;
 public class AddOrder extends AppCompatActivity {
 
 
-    public TextView TipCreditText;
-    public EditText tipCreditEditText;
+    public TextView TipText;
+    public EditText tipEditText;
     public CheckBox cashCheckedBox;
     public TextView orderTotalText;
     public EditText orderTotalEditText;
@@ -32,10 +32,10 @@ public class AddOrder extends AppCompatActivity {
     String orderType;
     String OrderLocation;
     Integer orderNumber;
-    Boolean locationTracy;
-    Boolean locationMountainHouse;
-    double TipCredit;
-    double TipCash;
+    boolean locationTracy;
+    boolean locationMountainHouse;
+    double Tip;
+    Integer TipCashBool;
     double OrderTotal;
     double CashReceived;
     String location;
@@ -76,11 +76,11 @@ public class AddOrder extends AppCompatActivity {
         final Chip tracyChip = (Chip)this.findViewById(R.id.tracyChip);
         final Chip mountainHouseChip = (Chip)this.findViewById(R.id.mountainHouseChip);
 
-        TipCreditText = (TextView)findViewById(R.id.tipCreditStatic);
+        TipText = (TextView)findViewById(R.id.tipStatic);
         orderTotalText = (TextView)findViewById(R.id.orderTotalStatic);
         cashReceivedText = (TextView)findViewById(R.id.cashReceivedStatic);
 
-        tipCreditEditText = (EditText)findViewById(R.id.tipCredit);
+        tipEditText = (EditText)findViewById(R.id.tip);
         orderTotalEditText = (EditText)findViewById(R.id.orderTotal);
         cashReceivedEditText = (EditText)findViewById(R.id.cashReceived);
 
@@ -109,8 +109,8 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View v) {
                 if (creditAutoChip.isChecked()){
                     setInvisible();
-                    TipCreditText.setVisibility(TextView.VISIBLE);
-                    tipCreditEditText.setVisibility(EditText.VISIBLE);
+                    TipText.setVisibility(TextView.VISIBLE);
+                    tipEditText.setVisibility(EditText.VISIBLE);
                 }
                 else {
                     setInvisible();
@@ -123,8 +123,8 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View v) {
                 if (creditManualChip.isChecked()){
                     setInvisible();
-                    TipCreditText.setVisibility(TextView.VISIBLE);
-                    tipCreditEditText.setVisibility(EditText.VISIBLE);
+                    TipText.setVisibility(TextView.VISIBLE);
+                    tipEditText.setVisibility(EditText.VISIBLE);
                     cashCheckedBox.setVisibility(CheckBox.VISIBLE);
                     cashCheckedBox.setChecked(false);
                 }
@@ -138,8 +138,8 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View v) {
                 if (cashChip.isChecked()){
                     setInvisible();
-                    TipCreditText.setVisibility(TextView.VISIBLE);
-                    tipCreditEditText.setVisibility(EditText.VISIBLE);
+                    TipText.setVisibility(TextView.VISIBLE);
+                    tipEditText.setVisibility(EditText.VISIBLE);
                     cashCheckedBox.setVisibility(CheckBox.VISIBLE);
                     cashCheckedBox.setChecked(true);
                     orderTotalText.setVisibility(TextView.VISIBLE);
@@ -147,11 +147,11 @@ public class AddOrder extends AppCompatActivity {
                     cashReceivedText.setVisibility(TextView.VISIBLE);
                     cashReceivedEditText.setVisibility(EditText.VISIBLE);
 
-                    if (TextUtils.isEmpty(tipCreditEditText.getText().toString())) {
-                        TipCredit = 0.00d;
+                    if (TextUtils.isEmpty(tipEditText.getText().toString())) {
+                        Tip = 0.00d;
                     }
                     else {
-                        TipCredit = Double.parseDouble(tipCreditEditText.getText().toString());
+                        Tip = Double.parseDouble(tipEditText.getText().toString());
                     }
                     if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
                         OrderTotal = 0.00d;
@@ -174,11 +174,11 @@ public class AddOrder extends AppCompatActivity {
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             Log.v("Test", "changed");
-                            if (TextUtils.isEmpty(tipCreditEditText.getText().toString())) {
-                                TipCredit = 0.00d;
+                            if (TextUtils.isEmpty(tipEditText.getText().toString())) {
+                                Tip = 0.00d;
                             }
                             else {
-                                TipCredit = Double.parseDouble(tipCreditEditText.getText().toString());
+                                Tip = Double.parseDouble(tipEditText.getText().toString());
                             }
                             if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
                                 OrderTotal = 0.00d;
@@ -194,7 +194,7 @@ public class AddOrder extends AppCompatActivity {
                             }
                             double tip = CashReceived - OrderTotal;
                             Log.v("Test", "changed" + tip);
-                            tipCreditEditText.setText(Double.toString(tip));
+                            tipEditText.setText(Double.toString(tip));
                         }
 
                         @Override
@@ -211,11 +211,11 @@ public class AddOrder extends AppCompatActivity {
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             Log.v("Test", "changed");
-                            if (TextUtils.isEmpty(tipCreditEditText.getText().toString())) {
-                                TipCredit = 0.00d;
+                            if (TextUtils.isEmpty(tipEditText.getText().toString())) {
+                                Tip = 0.00d;
                             }
                             else {
-                                TipCredit = Double.parseDouble(tipCreditEditText.getText().toString());
+                                Tip = Double.parseDouble(tipEditText.getText().toString());
                             }
                             if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
                                 OrderTotal = 0.00d;
@@ -231,7 +231,7 @@ public class AddOrder extends AppCompatActivity {
                             }
                             double tip = CashReceived - OrderTotal;
                             Log.v("Test", "changed" + tip);
-                            tipCreditEditText.setText(Double.toString(tip));
+                            tipEditText.setText(Double.toString(tip));
                         }
 
                         @Override
@@ -250,8 +250,8 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View v) {
                 if (grubhubChip.isChecked()){
                     setInvisible();
-                    TipCreditText.setVisibility(TextView.VISIBLE);
-                    tipCreditEditText.setVisibility(EditText.VISIBLE);
+                    TipText.setVisibility(TextView.VISIBLE);
+                    tipEditText.setVisibility(EditText.VISIBLE);
                 }
                 else {
                     setInvisible();
@@ -263,8 +263,8 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View v) {
                 if (otherChip.isChecked()){
                     setInvisible();
-                    TipCreditText.setVisibility(TextView.VISIBLE);
-                    tipCreditEditText.setVisibility(EditText.VISIBLE);
+                    TipText.setVisibility(TextView.VISIBLE);
+                    tipEditText.setVisibility(EditText.VISIBLE);
                     cashCheckedBox.setVisibility(CheckBox.VISIBLE);
                     cashCheckedBox.setChecked(false);
                     orderTotalText.setVisibility(TextView.VISIBLE);
@@ -298,7 +298,7 @@ public class AddOrder extends AppCompatActivity {
                 Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
                 int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
 
-                Boolean error = false;
+                boolean error = false;
 
                 if (OrderTypeSelectedChipID == -1) {
                     error = true;
@@ -322,23 +322,19 @@ public class AddOrder extends AppCompatActivity {
                 }
                 else {
                     if (cashCheckedBox.isChecked()) {
-                        if (TextUtils.isEmpty(tipCreditEditText.getText().toString())){
-                            TipCash = 0.00d;
-                        }
-                        else {
-                            TipCash = Double.parseDouble(tipCreditEditText.getText().toString());
-                        }
-
+                        TipCashBool = 1;
                     }
                     else {
-                        if (TextUtils.isEmpty(tipCreditEditText.getText().toString())){
-                            TipCredit = 0.00d;
-                        }
-                        else {
-                            TipCredit = Double.parseDouble(tipCreditEditText.getText().toString());
-                        }
-
+                        TipCashBool = 0;
                     }
+                    if (TextUtils.isEmpty(tipEditText.getText().toString())){
+                        Tip = 0.00d;
+                    }
+                    else {
+                        Tip = Double.parseDouble(tipEditText.getText().toString());
+                    }
+
+
                     if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
                         OrderTotal = 0.00d;
                     }
@@ -352,7 +348,7 @@ public class AddOrder extends AppCompatActivity {
                         CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
                     }
 
-                    Boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, TipCredit, TipCash, OrderTotal, CashReceived, OrderLocation);
+                    boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip, TipCashBool, OrderTotal, CashReceived, OrderLocation);
                     if (result){
                         Log.v("Test", "Data inserted" + result);
                         Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
@@ -363,7 +359,7 @@ public class AddOrder extends AppCompatActivity {
 
                     }
                     else {
-                        Log.v("Test", "ERROR inserting data");
+                        Log.v("Test", "ERROR inserting data" + result);
                         Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
                         toast.show();
 
@@ -377,8 +373,8 @@ public class AddOrder extends AppCompatActivity {
 
     private void setInvisible() {
         //Setting everything to invisible.
-        TipCreditText.setVisibility(TextView.INVISIBLE);
-        tipCreditEditText.setVisibility(EditText.INVISIBLE);
+        TipText.setVisibility(TextView.INVISIBLE);
+        tipEditText.setVisibility(EditText.INVISIBLE);
         cashCheckedBox.setVisibility(CheckBox.INVISIBLE);
 
         orderTotalText.setVisibility((TextView.INVISIBLE));
