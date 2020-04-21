@@ -52,8 +52,6 @@ public class addOrderNumber extends AppCompatActivity {
                     Integer orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
                     Intent addOrderIntent = new Intent(addOrderNumber.this, AddOrder.class);
                     addOrderIntent.putExtra("orderNumber", orderNumber);
-                    addOrderIntent.putExtra("locationTracy", finalLocationTracy);
-                    addOrderIntent.putExtra("locationMountainHouse", finalLocationMountainHouse);
                     startActivity(addOrderIntent);
                 }
                 return false;

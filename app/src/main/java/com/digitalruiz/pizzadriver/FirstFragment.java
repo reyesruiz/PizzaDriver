@@ -1,8 +1,10 @@
 package com.digitalruiz.pizzadriver;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,40 +65,70 @@ public class FirstFragment extends Fragment {
         TipTextStatic.setText("Tip");
         TipTextStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
+        TextView LocationStatic = new TextView(getContext());
+        LocationStatic.setText("Location");
+        LocationStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
         HeadLine.addView(OrderNumberStatic);
         HeadLine.addView(OrderTypeStatic);
         HeadLine.addView(TipTextStatic);
+        HeadLine.addView(LocationStatic);
 
         WrapperTable.addView(HeadLine);
 
-        for (Integer orderNumber: orders ){
+        for (final Integer orderNumber: orders ){
             Log.v("Test", "Order number is " + orderNumber);
 
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
             String OrderType = result.getString(result.getColumnIndex("OrderType"));
             String Tip = result.getString(result.getColumnIndex("Tip"));
-            Log.v("Test", "cursor " + result);
+            int Cash = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
+            String OrderLocation = result.getString(result.getColumnIndex("Location"));
 
+            Log.v("Test", "cursor " + result);
+            result.close();
+            Log.v("Test", "Cash " + Cash);
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
             Chip orderNumberChip = new Chip(getContext());
             orderNumberChip.setText(orderNumber.toString());
             orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-
+            orderNumberChip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addOrderIntent = new Intent(getActivity(), AddOrder.class);
+                    addOrderIntent.putExtra("orderNumber", orderNumber);
+                    startActivity(addOrderIntent);
+                }
+            });
 
             TextView OrderTypeText = new TextView(getContext());
-            OrderTypeText.setText(OrderType);
+            Log.v("Test", OrderType);
+            if ((OrderType.equals("Credit Manual")) && (Cash == 1)){
+                Log.v("Test", "here");
+                OrderType = OrderType + " Cash";
+                OrderTypeText.setText(OrderType);
+            }
+            else {
+                OrderTypeText.setText(OrderType);
+            }
             OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView TipText = new TextView(getContext());
             TipText.setText(Tip);
             TipText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
+            TextView LocationText = new TextView(getContext());
+            LocationText.setText(OrderLocation);
+            LocationText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+
             Row.addView(orderNumberChip);
             Row.addView(OrderTypeText);
             Row.addView(TipText);
+            Row.addView(LocationText);
 
             WrapperTable.addView(Row);
         }
