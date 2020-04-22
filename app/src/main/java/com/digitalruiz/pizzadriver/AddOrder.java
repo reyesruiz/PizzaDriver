@@ -35,6 +35,7 @@ public class AddOrder extends AppCompatActivity {
     String orderType;
     String OrderLocation;
     Integer orderNumber;
+    Integer oldOrderNumber;
     boolean locationTracy;
     boolean locationMountainHouse;
     double Tip;
@@ -57,8 +58,9 @@ public class AddOrder extends AppCompatActivity {
 
         Intent intent = getIntent();
         orderNumber = intent.getExtras().getInt("orderNumber");
-    //    locationTracy = intent.getExtras().getBoolean("locationTracy");
-   //     locationMountainHouse = intent.getExtras().getBoolean("locationMountainHouse");
+        oldOrderNumber = intent.getExtras().getInt("oldOrderNumber");
+
+
         pizzaDriverDB = new SQLiteDBHelper(this);
         SaveButton = (Button)findViewById(R.id.saveButton);
 
@@ -87,6 +89,10 @@ public class AddOrder extends AppCompatActivity {
 
         cashCheckedBox = (CheckBox)this.findViewById(R.id.cashCheckedBox);
 
+        if (oldOrderNumber != null)  {
+            pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
+        }
+
         orderNumberChip.setText(orderNumber.toString());
 
 
@@ -105,6 +111,8 @@ public class AddOrder extends AppCompatActivity {
             tracyChip.setChecked(true);
         }
         setInvisible();
+
+
 
         Cursor result = pizzaDriverDB.getData(orderNumber);
         if (result.getCount() == 1){
@@ -301,30 +309,37 @@ public class AddOrder extends AppCompatActivity {
                         CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
                     }
                     Cursor data = pizzaDriverDB.getData(orderNumber);
+                    Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
                     if (data.getCount() == 1) {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Updating Order", Toast.LENGTH_LONG);
-                        pizzaDriverDB.deleteOrder(orderNumber);
+                        boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip, TipCashBool, OrderTotal, CashReceived, OrderLocation);
                         data.close();
+                        if (updateResult){
+                            Log.v("Test", "Data Updated " + updateResult);
+                            Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
+                            updateToast.show();
+                            startActivity(BackToMain);
+                        }
+                        else {
+                            Log.v("Test", "ERROR inserting data" + updateResult);
+                            Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
+                            updateToast.show();
+                        }
+
                     }
                     else {
+                        boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip, TipCashBool, OrderTotal, CashReceived, OrderLocation);
+                        if (result) {
+                            Log.v("Test", "Data inserted" + result);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                            toast.show();
+                            startActivity(BackToMain);
 
+                        } else {
+                            Log.v("Test", "ERROR inserting data" + result);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
+                            toast.show();
 
-                        //Nothing
-
-                    }
-                    boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip, TipCashBool, OrderTotal, CashReceived, OrderLocation);
-                    if (result) {
-                        Log.v("Test", "Data inserted" + result);
-                        Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
-                        toast.show();
-                        Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
-                        startActivity(BackToMain);
-
-                     } else {
-                        Log.v("Test", "ERROR inserting data" + result);
-                        Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
-                        toast.show();
-
+                        }
                     }
 
                 }

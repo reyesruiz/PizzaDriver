@@ -25,26 +25,24 @@ public class addOrderNumber extends AppCompatActivity {
         final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         final EditText orderNumberText = (EditText)this.findViewById(R.id.orderNumber);
 
+        final Integer oldOrderNumber;
+
 
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
         if (intent.hasExtra("orderNumber")) {
             final Integer orderNumber = intent.getExtras().getInt("orderNumber");
             orderNumberText.setText(orderNumber.toString());
+            oldOrderNumber = orderNumber;
+        }
+        else {
+            oldOrderNumber = null;
         }
         orderNumberText.requestFocus();
-        Boolean locationTracy = false;
-        if (intent.hasExtra("locationTracy")){
-            locationTracy = intent.getExtras().getBoolean("locationTracy");
-        }
-        Boolean locationMountainHouse = false;
-        if (intent.hasExtra("locationMountainHouse")){
-            locationMountainHouse =  intent.getExtras().getBoolean("locationMountainHouse");
-        }
 
 
-        final Boolean finalLocationTracy = locationTracy;
-        final Boolean finalLocationMountainHouse = locationMountainHouse;
+
+
         orderNumberText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -52,6 +50,9 @@ public class addOrderNumber extends AppCompatActivity {
                     Integer orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
                     Intent addOrderIntent = new Intent(addOrderNumber.this, AddOrder.class);
                     addOrderIntent.putExtra("orderNumber", orderNumber);
+                    if (orderNumber != oldOrderNumber){
+                        addOrderIntent.putExtra("oldOrderNumber", oldOrderNumber);
+                    }
                     startActivity(addOrderIntent);
                 }
                 return false;

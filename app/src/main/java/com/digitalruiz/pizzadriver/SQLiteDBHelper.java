@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -90,7 +91,29 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(CASH_RECEIVED, CashReceived);
         contentValues.put(LOCATION, Location);
         pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
-        return true;
+        long rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
+        Log.v("Test", "row updated " + rowUpdated);
+        if(rowUpdated != -1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean updateOrderNumber (Integer OldOrderNumber, Integer OrderNumber){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ORDER_NUMBER, OrderNumber);
+        pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OldOrderNumber) } );
+        long rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
+        Log.v("Test", "row updated " + rowUpdated);
+        if(rowUpdated != -1) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public Integer deleteOrder (Integer OrderNumber) {
