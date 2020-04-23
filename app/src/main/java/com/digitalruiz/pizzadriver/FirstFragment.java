@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -52,31 +56,44 @@ public class FirstFragment extends Fragment {
 
         TableRow HeadLine = new TableRow(getContext());
         HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        HeadLine.setBackgroundColor(Color.parseColor("#0079d6"));
+        HeadLine.setPadding(5, 5, 5, 5);
 
         TextView OrderNumberStatic = new TextView(getContext());
-        OrderNumberStatic.setText("Order Number");
+        OrderNumberStatic.setText("Number");
+        OrderNumberStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderNumberStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView OrderTypeStatic = new TextView(getContext());
-        OrderTypeStatic.setText("Order Type");
+        OrderTypeStatic.setText("Type");
+        OrderTypeStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderTypeStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+        TextView CashStatic = new TextView(getContext());
+        CashStatic.setText("Cash?");
+        CashStatic.setTypeface(CashStatic.getTypeface(), Typeface.BOLD);
+        CashStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView TipTextStatic = new TextView(getContext());
         TipTextStatic.setText("Tip");
+        TipTextStatic.setTypeface(TipTextStatic.getTypeface(), Typeface.BOLD);
         TipTextStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView LocationStatic = new TextView(getContext());
         LocationStatic.setText("Location");
+        LocationStatic.setTypeface(LocationStatic.getTypeface(), Typeface.BOLD);
         LocationStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         HeadLine.addView(OrderNumberStatic);
         HeadLine.addView(OrderTypeStatic);
+        HeadLine.addView(CashStatic);
         HeadLine.addView(TipTextStatic);
         HeadLine.addView(LocationStatic);
 
         WrapperTable.addView(HeadLine);
-
+        int counter = 0;
         for (final Integer orderNumber: orders ){
+            counter = counter + 1;
             Log.v("Test", "Order number is " + orderNumber);
 
             Cursor result = pizzaDriverDB.getData(orderNumber);
@@ -91,7 +108,13 @@ public class FirstFragment extends Fragment {
             Log.v("Test", "Cash " + Cash);
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-
+            Row.setPadding(5, 5, 5, 5);
+            if (counter % 2 == 0){
+                Row.setBackgroundColor(Color.parseColor("#0079d6"));
+            }
+            else {
+                Row.setBackgroundColor(Color.parseColor("#00cccc"));
+            }
             Chip orderNumberChip = new Chip(getContext());
             orderNumberChip.setText(orderNumber.toString());
             orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -105,16 +128,17 @@ public class FirstFragment extends Fragment {
             });
 
             TextView OrderTypeText = new TextView(getContext());
-            Log.v("Test", OrderType);
-            if ((OrderType.equals("Credit Manual")) && (Cash == 1)){
-                Log.v("Test", "here");
-                OrderType = OrderType + " Cash";
-                OrderTypeText.setText(OrderType);
+            OrderTypeText.setText(OrderType);
+            OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+            TextView CashText = new TextView((getContext()));
+            if (Cash == 1){
+                CashText.setText("Cash");
             }
             else {
-                OrderTypeText.setText(OrderType);
+
             }
-            OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            CashText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView TipText = new TextView(getContext());
             TipText.setText(Tip);
@@ -127,6 +151,7 @@ public class FirstFragment extends Fragment {
 
             Row.addView(orderNumberChip);
             Row.addView(OrderTypeText);
+            Row.addView(CashText);
             Row.addView(TipText);
             Row.addView(LocationText);
 
