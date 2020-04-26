@@ -138,4 +138,61 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public ArrayList<Integer> getAllCredit() {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
+
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\") AND " + TIP_CASH_BOOL + " = 0", null);
+        res.moveToFirst();
+        while(res.isAfterLast() == false){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public ArrayList<Integer> getAllCash() {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
+
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\" OR " + TIP_CASH_BOOL + " = 1", null);
+        res.moveToFirst();
+        while(res.isAfterLast() == false){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public ArrayList<Integer> getAllLocation(String location) {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
+
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + LOCATION + " = \"" + location + "\"", null);
+        res.moveToFirst();
+        while(res.isAfterLast() == false){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public ArrayList<Integer> getAllCashOrders() {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
+
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\"", null);
+        res.moveToFirst();
+        while(res.isAfterLast() == false){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+
 }

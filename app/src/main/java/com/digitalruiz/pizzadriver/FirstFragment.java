@@ -12,12 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 public class FirstFragment extends Fragment {
 
     SQLiteDBHelper pizzaDriverDB;
+
 
     @Override
     public View onCreateView(
@@ -46,12 +49,13 @@ public class FirstFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
+        Button button_first = (Button) view.findViewById(R.id.buttonSumary);
 
 
         ArrayList<Integer> orders = pizzaDriverDB.getAllOrders();
         Log.v("Test", "Array is " + orders);
 
-
+        LinearLayout wrapperLayout = (LinearLayout) view.findViewById(R.id.wrapperLayout);
         TableLayout WrapperTable = (TableLayout) view.findViewById(R.id.wrapperTableLayout);
 
         TableRow HeadLine = new TableRow(getContext());
@@ -158,13 +162,23 @@ public class FirstFragment extends Fragment {
             WrapperTable.addView(Row);
         }
 
+       // TableLayout ReportTable = (TableLayout) view.findViewById(R.id.ReportTable);
+     //   TableRow ReportRow = new TableRow(getContext());
+    //    TextView TipsCreditTotal = new TextView(getContext());
+    //    TipsCreditTotal.setText("Tips Credit:");
+    //    TipsCreditTotal.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+   //     ReportRow.addView(TipsCreditTotal);
+   //     ReportTable.addView(ReportRow);
+    //    wrapperLayout.addView(ReportTable);
 
-     //   view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
-       //     @Override
-        //    public void onClick(View view) {
-         //       NavHostFragment.findNavController(FirstFragment.this)
-          //              .navigate(R.id.action_FirstFragment_to_SecondFragment);
-           // }
-        //});
+
+
+        button_first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            }
+        });
     }
 }
