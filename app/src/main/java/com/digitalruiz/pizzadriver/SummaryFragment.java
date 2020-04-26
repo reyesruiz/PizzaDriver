@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -34,10 +35,17 @@ public class SummaryFragment extends Fragment {
         TextView TipsTotalText = (TextView) view.findViewById(R.id.tipsTotal);
         TextView TracyTotalText = (TextView) view.findViewById(R.id.tracyTotal);
         TextView MountainHouseText = (TextView) view.findViewById(R.id.mountainHouseTotal);
-        TextView ReinbursmentTotalText = (TextView) view.findViewById(R.id.reinbursmentTotal);
+        TextView ReimbursementTotalText = (TextView) view.findViewById(R.id.reinbursmentTotal);
         TextView CompensationTotalText = (TextView) view.findViewById(R.id.compensationTotal);
         TextView CashOrdersTotalText = (TextView) view.findViewById(R.id.cashOrdersTotal);
         TextView netCashText = (TextView) view.findViewById(R.id.netCash);
+        TextView ordersCreditAutoText = (TextView) view.findViewById(R.id.CreditAuto);
+        TextView ordersCreditManualText = (TextView) view.findViewById(R.id.creditManual);
+        TextView ordersCreditManualCashText = (TextView) view.findViewById(R.id.creditManualCash);
+        TextView ordersCashText = (TextView) view.findViewById(R.id.Cash);
+        TextView ordersGrubhubText = (TextView) view.findViewById(R.id.grubhub);
+        TextView ordersOtherText = (TextView) view.findViewById(R.id.other);
+        TextView ordersTotalText = (TextView) view.findViewById(R.id.Total);
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
 
@@ -50,6 +58,14 @@ public class SummaryFragment extends Fragment {
         double CompensationTotal = 0;
         double CashOrdersTotal = 0;
         double NetCash = 0;
+        int OrdersCreditAuto = 0;
+        int OrdersCreditManual = 0;
+        int OrdersCreditManualCash = 0;
+        int OrdersCash = 0;
+        int OrdersGrubhub = 0;
+        int OrdersOther = 0;
+        int OrdersTotal = 0;
+        int OrdersTotalFromDB = 0;
 
         ArrayList<Integer> ordersCredit = pizzaDriverDB.getAllCredit();
         for (final Integer orderNumber: ordersCredit ){
@@ -91,7 +107,7 @@ public class SummaryFragment extends Fragment {
         MountainHouseText.setText(Double.toString(MountainHouseTotal));
 
         ReinbursmentTotal = TracyTotal + MountainHouseTotal;
-        ReinbursmentTotalText.setText(Double.toString(ReinbursmentTotal));
+        ReimbursementTotalText.setText(Double.toString(ReinbursmentTotal));
 
         CompensationTotal = TipsTotal + ReinbursmentTotal;
         CompensationTotalText.setText(Double.toString(CompensationTotal));
@@ -109,7 +125,28 @@ public class SummaryFragment extends Fragment {
         NetCash = (CreditTotal + ReinbursmentTotal) - CashOrdersTotal;
         netCashText.setText(Double.toString(NetCash));
 
+        OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", 0);
+        OrdersCreditManual = pizzaDriverDB.numberOfRowsPerType("Credit Manual", 0);
+        OrdersCreditManualCash = pizzaDriverDB.numberOfRowsPerType("Credit Manual", 1);
+        OrdersCash = pizzaDriverDB.numberOfRowsPerType("Cash", 1);
+        OrdersGrubhub = pizzaDriverDB.numberOfRowsPerType("Grubhub", 0);
+        OrdersOther = pizzaDriverDB.numberOfRowsPerType("Other", 0);
+        OrdersTotal = OrdersCreditAuto + OrdersCreditManual + OrdersCreditManualCash + OrdersCash + OrdersGrubhub + OrdersOther;
+        OrdersTotalFromDB = pizzaDriverDB.numberOfRows();
 
+        if (OrdersTotal != OrdersTotalFromDB){
+            Toast toast = Toast.makeText(getContext(), "Number of Orders does not match the number of Records in DB", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+
+        ordersCreditAutoText.setText(Integer.toString(OrdersCreditAuto));
+        ordersCreditManualText.setText(Integer.toString(OrdersCreditManual));
+        ordersCreditManualCashText.setText(Integer.toString(OrdersCreditManualCash));
+        ordersCashText.setText(Integer.toString(OrdersCash));
+        ordersGrubhubText.setText((Integer.toString(OrdersGrubhub)));
+        ordersOtherText.setText(Integer.toString(OrdersOther));
+        ordersTotalText.setText(Integer.toString(OrdersTotal));
 
 
         view.findViewById(R.id.buttonBackToOrders).setOnClickListener(new View.OnClickListener() {

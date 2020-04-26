@@ -143,7 +143,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\") AND " + TIP_CASH_BOOL + " = 0", null);
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\" OR " + ORDER_TYPE + " = \"Grubhub\" OR " + ORDER_TYPE + " = \"Other\") AND " + TIP_CASH_BOOL + " = 0", null);
         res.moveToFirst();
         while(res.isAfterLast() == false){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
@@ -192,6 +192,19 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             res.moveToNext();
         }
         return array_list;
+    }
+
+
+    public int numberOfRowsPerType(String Type, Integer TipCashBool){
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"" + " AND " + TIP_CASH_BOOL + " = " + TipCashBool, null);
+        res.moveToFirst();
+        int counter = 0;
+        while(res.isAfterLast() == false){
+            counter = counter + 1;
+            res.moveToNext();
+        }
+        return counter;
     }
 
 
