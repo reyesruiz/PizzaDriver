@@ -1,12 +1,9 @@
 package com.digitalruiz.pizzadriver;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,17 +16,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class FirstFragment extends Fragment {
+public class OrderListFragment extends Fragment {
 
     SQLiteDBHelper pizzaDriverDB;
 
@@ -42,7 +36,7 @@ public class FirstFragment extends Fragment {
     )
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false);
+        return inflater.inflate(R.layout.fragment_order_list, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -176,8 +170,8 @@ public class FirstFragment extends Fragment {
         button_first.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SummaryFragment);
+                NavHostFragment.findNavController(OrderListFragment.this)
+                        .navigate(R.id.action_OrderListFragment_to_SummaryFragment);
             }
         });
     }
