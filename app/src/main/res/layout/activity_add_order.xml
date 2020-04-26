@@ -6,62 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".AddOrder">
 
-    <EditText
-        android:id="@+id/orderTotal"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="176dp"
-        android:ems="10"
-        android:hint="0.00"
-        android:inputType="numberDecimal"
-        android:numeric="decimal"
-        app:layout_constraintBottom_toTopOf="@+id/OrderLocation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tipStatic"
-        app:layout_constraintVertical_bias="0.169" />
-
-    <EditText
-        android:id="@+id/cashReceived"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="132dp"
-        android:ems="10"
-        android:hint="0.00"
-        android:inputType="numberDecimal"
-        android:numeric="decimal"
-        app:layout_constraintBottom_toTopOf="@+id/OrderLocation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
-        app:layout_constraintVertical_bias="0.319" />
-
     <com.google.android.material.chip.Chip
         android:id="@+id/orderNumberChip"
         style="@style/Widget.MaterialComponents.Chip.Action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:inputType="number"
         android:text="Order Number"
         android:textAlignment="textStart"
+
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
-
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/orderType"
         style="@style/Widget.MaterialComponents.Chip.Filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:scrollbarStyle="insideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderNumberChip"
+        app:layout_constraintVertical_bias="0.0"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
@@ -100,16 +76,134 @@
             android:text="Other" />
     </com.google.android.material.chip.ChipGroup>
 
+    <TextView
+        android:id="@+id/tipStatic"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Tip: $"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderType"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/tip"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:numeric="decimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tipStatic"
+        app:layout_constraintTop_toBottomOf="@+id/orderType"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <CheckBox
+        android:id="@+id/cashCheckedBox"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Cash?"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tip"
+        app:layout_constraintTop_toBottomOf="@+id/orderType"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/orderTotalStatic"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Order Total: $"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipStatic"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/orderTotal"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:numeric="decimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/orderTotalStatic"
+        app:layout_constraintTop_toBottomOf="@id/tipStatic"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cashReceivedStatic"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Cash Received: $"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/cashReceived"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:numeric="decimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/cashReceivedStatic"
+        app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
+        app:layout_constraintVertical_bias="0.0" />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/OrderLocation"
         style="@style/Widget.MaterialComponents.Chip.Filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cashReceivedStatic"
+        app:layout_constraintVertical_bias="0.0"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
@@ -127,74 +221,10 @@
             android:text="Mountain House" />
     </com.google.android.material.chip.ChipGroup>
 
-    <EditText
-        android:id="@+id/tip"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="101dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="0.00"
-        android:inputType="numberDecimal"
-        android:numeric="decimal"
-        app:layout_constraintStart_toEndOf="@+id/tipStatic"
-        app:layout_constraintTop_toBottomOf="@+id/orderType" />
-
-    <TextView
-        android:id="@+id/tipStatic"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="60dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="32dp"
-        android:text="Tip: $"
-        android:textAlignment="textStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderType" />
-
-    <TextView
-        android:id="@+id/cashReceivedStatic"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Cash Received: $"
-        android:textAlignment="textStart"
-        app:layout_constraintEnd_toStartOf="@+id/cashReceived"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic" />
-
-    <TextView
-        android:id="@+id/orderTotalStatic"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Order Total: $"
-        android:textAlignment="textStart"
-        app:layout_constraintEnd_toStartOf="@+id/orderTotal"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tipStatic" />
-
-    <CheckBox
-        android:id="@+id/cashCheckedBox"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Cash?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tip"
-        app:layout_constraintTop_toBottomOf="@+id/orderType" />
-
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="224dp"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
