@@ -156,16 +156,6 @@ public class OrderListFragment extends Fragment {
             WrapperTable.addView(Row);
         }
 
-       // TableLayout ReportTable = (TableLayout) view.findViewById(R.id.ReportTable);
-     //   TableRow ReportRow = new TableRow(getContext());
-    //    TextView TipsCreditTotal = new TextView(getContext());
-    //    TipsCreditTotal.setText("Tips Credit:");
-    //    TipsCreditTotal.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-   //     ReportRow.addView(TipsCreditTotal);
-   //     ReportTable.addView(ReportRow);
-    //    wrapperLayout.addView(ReportTable);
-
-
 
         button_first.setOnClickListener(new View.OnClickListener() {
             @Override

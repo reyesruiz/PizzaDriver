@@ -1,13 +1,10 @@
 package com.digitalruiz.pizzadriver;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -41,8 +38,6 @@ public class addOrderNumber extends AppCompatActivity {
         orderNumberText.requestFocus();
 
 
-
-
         orderNumberText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -59,11 +54,5 @@ public class addOrderNumber extends AppCompatActivity {
             }
 
         });
-
-
-
-
-
-
     }
 }
