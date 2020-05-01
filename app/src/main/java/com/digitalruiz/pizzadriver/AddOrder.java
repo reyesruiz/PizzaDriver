@@ -428,7 +428,7 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
                 }
-                double tip = CashReceived - OrderTotal;
+                double tip = (double) CashReceived - OrderTotal;
                 Log.v("Test", "changed" + tip);
                 tipEditText.setText(Double.toString(tip));
             }
@@ -465,7 +465,7 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
                 }
-                double tip = CashReceived - OrderTotal;
+                double tip = (double) CashReceived - OrderTotal;
                 Log.v("Test", "changed" + tip);
                 tipEditText.setText(Double.toString(tip));
             }
