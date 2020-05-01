@@ -47,15 +47,15 @@ public class SummaryFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
 
-        double CreditTotal = 0;
-        double CashTotal = 0;
-        double TipsTotal = 0;
-        double ReinbursmentTotal = 0;
-        double TracyTotal = 0;
-        double MountainHouseTotal = 0;
-        double CompensationTotal = 0;
-        double CashOrdersTotal = 0;
-        double NetCash = 0;
+        double CreditTotal = 0d;
+        double CashTotal = 0d;
+        double TipsTotal = 0d;
+        double ReinbursmentTotal = 0d;
+        double TracyTotal = 0d;
+        double MountainHouseTotal = 0d;
+        double CompensationTotal = 0d;
+        double CashOrdersTotal = 0d;
+        double NetCash = 0d;
         int OrdersCreditAuto = 0;
         int OrdersCreditManual = 0;
         int OrdersCreditManualCash = 0;
@@ -70,7 +70,7 @@ public class SummaryFragment extends Fragment {
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
             double TipCredit = Double.parseDouble(result.getString(result.getColumnIndex("Tip")));
-            CreditTotal = CreditTotal + TipCredit;
+            CreditTotal = (double) CreditTotal + TipCredit;
         }
         TipsCreditText.setText(Double.toString(CreditTotal));
 
@@ -79,11 +79,11 @@ public class SummaryFragment extends Fragment {
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
             double TipCash = Double.parseDouble(result.getString(result.getColumnIndex("Tip")));
-            CashTotal = CashTotal + TipCash;
+            CashTotal = (double) CashTotal + TipCash;
         }
         TipsCashText.setText(Double.toString(CashTotal));
 
-        TipsTotal = CreditTotal + CashTotal;
+        TipsTotal = (double) CreditTotal + CashTotal;
 
         TipsTotalText.setText(Double.toString(TipsTotal));
 
@@ -92,7 +92,7 @@ public class SummaryFragment extends Fragment {
         for (final Integer orderNumber: ordersTracy ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            TracyTotal = TracyTotal + 1.50;
+            TracyTotal =  (double) TracyTotal + 1.50;
         }
         TracyTotalText.setText(Double.toString(TracyTotal));
 
@@ -100,14 +100,14 @@ public class SummaryFragment extends Fragment {
         for (final Integer orderNumber: ordersMountainHouse ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            MountainHouseTotal = MountainHouseTotal + 2.50;
+            MountainHouseTotal = (double) MountainHouseTotal + 2.50;
         }
         MountainHouseText.setText(Double.toString(MountainHouseTotal));
 
-        ReinbursmentTotal = TracyTotal + MountainHouseTotal;
+        ReinbursmentTotal = (double) TracyTotal + MountainHouseTotal;
         ReimbursementTotalText.setText(Double.toString(ReinbursmentTotal));
 
-        CompensationTotal = TipsTotal + ReinbursmentTotal;
+        CompensationTotal = (double) TipsTotal + ReinbursmentTotal;
         CompensationTotalText.setText(Double.toString(CompensationTotal));
 
         ArrayList<Integer> cashOrders = pizzaDriverDB.getAllCashOrders();
@@ -115,12 +115,12 @@ public class SummaryFragment extends Fragment {
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
             double OrderTotal = Double.parseDouble(result.getString(result.getColumnIndex("OrderTotal")));
-            CashOrdersTotal = CashOrdersTotal + OrderTotal;
+            CashOrdersTotal = (double) CashOrdersTotal + OrderTotal;
         }
 
         CashOrdersTotalText.setText(Double.toString(CashOrdersTotal));
 
-        NetCash = (CreditTotal + ReinbursmentTotal) - CashOrdersTotal;
+        NetCash = (double) (CreditTotal + ReinbursmentTotal) - CashOrdersTotal;
         netCashText.setText(Double.toString(NetCash));
 
         OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", 0);
