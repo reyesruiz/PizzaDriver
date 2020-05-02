@@ -1,6 +1,7 @@
 package com.digitalruiz.pizzadriver;
 
 import android.database.Cursor;
+import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,15 +48,15 @@ public class SummaryFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
 
-        double CreditTotal = 0d;
-        double CashTotal = 0d;
-        double TipsTotal = 0d;
-        double ReinbursmentTotal = 0d;
-        double TracyTotal = 0d;
-        double MountainHouseTotal = 0d;
-        double CompensationTotal = 0d;
-        double CashOrdersTotal = 0d;
-        double NetCash = 0d;
+        BigDecimal CreditTotal = new BigDecimal("0.00");
+        BigDecimal CashTotal = new BigDecimal("0.00");
+        BigDecimal TipsTotal = new BigDecimal("0.00");
+        BigDecimal ReinbursmentTotal = new BigDecimal("0.00");
+        BigDecimal TracyTotal = new BigDecimal("0.00");
+        BigDecimal MountainHouseTotal = new BigDecimal("0.00");
+        BigDecimal CompensationTotal = new BigDecimal("0.00");
+        BigDecimal CashOrdersTotal = new BigDecimal("0.00");
+        BigDecimal NetCash = new BigDecimal("0.00");
         int OrdersCreditAuto = 0;
         int OrdersCreditManual = 0;
         int OrdersCreditManualCash = 0;
@@ -69,59 +70,61 @@ public class SummaryFragment extends Fragment {
         for (final Integer orderNumber: ordersCredit ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            double TipCredit = Double.parseDouble(result.getString(result.getColumnIndex("Tip")));
-            CreditTotal = (double) CreditTotal + TipCredit;
+            BigDecimal TipCredit = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
+            CreditTotal = CreditTotal.add(TipCredit);
         }
-        TipsCreditText.setText(Double.toString(CreditTotal));
+        TipsCreditText.setText(CreditTotal.toString());
 
         ArrayList<Integer> ordersCash = pizzaDriverDB.getAllCash();
         for (final Integer orderNumber: ordersCash ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            double TipCash = Double.parseDouble(result.getString(result.getColumnIndex("Tip")));
-            CashTotal = (double) CashTotal + TipCash;
+            BigDecimal TipCash = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
+            CashTotal = CashTotal.add(TipCash);
         }
-        TipsCashText.setText(Double.toString(CashTotal));
+        TipsCashText.setText(CashTotal.toString());
 
-        TipsTotal = (double) CreditTotal + CashTotal;
+        TipsTotal = CreditTotal.add(CashTotal);
 
-        TipsTotalText.setText(Double.toString(TipsTotal));
+        TipsTotalText.setText(TipsTotal.toString());
 
 
         ArrayList<Integer> ordersTracy = pizzaDriverDB.getAllLocation("Tracy");
         for (final Integer orderNumber: ordersTracy ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            TracyTotal =  (double) TracyTotal + 1.50;
+            BigDecimal Rate = new BigDecimal("1.50");
+            TracyTotal =  TracyTotal.add(Rate);
         }
-        TracyTotalText.setText(Double.toString(TracyTotal));
+        TracyTotalText.setText(TracyTotal.toString());
 
         ArrayList<Integer> ordersMountainHouse = pizzaDriverDB.getAllLocation("Mountain House");
         for (final Integer orderNumber: ordersMountainHouse ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            MountainHouseTotal = (double) MountainHouseTotal + 2.50;
+            BigDecimal Rate = new BigDecimal("2.50");
+            MountainHouseTotal = MountainHouseTotal.add(Rate);
         }
-        MountainHouseText.setText(Double.toString(MountainHouseTotal));
+        MountainHouseText.setText(MountainHouseTotal.toString());
 
-        ReinbursmentTotal = (double) TracyTotal + MountainHouseTotal;
-        ReimbursementTotalText.setText(Double.toString(ReinbursmentTotal));
+        ReinbursmentTotal = TracyTotal.add(MountainHouseTotal);
+        ReimbursementTotalText.setText(ReinbursmentTotal.toString());
 
-        CompensationTotal = (double) TipsTotal + ReinbursmentTotal;
-        CompensationTotalText.setText(Double.toString(CompensationTotal));
+        CompensationTotal = TipsTotal.add(ReinbursmentTotal);
+        CompensationTotalText.setText(CompensationTotal.toString());
 
         ArrayList<Integer> cashOrders = pizzaDriverDB.getAllCashOrders();
         for (final Integer orderNumber: cashOrders ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            double OrderTotal = Double.parseDouble(result.getString(result.getColumnIndex("OrderTotal")));
-            CashOrdersTotal = (double) CashOrdersTotal + OrderTotal;
+            BigDecimal OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
+            CashOrdersTotal = CashOrdersTotal.add(OrderTotal);
         }
 
-        CashOrdersTotalText.setText(Double.toString(CashOrdersTotal));
+        CashOrdersTotalText.setText(CashOrdersTotal.toString());
 
-        NetCash = (double) (CreditTotal + ReinbursmentTotal) - CashOrdersTotal;
-        netCashText.setText(Double.toString(NetCash));
+        NetCash = (CreditTotal.add(ReinbursmentTotal)).subtract(CashOrdersTotal);
+        netCashText.setText(NetCash.toString());
 
         OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", 0);
         OrdersCreditManual = pizzaDriverDB.numberOfRowsPerType("Credit Manual", 0);

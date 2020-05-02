@@ -44,7 +44,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  TABLE);
     }
 
-    public boolean insertOrder (Integer OrderNumber,  String OrderType, double Tip, Integer TipCashBool, double OrderTotal, double CashReceived, String Location){
+    public boolean insertOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);
@@ -76,7 +76,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateOrder (Integer OrderNumber,  String OrderType, double Tip, Integer TipCashBool, double OrderTotal, double CashReceived, String Location) {
+    public boolean updateOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);

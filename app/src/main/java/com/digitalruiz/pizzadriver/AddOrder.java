@@ -3,6 +3,7 @@ package com.digitalruiz.pizzadriver;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -34,10 +35,10 @@ public class AddOrder extends AppCompatActivity {
     Integer oldOrderNumber;
     boolean locationTracy;
     boolean locationMountainHouse;
-    double Tip;
+    BigDecimal Tip;
     Integer TipCashBool;
-    double OrderTotal;
-    double CashReceived;
+    BigDecimal OrderTotal;
+    BigDecimal CashReceived;
     String location;
 
     SQLiteDBHelper pizzaDriverDB;
@@ -55,6 +56,8 @@ public class AddOrder extends AppCompatActivity {
         Intent intent = getIntent();
         orderNumber = intent.getExtras().getInt("orderNumber");
         oldOrderNumber = intent.getExtras().getInt("oldOrderNumber");
+
+
 
 
         pizzaDriverDB = new SQLiteDBHelper(this);
@@ -149,8 +152,8 @@ public class AddOrder extends AppCompatActivity {
                 // What to do here, set default?
             }
 
-            Tip = Double.parseDouble(result.getString(result.getColumnIndex("Tip")));
-            tipEditText.setText(Double.toString(Tip));
+            Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
+            tipEditText.setText(Tip.toString());
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
             if (TipCashBool == 1){
@@ -160,11 +163,11 @@ public class AddOrder extends AppCompatActivity {
                 cashCheckedBox.setChecked(false);
             }
 
-            OrderTotal = Double.parseDouble(result.getString(result.getColumnIndex("OrderTotal")));
-            orderTotalEditText.setText(Double.toString(OrderTotal));
+            OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
+            orderTotalEditText.setText(OrderTotal.toString());
 
-            CashReceived = Double.parseDouble(result.getString(result.getColumnIndex("CashReceived")));
-            cashReceivedEditText.setText(Double.toString(CashReceived));
+            CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
+            cashReceivedEditText.setText(CashReceived.toString());
 
 
             result.close();
@@ -285,29 +288,29 @@ public class AddOrder extends AppCompatActivity {
                         TipCashBool = 0;
                     }
                     if (TextUtils.isEmpty(tipEditText.getText().toString())){
-                        Tip = 0.00d;
+                        Tip = new BigDecimal("0.00");
                     }
                     else {
-                        Tip = Double.parseDouble(tipEditText.getText().toString());
+                        Tip = new BigDecimal(tipEditText.getText().toString());
                     }
 
 
                     if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
-                        OrderTotal = 0.00d;
+                        OrderTotal = new BigDecimal("0.00");
                     }
                     else {
-                        OrderTotal = Double.parseDouble(orderTotalEditText.getText().toString());
+                        OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
                     }
                     if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
-                        CashReceived = 0.00d;
+                        CashReceived = new BigDecimal("0.00");
                     }
                     else {
-                        CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
+                        CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                     }
                     Cursor data = pizzaDriverDB.getData(orderNumber);
                     Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
                     if (data.getCount() == 1) {
-                        boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip, TipCashBool, OrderTotal, CashReceived, OrderLocation);
+                        boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                         data.close();
                         if (updateResult){
                             Log.v("Test", "Data Updated " + updateResult);
@@ -323,7 +326,7 @@ public class AddOrder extends AppCompatActivity {
 
                     }
                     else {
-                        boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip, TipCashBool, OrderTotal, CashReceived, OrderLocation);
+                        boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                         if (result) {
                             Log.v("Test", "Data inserted" + result);
                             Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
@@ -384,22 +387,22 @@ public class AddOrder extends AppCompatActivity {
         cashReceivedEditText.setVisibility(EditText.VISIBLE);
 
         if (TextUtils.isEmpty(tipEditText.getText().toString())) {
-            Tip = 0.00d;
+            Tip = new BigDecimal("0.00");
         }
         else {
-            Tip = Double.parseDouble(tipEditText.getText().toString());
+            Tip = new BigDecimal(tipEditText.getText().toString());
         }
         if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
-            OrderTotal = 0.00d;
+            OrderTotal = new BigDecimal("0.00");
         }
         else {
-            OrderTotal = Double.parseDouble(orderTotalEditText.getText().toString());
+            OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
         }
         if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
-            CashReceived = 0.00d;
+            CashReceived = new BigDecimal("0.00");
         }
         else {
-            CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
+            CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
         }
         orderTotalEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -411,26 +414,26 @@ public class AddOrder extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.v("Test", "changed");
                 if (TextUtils.isEmpty(tipEditText.getText().toString())) {
-                    Tip = 0.00d;
+                    Tip = new BigDecimal("0.00");
                 }
                 else {
-                    Tip = Double.parseDouble(tipEditText.getText().toString());
+                    Tip = new BigDecimal(tipEditText.getText().toString());
                 }
                 if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
-                    OrderTotal = 0.00d;
+                    OrderTotal = new BigDecimal("0.00");
                 }
                 else {
-                    OrderTotal = Double.parseDouble(orderTotalEditText.getText().toString());
+                    OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
                 }
                 if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
-                    CashReceived = 0.00d;
+                    CashReceived = new BigDecimal("0.00");
                 }
                 else {
-                    CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
+                    CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
-                double tip = (double) CashReceived - OrderTotal;
-                Log.v("Test", "changed" + tip);
-                tipEditText.setText(Double.toString(tip));
+                Tip = new BigDecimal(CashReceived.subtract(OrderTotal).toString());
+                Log.v("Test", "changed" + tipEditText.toString());
+                tipEditText.setText(Tip.toString());
             }
 
             @Override
@@ -448,26 +451,26 @@ public class AddOrder extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.v("Test", "changed");
                 if (TextUtils.isEmpty(tipEditText.getText().toString())) {
-                    Tip = 0.00d;
+                    Tip = new BigDecimal("0.00");
                 }
                 else {
-                    Tip = Double.parseDouble(tipEditText.getText().toString());
+                    Tip = new BigDecimal(tipEditText.getText().toString());
                 }
                 if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
-                    OrderTotal = 0.00d;
+                    OrderTotal = new BigDecimal("0.00");
                 }
                 else {
-                    OrderTotal = Double.parseDouble(orderTotalEditText.getText().toString());
+                    OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
                 }
                 if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
-                    CashReceived = 0.00d;
+                    CashReceived = new BigDecimal("0.00");
                 }
                 else {
-                    CashReceived = Double.parseDouble(cashReceivedEditText.getText().toString());
+                    CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
-                double tip = (double) CashReceived - OrderTotal;
-                Log.v("Test", "changed" + tip);
-                tipEditText.setText(Double.toString(tip));
+                Tip = new BigDecimal(CashReceived.subtract(OrderTotal).toString());
+                Log.v("Test", "changed" + Tip.toString());
+                tipEditText.setText(Tip.toString());
             }
 
             @Override
