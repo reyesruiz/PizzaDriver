@@ -20,7 +20,6 @@ android:
     - 'google-gdk-license-.+'   
 
 before_cache:
-  - android list targets
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
@@ -33,6 +32,7 @@ cache:
 
 before_script:
   - chmod +x gradlew
+  - android list targets
   - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a -c 100M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
