@@ -345,6 +345,36 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
+        tipEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((tipEditText.getText().toString().equals("0")) || (tipEditText.getText().toString().equals("0.0")) || (tipEditText.getText().toString().equals("0.00")) ){
+                    tipEditText.setText("");
+                }
+            }
+        });
+
+        orderTotalEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((orderTotalEditText.getText().toString().equals("0")) || (orderTotalEditText.getText().toString().equals("0.0")) || (orderTotalEditText.getText().toString().equals("0.00")) ){
+                    orderTotalEditText.setText("");
+                }
+            }
+        });
+
+        cashReceivedEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((cashReceivedEditText.getText().toString().equals("0")) || (cashReceivedEditText.getText().toString().equals("0.0")) || (cashReceivedEditText.getText().toString().equals("0.00"))){
+                    cashReceivedEditText.setText("");
+                }
+            }
+        });
+
+
+
+
 
     }
 
