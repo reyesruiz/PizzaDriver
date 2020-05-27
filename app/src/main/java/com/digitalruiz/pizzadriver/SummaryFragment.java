@@ -126,12 +126,12 @@ public class SummaryFragment extends Fragment {
         NetCash = (CreditTotal.add(ReinbursmentTotal)).subtract(CashOrdersTotal);
         netCashText.setText(NetCash.toString());
 
-        OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", 0);
-        OrdersCreditManual = pizzaDriverDB.numberOfRowsPerType("Credit Manual", 0);
-        OrdersCreditManualCash = pizzaDriverDB.numberOfRowsPerType("Credit Manual", 1);
-        OrdersCash = pizzaDriverDB.numberOfRowsPerType("Cash", 1);
-        OrdersGrubhub = pizzaDriverDB.numberOfRowsPerType("Grubhub", 0);
-        OrdersOther = pizzaDriverDB.numberOfRowsPerType("Other", 0);
+        OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", "0");
+        OrdersCreditManual = pizzaDriverDB.numberOfRowsPerType("Credit Manual", "0");
+        OrdersCreditManualCash = pizzaDriverDB.numberOfRowsPerType("Credit Manual", "1");
+        OrdersCash = pizzaDriverDB.numberOfRowsPerType("Cash", "1");
+        OrdersGrubhub = pizzaDriverDB.numberOfRowsPerType("Grubhub", "*");
+        OrdersOther = pizzaDriverDB.numberOfRowsPerType("Other", "*");
         OrdersTotal = OrdersCreditAuto + OrdersCreditManual + OrdersCreditManualCash + OrdersCash + OrdersGrubhub + OrdersOther;
         OrdersTotalFromDB = pizzaDriverDB.numberOfRows();
 

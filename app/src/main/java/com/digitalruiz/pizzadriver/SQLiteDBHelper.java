@@ -190,10 +190,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-
-    public int numberOfRowsPerType(String Type, Integer TipCashBool){
+    public int numberOfRowsPerType(String Type, String TipCashBool){
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"" + " AND " + TIP_CASH_BOOL + " = " + TipCashBool, null);
+        Cursor res;
+        if (TipCashBool.equals("*")){
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"", null);
+        }
+        else {
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"" + " AND " + TIP_CASH_BOOL + " = " + TipCashBool, null);
+        }
         res.moveToFirst();
         int counter = 0;
         while(res.isAfterLast() == false){

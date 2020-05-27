@@ -49,7 +49,6 @@ public class OrderListFragment extends Fragment {
         ArrayList<Integer> orders = pizzaDriverDB.getAllOrders();
         Log.v("Test", "Array is " + orders);
 
-        LinearLayout wrapperLayout = (LinearLayout) view.findViewById(R.id.wrapperLayout);
         TableLayout WrapperTable = (TableLayout) view.findViewById(R.id.wrapperTableLayout);
 
         TableRow HeadLine = new TableRow(getContext());
