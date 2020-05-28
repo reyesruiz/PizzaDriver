@@ -44,9 +44,23 @@ public class OrderListFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = (Button) view.findViewById(R.id.buttonSumary);
-
-
-        ArrayList<Integer> orders = pizzaDriverDB.getAllOrders();
+        ArrayList<Integer> orders;
+        if (getArguments() == null){
+            orders = pizzaDriverDB.getAllOrders();
+        }
+        else {
+            if ((getArguments().getString("OrderType").equals("*")) && (getArguments().getString("CashBool").equals("*")) && (getArguments().getString("Location").equals("*"))) {
+                orders = pizzaDriverDB.getAllOrders();
+            }
+            else if (getArguments().getString("Location").equals("*")){
+                Log.v("TEST", "GetAllOdersPerType");
+                orders = pizzaDriverDB.getAllOrdersPerType(getArguments().getString("OrderType"), getArguments().getString("CashBool"));
+                Log.v("TEST", orders + "");
+            }
+            else {
+                orders = pizzaDriverDB.getAllOrdersPerLocation(getArguments().getString("Location"));
+            }
+        }
         Log.v("Test", "Array is " + orders);
 
         TableLayout WrapperTable = (TableLayout) view.findViewById(R.id.wrapperTableLayout);
@@ -151,6 +165,13 @@ public class OrderListFragment extends Fragment {
             Row.addView(CashText);
             Row.addView(TipText);
             Row.addView(LocationText);
+            Row.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.v("TEST", "Long Click");
+                    return false;
+                }
+            });
 
             WrapperTable.addView(Row);
         }

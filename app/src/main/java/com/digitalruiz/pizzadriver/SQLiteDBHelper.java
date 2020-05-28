@@ -209,4 +209,42 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<Integer> getAllOrdersPerType(String Type, String TipCashBool) {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
+
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res;
+        if (TipCashBool.equals("*")){
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"", null);
+        }
+        else {
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"" + " AND " + TIP_CASH_BOOL + " = " + TipCashBool, null);
+            Log.v("TEST", res + "");
+        }
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public ArrayList<Integer> getAllOrdersPerLocation(String Location) {
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
+
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res;
+        res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + LOCATION + " = \"" + Location + "\"", null);
+
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+
 }

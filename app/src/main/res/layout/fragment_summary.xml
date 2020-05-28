@@ -393,7 +393,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/CreditAutoStatic"
+                android:id="@+id/creditAutoStatic"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -416,7 +416,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/CreditAutoStatic"
+                app:layout_constraintStart_toEndOf="@id/creditAutoStatic"
                 app:layout_constraintTop_toBottomOf="@id/divider5"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -431,7 +431,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/CreditAutoStatic"
+                app:layout_constraintTop_toBottomOf="@id/creditAutoStatic"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -477,7 +477,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/CashStatic"
+                android:id="@+id/cashStatic"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -500,7 +500,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/CashStatic"
+                app:layout_constraintStart_toEndOf="@id/cashStatic"
                 app:layout_constraintTop_toBottomOf="@id/creditManualCash"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -515,7 +515,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/CashStatic"
+                app:layout_constraintTop_toBottomOf="@id/cashStatic"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
