@@ -243,12 +243,9 @@ public class AddOrder extends AppCompatActivity {
         orderNumberChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Boolean locationTracy = tracyChip.isChecked();
-                final Boolean locationMountainHouse = mountainHouseChip.isChecked();
                 Intent changeNumberIntent = new Intent(AddOrder.this, addOrderNumber.class);
                 changeNumberIntent.putExtra("orderNumber", orderNumber);
                 startActivity(changeNumberIntent);
-
             }
         });
 
