@@ -119,7 +119,7 @@ public class OrderListFragment extends Fragment {
             Log.v("Test", "Cash " + Cash);
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            Row.setPadding(5, 5, 5, 5);
+            Row.setPadding(0, 0, 0, 0);
             if (counter % 2 == 0){
                 Row.setBackgroundColor(Color.parseColor("#0079d6"));
             }

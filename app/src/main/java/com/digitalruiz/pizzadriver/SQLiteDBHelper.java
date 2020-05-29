@@ -131,6 +131,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
@@ -145,6 +146,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
@@ -159,6 +161,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
@@ -173,6 +176,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
@@ -187,6 +191,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
@@ -205,6 +210,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             counter = counter + 1;
             res.moveToNext();
         }
+        res.close();
         return counter;
     }
 
@@ -227,6 +233,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
@@ -243,6 +250,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
+        res.close();
         return array_list;
     }
 
