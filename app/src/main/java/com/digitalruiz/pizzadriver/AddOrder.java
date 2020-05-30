@@ -39,7 +39,6 @@ public class AddOrder extends AppCompatActivity {
     Integer TipCashBool;
     BigDecimal OrderTotal;
     BigDecimal CashReceived;
-    String location;
 
     SQLiteDBHelper pizzaDriverDB;
 
@@ -178,8 +177,6 @@ public class AddOrder extends AppCompatActivity {
         }
 
 
-        Log.v("Test", "COUNT" + Integer.toString(result.getCount()));
-        Log.v("Test", "cursor " + result);
         creditAutoChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +251,7 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
                 int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
-
+                // TODO SIMPLIFY THIS
                 boolean error = false;
 
                 if (OrderTypeSelectedChipID == -1) {
@@ -273,7 +270,7 @@ public class AddOrder extends AppCompatActivity {
                     Chip OrderLocationSelectedChip = (Chip) findViewById(OrderLocationSelectedChipID);
                     OrderLocation = OrderLocationSelectedChip.getText().toString();
                 }
-                if (error == true){
+                if (error){
                     Toast toast = Toast.makeText(getApplicationContext(), "Please select all options", Toast.LENGTH_LONG);
                     toast.show();
                 }

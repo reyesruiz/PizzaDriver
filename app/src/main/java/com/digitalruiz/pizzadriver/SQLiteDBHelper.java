@@ -55,18 +55,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(CASH_RECEIVED, CashReceived);
         contentValues.put(LOCATION, Location);
         long rowInserted  = pizza_driver_db.insert(TABLE, null, contentValues);
-        if(rowInserted != -1) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return rowInserted != -1;
     }
 
     public Cursor getData(int orderNumber) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select * from " + TABLE + " where " + ORDER_NUMBER + "="+orderNumber+"", null );
-        return res;
+        return pizza_driver_db.rawQuery( "select * from " + TABLE + " where " + ORDER_NUMBER + "="+orderNumber+"", null );
     }
 
 
@@ -89,12 +83,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
         long rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
         Log.v("Test", "row updated " + rowUpdated);
-        if(rowUpdated != -1) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return rowUpdated != -1;
     }
 
     public boolean updateOrderNumber (Integer OldOrderNumber, Integer OrderNumber){
@@ -104,12 +93,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OldOrderNumber) } );
         long rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
         Log.v("Test", "row updated " + rowUpdated);
-        if(rowUpdated != -1) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return rowUpdated != -1;
     }
 
     public Integer deleteOrder (Integer OrderNumber) {
@@ -127,7 +111,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Cursor res =  pizza_driver_db.rawQuery( "select * from " + TABLE, null );
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
@@ -142,7 +126,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\" OR " + ORDER_TYPE + " = \"Grubhub\" OR " + ORDER_TYPE + " = \"Other\") AND " + TIP_CASH_BOOL + " = 0", null);
         res.moveToFirst();
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
@@ -157,7 +141,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\" OR " + TIP_CASH_BOOL + " = 1", null);
         res.moveToFirst();
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
@@ -172,7 +156,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + LOCATION + " = \"" + location + "\"", null);
         res.moveToFirst();
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
@@ -187,7 +171,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\"", null);
         res.moveToFirst();
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
@@ -206,7 +190,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
         res.moveToFirst();
         int counter = 0;
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             counter = counter + 1;
             res.moveToNext();
         }
@@ -229,7 +213,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
@@ -246,7 +230,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
             res.moveToNext();
         }
