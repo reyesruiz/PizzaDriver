@@ -104,7 +104,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tipStatic"
         app:layout_constraintTop_toBottomOf="@+id/orderType"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:importantForAutofill="no" />
 
     <CheckBox
         android:id="@+id/cashCheckedBox"
@@ -150,7 +151,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/orderTotalStatic"
         app:layout_constraintTop_toBottomOf="@id/tipStatic"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/cashReceivedStatic"
@@ -183,7 +185,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/cashReceivedStatic"
         app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:importantForAutofill="no" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/OrderLocation"
