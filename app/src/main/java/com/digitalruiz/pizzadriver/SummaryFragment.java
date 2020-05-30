@@ -34,7 +34,7 @@ public class SummaryFragment extends Fragment {
         TextView TipsTotalText = view.findViewById(R.id.tipsTotal);
         TextView TracyTotalText = view.findViewById(R.id.tracyTotal);
         TextView MountainHouseText = view.findViewById(R.id.mountainHouseTotal);
-        TextView ReimbursementTotalText = view.findViewById(R.id.reinbursmentTotal);
+        TextView ReimbursementTotalText = view.findViewById(R.id.reimbursementTotal);
         TextView CompensationTotalText = view.findViewById(R.id.compensationTotal);
         TextView CashOrdersTotalText = view.findViewById(R.id.cashOrdersTotal);
         TextView netCashText = view.findViewById(R.id.netCash);
@@ -62,7 +62,7 @@ public class SummaryFragment extends Fragment {
         BigDecimal CreditTotal = new BigDecimal("0.00");
         BigDecimal CashTotal = new BigDecimal("0.00");
         BigDecimal TipsTotal = new BigDecimal("0.00");
-        BigDecimal ReinbursmentTotal = new BigDecimal("0.00");
+        BigDecimal ReimbursementTotal = new BigDecimal("0.00");
         BigDecimal TracyTotal = new BigDecimal("0.00");
         BigDecimal MountainHouseTotal = new BigDecimal("0.00");
         BigDecimal CompensationTotal = new BigDecimal("0.00");
@@ -118,10 +118,10 @@ public class SummaryFragment extends Fragment {
         }
         MountainHouseText.setText(MountainHouseTotal.toString());
 
-        ReinbursmentTotal = TracyTotal.add(MountainHouseTotal);
-        ReimbursementTotalText.setText(ReinbursmentTotal.toString());
+        ReimbursementTotal = TracyTotal.add(MountainHouseTotal);
+        ReimbursementTotalText.setText(ReimbursementTotal.toString());
 
-        CompensationTotal = TipsTotal.add(ReinbursmentTotal);
+        CompensationTotal = TipsTotal.add(ReimbursementTotal);
         CompensationTotalText.setText(CompensationTotal.toString());
 
         ArrayList<Integer> cashOrders = pizzaDriverDB.getAllCashOrders();
@@ -134,7 +134,7 @@ public class SummaryFragment extends Fragment {
 
         CashOrdersTotalText.setText(CashOrdersTotal.toString());
 
-        NetCash = (CreditTotal.add(ReinbursmentTotal)).subtract(CashOrdersTotal);
+        NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
         netCashText.setText(NetCash.toString());
 
         OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", "0");

@@ -43,7 +43,7 @@ public class OrderListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
-        Button button_first = view.findViewById(R.id.buttonSumary);
+        Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> orders;
         if (getArguments() == null){
             orders = pizzaDriverDB.getAllOrders();
@@ -53,7 +53,7 @@ public class OrderListFragment extends Fragment {
                 orders = pizzaDriverDB.getAllOrders();
             }
             else if (Objects.equals(requireArguments().getString("Location"), "*")){
-                Log.v("TEST", "GetAllOdersPerType");
+                Log.v("TEST", "GetAllOrdersPerType");
                 orders = pizzaDriverDB.getAllOrdersPerType(getArguments().getString("OrderType"), Objects.requireNonNull(requireArguments().getString("CashBool")));
                 Log.v("TEST", orders + "");
             }
@@ -124,6 +124,7 @@ public class OrderListFragment extends Fragment {
                 Row.setBackgroundColor(Color.parseColor("#0079d6"));
             }
             else {
+                //noinspection SpellCheckingInspection
                 Row.setBackgroundColor(Color.parseColor("#00cccc"));
             }
             Chip orderNumberChip = new Chip(requireContext());

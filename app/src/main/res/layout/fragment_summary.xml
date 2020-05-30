@@ -126,13 +126,13 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/reinbursmentHeadLine"
+                android:id="@+id/reimbursementHeadLine"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="REINBURSMENT"
+                android:text="REIMBURSEMENT"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -150,7 +150,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reinbursmentHeadLine"
+                app:layout_constraintTop_toBottomOf="@id/reimbursementHeadLine"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -210,12 +210,12 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/reinbursmentTotalStatic"
+                android:id="@+id/reimbursementTotalStatic"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Reinbursment Total:"
+                android:text="Reimbursement Total:"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -224,7 +224,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/reinbursmentTotal"
+                android:id="@+id/reimbursementTotal"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/reinbursmentTotalStatic"
+                app:layout_constraintStart_toEndOf="@id/reimbursementTotalStatic"
                 app:layout_constraintTop_toBottomOf="@id/mountainHouseTotal"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -247,7 +247,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reinbursmentTotalStatic"
+                app:layout_constraintTop_toBottomOf="@id/reimbursementTotalStatic"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -275,7 +275,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/compensationTotalStatic"
-                app:layout_constraintTop_toBottomOf="@id/reinbursmentTotal"
+                app:layout_constraintTop_toBottomOf="@id/reimbursementTotal"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
