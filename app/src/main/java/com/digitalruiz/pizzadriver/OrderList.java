@@ -22,8 +22,8 @@ public class OrderList extends AppCompatActivity {
 
         pizzaDriverDB = new SQLiteDBHelper(this);
 
-        FloatingActionButton addOrder = (FloatingActionButton)findViewById(R.id.add);
-        FloatingActionButton startStop = (FloatingActionButton)findViewById(R.id.startStopShift);
+        FloatingActionButton addOrder = findViewById(R.id.add);
+        FloatingActionButton startStop = findViewById(R.id.startStopShift);
 
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override

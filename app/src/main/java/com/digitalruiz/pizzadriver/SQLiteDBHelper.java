@@ -23,7 +23,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
 
     public SQLiteDBHelper(Context context) {
-        super((Context) context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -66,8 +66,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     public int numberOfRows(){
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(pizza_driver_db, TABLE);
-        return numRows;
+        return (int) DatabaseUtils.queryNumEntries(pizza_driver_db, TABLE);
     }
 
     public boolean updateOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location) {
@@ -96,15 +95,17 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowUpdated != -1;
     }
 
-    public Integer deleteOrder (Integer OrderNumber) {
-        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
-        return pizza_driver_db.delete(TABLE,
-                ORDER_NUMBER + " = ? ",
-                new String[] { Integer.toString(OrderNumber) });
-    }
+// --Commented out by Inspection START (5/30/2020 1:26 AM):
+//    public Integer deleteOrder (Integer OrderNumber) {
+//        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+//        return pizza_driver_db.delete(TABLE,
+//                ORDER_NUMBER + " = ? ",
+//                new String[] { Integer.toString(OrderNumber) });
+//    }
+// --Commented out by Inspection STOP (5/30/2020 1:26 AM)
 
     public ArrayList<Integer> getAllOrders() {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -120,7 +121,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Integer> getAllCredit() {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -135,7 +136,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Integer> getAllCash() {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -150,7 +151,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Integer> getAllLocation(String location) {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -165,7 +166,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Integer> getAllCashOrders() {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -200,7 +201,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
 
     public ArrayList<Integer> getAllOrdersPerType(String Type, String TipCashBool) {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;
@@ -222,7 +223,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Integer> getAllOrdersPerLocation(String Location) {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<>();
 
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;

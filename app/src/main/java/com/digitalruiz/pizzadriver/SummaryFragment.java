@@ -29,32 +29,32 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView TipsCreditText = (TextView) view.findViewById(R.id.tipsCredit);
-        TextView TipsCashText = (TextView) view.findViewById(R.id.tipsCash);
-        TextView TipsTotalText = (TextView) view.findViewById(R.id.tipsTotal);
-        TextView TracyTotalText = (TextView) view.findViewById(R.id.tracyTotal);
-        TextView MountainHouseText = (TextView) view.findViewById(R.id.mountainHouseTotal);
-        TextView ReimbursementTotalText = (TextView) view.findViewById(R.id.reinbursmentTotal);
-        TextView CompensationTotalText = (TextView) view.findViewById(R.id.compensationTotal);
-        TextView CashOrdersTotalText = (TextView) view.findViewById(R.id.cashOrdersTotal);
-        TextView netCashText = (TextView) view.findViewById(R.id.netCash);
-        TextView ordersCreditAutoText = (TextView) view.findViewById(R.id.CreditAuto);
-        TextView ordersCreditManualText = (TextView) view.findViewById(R.id.creditManual);
-        TextView ordersCreditManualCashText = (TextView) view.findViewById(R.id.creditManualCash);
-        TextView ordersCashText = (TextView) view.findViewById(R.id.Cash);
-        TextView ordersGrubhubText = (TextView) view.findViewById(R.id.grubhub);
-        TextView ordersOtherText = (TextView) view.findViewById(R.id.other);
-        TextView ordersTotalText = (TextView) view.findViewById(R.id.Total);
+        TextView TipsCreditText = view.findViewById(R.id.tipsCredit);
+        TextView TipsCashText = view.findViewById(R.id.tipsCash);
+        TextView TipsTotalText = view.findViewById(R.id.tipsTotal);
+        TextView TracyTotalText = view.findViewById(R.id.tracyTotal);
+        TextView MountainHouseText = view.findViewById(R.id.mountainHouseTotal);
+        TextView ReimbursementTotalText = view.findViewById(R.id.reinbursmentTotal);
+        TextView CompensationTotalText = view.findViewById(R.id.compensationTotal);
+        TextView CashOrdersTotalText = view.findViewById(R.id.cashOrdersTotal);
+        TextView netCashText = view.findViewById(R.id.netCash);
+        TextView ordersCreditAutoText = view.findViewById(R.id.CreditAuto);
+        TextView ordersCreditManualText = view.findViewById(R.id.creditManual);
+        TextView ordersCreditManualCashText = view.findViewById(R.id.creditManualCash);
+        TextView ordersCashText = view.findViewById(R.id.Cash);
+        TextView ordersGrubhubText = view.findViewById(R.id.grubhub);
+        TextView ordersOtherText = view.findViewById(R.id.other);
+        TextView ordersTotalText = view.findViewById(R.id.Total);
 
-        TextView creditAutoStatic = (TextView) view.findViewById(R.id.creditAutoStatic);
-        TextView creditManualStatic = (TextView) view.findViewById(R.id.creditManualStatic);
-        TextView creditManualCashStatic = (TextView) view.findViewById(R.id.creditManualCashStatic);
-        TextView cashStatic = (TextView) view.findViewById(R.id.cashStatic);
-        TextView grubhubStatic = (TextView) view.findViewById(R.id.grubhubStatic);
-        TextView otherStatic = (TextView) view.findViewById(R.id.otherStatic);
+        TextView creditAutoStatic = view.findViewById(R.id.creditAutoStatic);
+        TextView creditManualStatic = view.findViewById(R.id.creditManualStatic);
+        TextView creditManualCashStatic = view.findViewById(R.id.creditManualCashStatic);
+        TextView cashStatic = view.findViewById(R.id.cashStatic);
+        TextView grubhubStatic = view.findViewById(R.id.grubhubStatic);
+        TextView otherStatic = view.findViewById(R.id.otherStatic);
 
-        TextView tracy = (TextView) view.findViewById(R.id.tracy);
-        TextView mountainHouse = (TextView) view.findViewById(R.id.mountainHouse);
+        TextView tracy = view.findViewById(R.id.tracy);
+        TextView mountainHouse = view.findViewById(R.id.mountainHouse);
 
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());

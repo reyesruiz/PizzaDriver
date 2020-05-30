@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class OrderListFragment extends Fragment {
 
@@ -43,18 +43,18 @@ public class OrderListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
-        Button button_first = (Button) view.findViewById(R.id.buttonSumary);
+        Button button_first = view.findViewById(R.id.buttonSumary);
         ArrayList<Integer> orders;
         if (getArguments() == null){
             orders = pizzaDriverDB.getAllOrders();
         }
         else {
-            if ((getArguments().getString("OrderType").equals("*")) && (getArguments().getString("CashBool").equals("*")) && (getArguments().getString("Location").equals("*"))) {
+            if ((Objects.equals(requireArguments().getString("OrderType"), "*")) && (Objects.equals(requireArguments().getString("CashBool"), "*")) && (Objects.equals(requireArguments().getString("Location"), "*"))) {
                 orders = pizzaDriverDB.getAllOrders();
             }
-            else if (getArguments().getString("Location").equals("*")){
+            else if (Objects.equals(requireArguments().getString("Location"), "*")){
                 Log.v("TEST", "GetAllOdersPerType");
-                orders = pizzaDriverDB.getAllOrdersPerType(getArguments().getString("OrderType"), getArguments().getString("CashBool"));
+                orders = pizzaDriverDB.getAllOrdersPerType(getArguments().getString("OrderType"), Objects.requireNonNull(requireArguments().getString("CashBool")));
                 Log.v("TEST", orders + "");
             }
             else {
@@ -63,7 +63,7 @@ public class OrderListFragment extends Fragment {
         }
         Log.v("Test", "Array is " + orders);
 
-        TableLayout WrapperTable = (TableLayout) view.findViewById(R.id.wrapperTableLayout);
+        TableLayout WrapperTable = view.findViewById(R.id.wrapperTableLayout);
 
         TableRow HeadLine = new TableRow(getContext());
         HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
@@ -126,7 +126,7 @@ public class OrderListFragment extends Fragment {
             else {
                 Row.setBackgroundColor(Color.parseColor("#00cccc"));
             }
-            Chip orderNumberChip = new Chip(getContext());
+            Chip orderNumberChip = new Chip(requireContext());
             orderNumberChip.setText(orderNumber.toString());
             orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             orderNumberChip.setOnClickListener(new View.OnClickListener() {
@@ -146,9 +146,7 @@ public class OrderListFragment extends Fragment {
             if (Cash == 1){
                 CashText.setText("Cash");
             }
-            else {
 
-            }
             CashText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView TipText = new TextView(getContext());

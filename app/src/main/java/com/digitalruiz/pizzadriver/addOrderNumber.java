@@ -10,6 +10,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class addOrderNumber extends AppCompatActivity {
 
     @Override
@@ -20,16 +22,17 @@ public class addOrderNumber extends AppCompatActivity {
 
         Intent intent = getIntent();
         final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        final EditText orderNumberText = (EditText)this.findViewById(R.id.orderNumber);
+        final EditText orderNumberText = this.findViewById(R.id.orderNumber);
 
         final Integer oldOrderNumber;
 
 
+        assert imm != null;
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
         if (intent.hasExtra("orderNumber")) {
-            final Integer orderNumber = intent.getExtras().getInt("orderNumber");
-            orderNumberText.setText(orderNumber.toString());
+            final int orderNumber = Objects.requireNonNull(intent.getExtras()).getInt("orderNumber");
+            orderNumberText.setText(Integer.toString(orderNumber));
             oldOrderNumber = orderNumber;
         }
         else {
@@ -42,11 +45,13 @@ public class addOrderNumber extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-                    Integer orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
+                    int orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
                     Intent addOrderIntent = new Intent(addOrderNumber.this, AddOrder.class);
                     addOrderIntent.putExtra("orderNumber", orderNumber);
-                    if (orderNumber != oldOrderNumber){
-                        addOrderIntent.putExtra("oldOrderNumber", oldOrderNumber);
+                    if (oldOrderNumber != null) {
+                        if (orderNumber != oldOrderNumber) {
+                            addOrderIntent.putExtra("oldOrderNumber", oldOrderNumber);
+                        }
                     }
                     startActivity(addOrderIntent);
                 }

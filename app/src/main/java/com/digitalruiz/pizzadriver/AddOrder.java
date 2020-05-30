@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.Objects;
+
 public class AddOrder extends AppCompatActivity {
 
 
@@ -33,8 +35,6 @@ public class AddOrder extends AppCompatActivity {
     String OrderLocation;
     Integer orderNumber;
     Integer oldOrderNumber;
-    boolean locationTracy;
-    boolean locationMountainHouse;
     BigDecimal Tip;
     Integer TipCashBool;
     BigDecimal OrderTotal;
@@ -53,39 +53,39 @@ public class AddOrder extends AppCompatActivity {
         setContentView(R.layout.activity_add_order);
 
         Intent intent = getIntent();
-        orderNumber = intent.getExtras().getInt("orderNumber");
+        orderNumber = Objects.requireNonNull(intent.getExtras()).getInt("orderNumber");
         oldOrderNumber = intent.getExtras().getInt("oldOrderNumber");
 
 
 
 
         pizzaDriverDB = new SQLiteDBHelper(this);
-        SaveButton = (Button)findViewById(R.id.saveButton);
+        SaveButton = findViewById(R.id.saveButton);
 
-        final Chip orderNumberChip = (Chip)this.findViewById(R.id.orderNumberChip);
+        final Chip orderNumberChip = this.findViewById(R.id.orderNumberChip);
 
-        final ChipGroup orderTypeChipGroup = (ChipGroup)findViewById(R.id.orderType);
+        final ChipGroup orderTypeChipGroup = findViewById(R.id.orderType);
 
-        final Chip creditAutoChip = (Chip)this.findViewById(R.id.creditAutoType);
-        final Chip creditManualChip = (Chip)this.findViewById(R.id.creditManualType);
-        final Chip cashChip = (Chip)this.findViewById(R.id.cashType);
-        final Chip grubhubChip = (Chip)this.findViewById(R.id.grubhubType);
-        final Chip otherChip = (Chip)this.findViewById(R.id.otherType);
+        final Chip creditAutoChip = this.findViewById(R.id.creditAutoType);
+        final Chip creditManualChip = this.findViewById(R.id.creditManualType);
+        final Chip cashChip = this.findViewById(R.id.cashType);
+        final Chip grubhubChip = this.findViewById(R.id.grubhubType);
+        final Chip otherChip = this.findViewById(R.id.otherType);
 
-        final ChipGroup orderLocationChipGroup = (ChipGroup)findViewById(R.id.OrderLocation);
+        final ChipGroup orderLocationChipGroup = findViewById(R.id.OrderLocation);
 
-        final Chip tracyChip = (Chip)this.findViewById(R.id.tracyChip);
-        final Chip mountainHouseChip = (Chip)this.findViewById(R.id.mountainHouseChip);
+        final Chip tracyChip = this.findViewById(R.id.tracyChip);
+        final Chip mountainHouseChip = this.findViewById(R.id.mountainHouseChip);
 
-        TipText = (TextView)findViewById(R.id.tipStatic);
-        orderTotalText = (TextView)findViewById(R.id.orderTotalStatic);
-        cashReceivedText = (TextView)findViewById(R.id.cashReceivedStatic);
+        TipText = findViewById(R.id.tipStatic);
+        orderTotalText = findViewById(R.id.orderTotalStatic);
+        cashReceivedText = findViewById(R.id.cashReceivedStatic);
 
-        tipEditText = (EditText)findViewById(R.id.tip);
-        orderTotalEditText = (EditText)findViewById(R.id.orderTotal);
-        cashReceivedEditText = (EditText)findViewById(R.id.cashReceived);
+        tipEditText = findViewById(R.id.tip);
+        orderTotalEditText = findViewById(R.id.orderTotal);
+        cashReceivedEditText = findViewById(R.id.cashReceived);
 
-        cashCheckedBox = (CheckBox)this.findViewById(R.id.cashCheckedBox);
+        cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
 
         if (oldOrderNumber != null)  {
             pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
@@ -96,16 +96,8 @@ public class AddOrder extends AppCompatActivity {
 
 
         Log.v("test", "bla" + "");
-        tracyChip.setChecked(locationTracy);
-        mountainHouseChip.setChecked(locationMountainHouse);
-        if (tracyChip.isChecked()){
-            Log.v("test", "tracy");
 
-        }
-        else if (mountainHouseChip.isChecked()){
-
-        }
-        else {
+        if ((!tracyChip.isChecked()) && (!mountainHouseChip.isChecked())){
             tracyChip.setChecked(true);
         }
         setInvisible();
@@ -116,28 +108,30 @@ public class AddOrder extends AppCompatActivity {
         if (result.getCount() == 1){
             result.moveToFirst();
             orderType = result.getString(result.getColumnIndex("OrderType"));
-            if (orderType.equals("Credit Auto")){
-                creditAutoChip.setChecked(true);
-                creditAuto();
-            }
-            else if (orderType.equals("Credit Manual")){
-                creditManualChip.setChecked(true);
-                creditManual();
-            }
-            else if (orderType.equals("Cash")){
-                cashChip.setChecked(true);
-                cash();
-            }
-            else if (orderType.equals("Grubhub")){
-                grubhubChip.setChecked(true);
-                grubhub();
-            }
-            else if (orderType.equals("Other")){
-                otherChip.setChecked(true);
-                other();
-            }
-            else {
-                //Nothing
+            switch (orderType) {
+                case "Credit Auto":
+                    creditAutoChip.setChecked(true);
+                    creditAuto();
+                    break;
+                case "Credit Manual":
+                    creditManualChip.setChecked(true);
+                    creditManual();
+                    break;
+                case "Cash":
+                    cashChip.setChecked(true);
+                    cash();
+                    break;
+                case "Grubhub":
+                    grubhubChip.setChecked(true);
+                    grubhub();
+                    break;
+                case "Other":
+                    otherChip.setChecked(true);
+                    other();
+                    break;
+                default:
+                    //Nothing
+                    break;
             }
 
             OrderLocation = result.getString(result.getColumnIndex("Location"));
@@ -149,6 +143,7 @@ public class AddOrder extends AppCompatActivity {
             }
             else {
                 // What to do here, set default?
+                tracyChip.setChecked(true);
             }
 
             Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
@@ -258,7 +253,7 @@ public class AddOrder extends AppCompatActivity {
                     error = true;
                 }
                 else {
-                    Chip OrderTypeSelectedChip = (Chip)findViewById(OrderTypeSelectedChipID);
+                    Chip OrderTypeSelectedChip = findViewById(OrderTypeSelectedChipID);
                     orderType = OrderTypeSelectedChip.getText().toString();
                 }
 
@@ -267,7 +262,7 @@ public class AddOrder extends AppCompatActivity {
                     error = true;
                 }
                 else {
-                    Chip OrderLocationSelectedChip = (Chip) findViewById(OrderLocationSelectedChipID);
+                    Chip OrderLocationSelectedChip = findViewById(OrderLocationSelectedChipID);
                     OrderLocation = OrderLocationSelectedChip.getText().toString();
                 }
                 if (error){
@@ -307,13 +302,11 @@ public class AddOrder extends AppCompatActivity {
                         boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                         data.close();
                         if (updateResult){
-                            Log.v("Test", "Data Updated " + updateResult);
                             Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
                             updateToast.show();
                             startActivity(BackToMain);
                         }
                         else {
-                            Log.v("Test", "ERROR inserting data" + updateResult);
                             Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
                             updateToast.show();
                         }
@@ -322,13 +315,11 @@ public class AddOrder extends AppCompatActivity {
                     else {
                         boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                         if (result) {
-                            Log.v("Test", "Data inserted" + result);
                             Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                             toast.show();
                             startActivity(BackToMain);
 
                         } else {
-                            Log.v("Test", "ERROR inserting data" + result);
                             Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
                             toast.show();
 
