@@ -59,25 +59,26 @@ public class SummaryFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
 
-        BigDecimal CreditTotal = new BigDecimal("0.00");
+        BigDecimal CreditTotal;
         BigDecimal CashTotal = new BigDecimal("0.00");
-        BigDecimal TipsTotal = new BigDecimal("0.00");
-        BigDecimal ReimbursementTotal = new BigDecimal("0.00");
+        BigDecimal TipsTotal;
+        BigDecimal ReimbursementTotal;
         BigDecimal TracyTotal = new BigDecimal("0.00");
         BigDecimal MountainHouseTotal = new BigDecimal("0.00");
-        BigDecimal CompensationTotal = new BigDecimal("0.00");
+        BigDecimal CompensationTotal;
         BigDecimal CashOrdersTotal = new BigDecimal("0.00");
-        BigDecimal NetCash = new BigDecimal("0.00");
-        int OrdersCreditAuto = 0;
-        int OrdersCreditManual = 0;
-        int OrdersCreditManualCash = 0;
-        int OrdersCash = 0;
-        int OrdersGrubhub = 0;
-        int OrdersOther = 0;
-        int OrdersTotal = 0;
-        int OrdersTotalFromDB = 0;
+        BigDecimal NetCash;
+        int OrdersCreditAuto;
+        int OrdersCreditManual;
+        int OrdersCreditManualCash;
+        int OrdersCash;
+        int OrdersGrubhub;
+        int OrdersOther;
+        int OrdersTotal;
+        int OrdersTotalFromDB;
 
         ArrayList<Integer> ordersCredit = pizzaDriverDB.getAllCredit();
+        CreditTotal = new BigDecimal("0.00");
         for (final Integer orderNumber: ordersCredit ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();

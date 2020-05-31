@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter order number"
+        android:hint="@string/enter_order_number"
         android:imeOptions="actionDone"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"

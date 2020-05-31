@@ -71,27 +71,27 @@ public class OrderListFragment extends Fragment {
         HeadLine.setPadding(5, 5, 5, 5);
 
         TextView OrderNumberStatic = new TextView(getContext());
-        OrderNumberStatic.setText("Number");
+        OrderNumberStatic.setText(getString(R.string.number));
         OrderNumberStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderNumberStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView OrderTypeStatic = new TextView(getContext());
-        OrderTypeStatic.setText("Type");
+        OrderTypeStatic.setText(R.string.type);
         OrderTypeStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderTypeStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView CashStatic = new TextView(getContext());
-        CashStatic.setText("Cash?");
+        CashStatic.setText(R.string.cash_boolean);
         CashStatic.setTypeface(CashStatic.getTypeface(), Typeface.BOLD);
         CashStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView TipTextStatic = new TextView(getContext());
-        TipTextStatic.setText("Tip");
+        TipTextStatic.setText(R.string.tip_text);
         TipTextStatic.setTypeface(TipTextStatic.getTypeface(), Typeface.BOLD);
         TipTextStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView LocationStatic = new TextView(getContext());
-        LocationStatic.setText("Location");
+        LocationStatic.setText(R.string.location);
         LocationStatic.setTypeface(LocationStatic.getTypeface(), Typeface.BOLD);
         LocationStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
@@ -145,7 +145,7 @@ public class OrderListFragment extends Fragment {
 
             TextView CashText = new TextView((getContext()));
             if (Cash == 1){
-                CashText.setText("Cash");
+                CashText.setText(R.string.cash);
             }
 
             CashText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
