@@ -499,6 +499,8 @@ public class AddOrder extends AppCompatActivity {
         setInvisible();
         TipText.setVisibility(TextView.VISIBLE);
         tipEditText.setVisibility(EditText.VISIBLE);
+        cashCheckedBox.setVisibility(CheckBox.VISIBLE);
+        cashCheckedBox.setChecked(false);
     }
 
     private void other() {
