@@ -105,7 +105,7 @@ public class SummaryFragment extends Fragment {
         for (final Integer orderNumber: ordersTracy ){
             Cursor result = pizzaDriverDB.getData(orderNumber);
             result.moveToFirst();
-            BigDecimal Rate = new BigDecimal("1.50");
+            BigDecimal Rate = new BigDecimal("1.75");
             TracyTotal =  TracyTotal.add(Rate);
         }
         TracyTotalText.setText(TracyTotal.toString());
