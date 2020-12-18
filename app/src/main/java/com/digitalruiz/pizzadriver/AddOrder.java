@@ -87,8 +87,17 @@ public class AddOrder extends AppCompatActivity {
 
         cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
 
-        if (oldOrderNumber != null)  {
-            pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
+        if ((oldOrderNumber != null )) {
+            boolean updateResult = pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
+            if (updateResult){
+                Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success" + oldOrderNumber, Toast.LENGTH_SHORT);
+                updateToast.show();
+
+            }
+            else {
+                Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update Order Number", Toast.LENGTH_LONG);
+                updateToast.show();
+            }
         }
 
         orderNumberChip.setText(orderNumber.toString());
@@ -150,12 +159,7 @@ public class AddOrder extends AppCompatActivity {
             tipEditText.setText(Tip.toString());
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
-            if (TipCashBool == 1){
-                cashCheckedBox.setChecked(true);
-            }
-            else {
-                cashCheckedBox.setChecked(false);
-            }
+            cashCheckedBox.setChecked(TipCashBool == 1);
 
             OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
             orderTotalEditText.setText(OrderTotal.toString());
