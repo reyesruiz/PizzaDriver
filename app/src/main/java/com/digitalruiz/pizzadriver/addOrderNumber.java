@@ -41,23 +41,19 @@ public class addOrderNumber extends AppCompatActivity {
         orderNumberText.requestFocus();
 
 
-        orderNumberText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
-                    int orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
-                    Intent addOrderIntent = new Intent(addOrderNumber.this, AddOrder.class);
-                    addOrderIntent.putExtra("orderNumber", orderNumber);
-                    if (oldOrderNumber != null) {
-                        if (orderNumber != oldOrderNumber) {
-                            addOrderIntent.putExtra("oldOrderNumber", oldOrderNumber);
-                        }
+        orderNumberText.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                int orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
+                Intent addOrderIntent = new Intent(addOrderNumber.this, AddOrder.class);
+                addOrderIntent.putExtra("orderNumber", orderNumber);
+                if (oldOrderNumber != null) {
+                    if (orderNumber != oldOrderNumber) {
+                        addOrderIntent.putExtra("oldOrderNumber", oldOrderNumber);
                     }
-                    startActivity(addOrderIntent);
                 }
-                return false;
+                startActivity(addOrderIntent);
             }
-
+            return false;
         });
     }
 }

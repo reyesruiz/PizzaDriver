@@ -162,103 +162,76 @@ public class SummaryFragment extends Fragment {
         ordersTotalText.setText(Integer.toString(OrdersTotal));
 
         final Bundle bundle = new Bundle();
-        view.findViewById(R.id.buttonBackToOrders).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bundle.putString("OrderType", "*");
-                bundle.putString("CashBool", "*");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        view.findViewById(R.id.buttonBackToOrders).setOnClickListener(view1 -> {
+            bundle.putString("OrderType", "*");
+            bundle.putString("CashBool", "*");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        creditAutoStatic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "Credit Auto");
-                bundle.putString("CashBool", "0");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        creditAutoStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "Credit Auto");
+            bundle.putString("CashBool", "0");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        creditManualStatic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "Credit Manual");
-                bundle.putString("CashBool", "0");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        creditManualStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "Credit Manual");
+            bundle.putString("CashBool", "0");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        creditManualCashStatic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "Credit Manual");
-                bundle.putString("CashBool", "1");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        creditManualCashStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "Credit Manual");
+            bundle.putString("CashBool", "1");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        cashStatic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "Cash");
-                bundle.putString("CashBool", "1");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        cashStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "Cash");
+            bundle.putString("CashBool", "1");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        grubhubStatic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "Grubhub");
-                bundle.putString("CashBool", "*");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        grubhubStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "Grubhub");
+            bundle.putString("CashBool", "*");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        otherStatic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "Other");
-                bundle.putString("CashBool", "*");
-                bundle.putString("Location", "*");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        otherStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "Other");
+            bundle.putString("CashBool", "*");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        tracy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "*");
-                bundle.putString("CashBool", "*");
-                bundle.putString("Location", "Tracy");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        tracy.setOnClickListener(v -> {
+            bundle.putString("OrderType", "*");
+            bundle.putString("CashBool", "*");
+            bundle.putString("Location", "Tracy");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
-        mountainHouse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("OrderType", "*");
-                bundle.putString("CashBool", "*");
-                bundle.putString("Location", "Mountain House");
-                NavHostFragment.findNavController(SummaryFragment.this)
-                        .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
-            }
+        mountainHouse.setOnClickListener(v -> {
+            bundle.putString("OrderType", "*");
+            bundle.putString("CashBool", "*");
+            bundle.putString("Location", "Mountain House");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
         });
 
     }

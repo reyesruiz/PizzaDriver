@@ -130,13 +130,10 @@ public class OrderListFragment extends Fragment {
             Chip orderNumberChip = new Chip(requireContext());
             orderNumberChip.setText(orderNumber.toString());
             orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            orderNumberChip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent addOrderIntent = new Intent(getActivity(), AddOrder.class);
-                    addOrderIntent.putExtra("orderNumber", orderNumber);
-                    startActivity(addOrderIntent);
-                }
+            orderNumberChip.setOnClickListener(v -> {
+                Intent addOrderIntent = new Intent(getActivity(), AddOrder.class);
+                addOrderIntent.putExtra("orderNumber", orderNumber);
+                startActivity(addOrderIntent);
             });
 
             TextView OrderTypeText = new TextView(getContext());
@@ -164,24 +161,16 @@ public class OrderListFragment extends Fragment {
             Row.addView(CashText);
             Row.addView(TipText);
             Row.addView(LocationText);
-            Row.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Log.v("TEST", "Long Click");
-                    return false;
-                }
+            Row.setOnLongClickListener(v -> {
+                Log.v("TEST", "Long Click");
+                return false;
             });
 
             WrapperTable.addView(Row);
         }
 
 
-        button_first.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(OrderListFragment.this)
-                        .navigate(R.id.action_OrderListFragment_to_SummaryFragment);
-            }
-        });
+        button_first.setOnClickListener(view1 -> NavHostFragment.findNavController(OrderListFragment.this)
+                .navigate(R.id.action_OrderListFragment_to_SummaryFragment));
     }
 }

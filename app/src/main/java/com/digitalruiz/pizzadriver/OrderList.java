@@ -25,19 +25,13 @@ public class OrderList extends AppCompatActivity {
         FloatingActionButton addOrder = findViewById(R.id.add);
         FloatingActionButton startStop = findViewById(R.id.startStopShift);
 
-        addOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addOrderIntent = new Intent(OrderList.this, addOrderNumber.class);
-                OrderList.this.startActivity(addOrderIntent);
-            }
+        addOrder.setOnClickListener(view -> {
+            Intent addOrderIntent = new Intent(OrderList.this, addOrderNumber.class);
+            OrderList.this.startActivity(addOrderIntent);
         });
 
-        startStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        startStop.setOnClickListener(v -> {
 
-            }
         });
     }
 

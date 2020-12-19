@@ -176,188 +176,158 @@ public class AddOrder extends AppCompatActivity {
         }
 
 
-        creditAutoChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (creditAutoChip.isChecked()){
-                    creditAuto();
-                }
-                else {
-                    setInvisible();
+        creditAutoChip.setOnClickListener(v -> {
+            if (creditAutoChip.isChecked()){
+                creditAuto();
+            }
+            else {
+                setInvisible();
 
-                }
             }
         });
 
-        creditManualChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (creditManualChip.isChecked()){
-                    creditManual();
-                }
-                else {
-                    setInvisible();
-                }
+        creditManualChip.setOnClickListener(v -> {
+            if (creditManualChip.isChecked()){
+                creditManual();
+            }
+            else {
+                setInvisible();
             }
         });
 
-        cashChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cashChip.isChecked()){
-                    cash();
-                }
-                else {
-                    setInvisible();
-                }
+        cashChip.setOnClickListener(v -> {
+            if (cashChip.isChecked()){
+                cash();
+            }
+            else {
+                setInvisible();
             }
         });
 
-        grubhubChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (grubhubChip.isChecked()){
-                    grubhub();
-                }
-                else {
-                    setInvisible();
-                }
+        grubhubChip.setOnClickListener(v -> {
+            if (grubhubChip.isChecked()){
+                grubhub();
+            }
+            else {
+                setInvisible();
             }
         });
-        otherChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (otherChip.isChecked()){
-                    other();
-                }
-                else {
-                    setInvisible();
-                }
+        otherChip.setOnClickListener(v -> {
+            if (otherChip.isChecked()){
+                other();
+            }
+            else {
+                setInvisible();
             }
         });
 
-        orderNumberChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent changeNumberIntent = new Intent(AddOrder.this, addOrderNumber.class);
-                changeNumberIntent.putExtra("orderNumber", orderNumber);
-                startActivity(changeNumberIntent);
-            }
+        orderNumberChip.setOnClickListener(v -> {
+            Intent changeNumberIntent = new Intent(AddOrder.this, addOrderNumber.class);
+            changeNumberIntent.putExtra("orderNumber", orderNumber);
+            startActivity(changeNumberIntent);
         });
 
-        SaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
-                int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
-                // TODO SIMPLIFY THIS
-                boolean error = false;
+        SaveButton.setOnClickListener(v -> {
+            Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
+            int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
+            // TODO SIMPLIFY THIS
+            boolean error = false;
 
-                if (OrderTypeSelectedChipID == -1) {
-                    error = true;
+            if (OrderTypeSelectedChipID == -1) {
+                error = true;
+            }
+            else {
+                Chip OrderTypeSelectedChip = findViewById(OrderTypeSelectedChipID);
+                orderType = OrderTypeSelectedChip.getText().toString();
+            }
+
+            int OrderLocationSelectedChipID = orderLocationChipGroup.getCheckedChipId();
+            if (OrderLocationSelectedChipID == -1){
+                error = true;
+            }
+            else {
+                Chip OrderLocationSelectedChip = findViewById(OrderLocationSelectedChipID);
+                OrderLocation = OrderLocationSelectedChip.getText().toString();
+            }
+            if (error){
+                Toast toast = Toast.makeText(getApplicationContext(), "Please select all options", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else {
+                if (cashCheckedBox.isChecked()) {
+                    TipCashBool = 1;
                 }
                 else {
-                    Chip OrderTypeSelectedChip = findViewById(OrderTypeSelectedChipID);
-                    orderType = OrderTypeSelectedChip.getText().toString();
+                    TipCashBool = 0;
+                }
+                if (TextUtils.isEmpty(tipEditText.getText().toString())){
+                    Tip = new BigDecimal("0.00");
+                }
+                else {
+                    Tip = new BigDecimal(tipEditText.getText().toString());
                 }
 
-                int OrderLocationSelectedChipID = orderLocationChipGroup.getCheckedChipId();
-                if (OrderLocationSelectedChipID == -1){
-                    error = true;
+
+                if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
+                    OrderTotal = new BigDecimal("0.00");
                 }
                 else {
-                    Chip OrderLocationSelectedChip = findViewById(OrderLocationSelectedChipID);
-                    OrderLocation = OrderLocationSelectedChip.getText().toString();
+                    OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
                 }
-                if (error){
-                    Toast toast = Toast.makeText(getApplicationContext(), "Please select all options", Toast.LENGTH_LONG);
-                    toast.show();
+                if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
+                    CashReceived = new BigDecimal("0.00");
                 }
                 else {
-                    if (cashCheckedBox.isChecked()) {
-                        TipCashBool = 1;
+                    CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
+                }
+                Cursor data = pizzaDriverDB.getData(orderNumber);
+                Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
+                if (data.getCount() == 1) {
+                    boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
+                    data.close();
+                    if (updateResult){
+                        Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
+                        updateToast.show();
+                        startActivity(BackToMain);
                     }
                     else {
-                        TipCashBool = 0;
-                    }
-                    if (TextUtils.isEmpty(tipEditText.getText().toString())){
-                        Tip = new BigDecimal("0.00");
-                    }
-                    else {
-                        Tip = new BigDecimal(tipEditText.getText().toString());
-                    }
-
-
-                    if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
-                        OrderTotal = new BigDecimal("0.00");
-                    }
-                    else {
-                        OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
-                    }
-                    if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
-                        CashReceived = new BigDecimal("0.00");
-                    }
-                    else {
-                        CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
-                    }
-                    Cursor data = pizzaDriverDB.getData(orderNumber);
-                    Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
-                    if (data.getCount() == 1) {
-                        boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
-                        data.close();
-                        if (updateResult){
-                            Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
-                            updateToast.show();
-                            startActivity(BackToMain);
-                        }
-                        else {
-                            Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
-                            updateToast.show();
-                        }
-
-                    }
-                    else {
-                        boolean result = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
-                        if (result) {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
-                            toast.show();
-                            startActivity(BackToMain);
-
-                        } else {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
-                            toast.show();
-
-                        }
+                        Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
+                        updateToast.show();
                     }
 
                 }
+                else {
+                    boolean result1 = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
+                    if (result1) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                        toast.show();
+                        startActivity(BackToMain);
+
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                }
+
             }
         });
 
-        tipEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((tipEditText.getText().toString().equals("0")) || (tipEditText.getText().toString().equals("0.0")) || (tipEditText.getText().toString().equals("0.00")) ){
-                    tipEditText.setText("");
-                }
+        tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if ((tipEditText.getText().toString().equals("0")) || (tipEditText.getText().toString().equals("0.0")) || (tipEditText.getText().toString().equals("0.00")) ){
+                tipEditText.setText("");
             }
         });
 
-        orderTotalEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((orderTotalEditText.getText().toString().equals("0")) || (orderTotalEditText.getText().toString().equals("0.0")) || (orderTotalEditText.getText().toString().equals("0.00")) ){
-                    orderTotalEditText.setText("");
-                }
+        orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if ((orderTotalEditText.getText().toString().equals("0")) || (orderTotalEditText.getText().toString().equals("0.0")) || (orderTotalEditText.getText().toString().equals("0.00")) ){
+                orderTotalEditText.setText("");
             }
         });
 
-        cashReceivedEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((cashReceivedEditText.getText().toString().equals("0")) || (cashReceivedEditText.getText().toString().equals("0.0")) || (cashReceivedEditText.getText().toString().equals("0.00"))){
-                    cashReceivedEditText.setText("");
-                }
+        cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if ((cashReceivedEditText.getText().toString().equals("0")) || (cashReceivedEditText.getText().toString().equals("0.0")) || (cashReceivedEditText.getText().toString().equals("0.00"))){
+                cashReceivedEditText.setText("");
             }
         });
 
