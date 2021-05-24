@@ -21,12 +21,12 @@ jobs:
         run: ./gradlew testStagingDebugUnitTest
       - name: Run Unit Tests with emulator
         uses: reactivecircus/android-emulator-runner@v2
-          with:
-            api-level: 30
-            target: default
-            arch: x86
-            profile: Nexus 6
-            script: ./gradlew connectedCheck --stacktrace
+        with:
+        api-level: 30
+        target: default
+        arch: x86
+        profile: Nexus 6
+        script: ./gradlew connectedCheck --stacktrace
       ## Sign our artifact##
       - name: Sign artifact
         id: signArtifact
