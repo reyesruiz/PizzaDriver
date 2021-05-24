@@ -68,7 +68,7 @@ public class OrderListFragment extends Fragment {
         TableRow HeadLine = new TableRow(getContext());
         HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         HeadLine.setBackgroundColor(Color.parseColor("#0079d6"));
-        HeadLine.setPadding(5, 5, 5, 5);
+        HeadLine.setPadding(0, 0, 0, 0);
 
         TextView OrderNumberStatic = new TextView(getContext());
         OrderNumberStatic.setText(getString(R.string.number));

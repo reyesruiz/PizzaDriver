@@ -22,16 +22,13 @@ public class OrderList extends AppCompatActivity {
         pizzaDriverDB = new SQLiteDBHelper(this);
 
         FloatingActionButton addOrder = findViewById(R.id.add);
-        FloatingActionButton startStop = findViewById(R.id.startStopShift);
 
         addOrder.setOnClickListener(view -> {
             Intent addOrderIntent = new Intent(OrderList.this, addOrderNumber.class);
             OrderList.this.startActivity(addOrderIntent);
         });
 
-        startStop.setOnClickListener(v -> {
 
-        });
     }
 
 }
