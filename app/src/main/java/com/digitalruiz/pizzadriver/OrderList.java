@@ -6,7 +6,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
 
 public class OrderList extends AppCompatActivity {
 
