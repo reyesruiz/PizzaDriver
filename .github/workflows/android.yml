@@ -17,8 +17,6 @@ jobs:
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
           arguments: assembleRelease
-      - name: Run Unit Tests
-        run: ./gradlew testStagingDebugUnitTest
       - name: Run Unit Tests with emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
