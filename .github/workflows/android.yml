@@ -30,7 +30,7 @@ jobs:
         id: signArtifact
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/apk/release
+          releaseDirectory: app/build/outputs/apk/release
           alias: ${{ secrets.KEYALIAS }}
           signingKeyBase64: ${{ secrets.KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
