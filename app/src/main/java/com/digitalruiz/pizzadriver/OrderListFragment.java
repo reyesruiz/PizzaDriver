@@ -1,8 +1,10 @@
 package com.digitalruiz.pizzadriver;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -63,22 +66,25 @@ public class OrderListFragment extends Fragment {
         }
         Log.v("Test", "Array is " + orders);
 
+
         TableLayout WrapperTable = view.findViewById(R.id.wrapperTableLayout);
 
+
         TableRow HeadLine = new TableRow(getContext());
-        HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-        HeadLine.setBackgroundColor(Color.parseColor("#0079d6"));
-        HeadLine.setPadding(0, 0, 0, 0);
+        HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
+        HeadLine.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_red_hover, getContext().getTheme()));
+        HeadLine.setPadding(10, 10, 0, 10);
+        HeadLine.setDividerPadding(10);
 
         TextView OrderNumberStatic = new TextView(getContext());
         OrderNumberStatic.setText(getString(R.string.number));
         OrderNumberStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderNumberStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-
         TextView OrderTypeStatic = new TextView(getContext());
         OrderTypeStatic.setText(R.string.type);
         OrderTypeStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderTypeStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
 
         TextView CashStatic = new TextView(getContext());
         CashStatic.setText(R.string.cash_boolean);
@@ -118,16 +124,18 @@ public class OrderListFragment extends Fragment {
             result.close();
             Log.v("Test", "Cash " + Cash);
             TableRow Row = new TableRow(getContext());
-            Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
             if (counter % 2 == 0){
-                Row.setBackgroundColor(Color.parseColor("#0079d6"));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow, getContext().getTheme()));
             }
             else {
                 //noinspection SpellCheckingInspection
-                Row.setBackgroundColor(Color.parseColor("#00cccc"));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green, getContext().getTheme()));
+
             }
             Chip orderNumberChip = new Chip(requireContext());
+            orderNumberChip.setEnsureMinTouchTargetSize(false);
             orderNumberChip.setText(orderNumber.toString());
             orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             orderNumberChip.setOnClickListener(v -> {
@@ -135,6 +143,7 @@ public class OrderListFragment extends Fragment {
                 addOrderIntent.putExtra("orderNumber", orderNumber);
                 startActivity(addOrderIntent);
             });
+
 
             TextView OrderTypeText = new TextView(getContext());
             OrderTypeText.setText(OrderType);

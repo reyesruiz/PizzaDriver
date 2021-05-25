@@ -38,13 +38,13 @@ public class SummaryFragment extends Fragment {
         TextView CompensationTotalText = view.findViewById(R.id.compensationTotal);
         TextView CashOrdersTotalText = view.findViewById(R.id.cashOrdersTotal);
         TextView netCashText = view.findViewById(R.id.netCash);
-        TextView ordersCreditAutoText = view.findViewById(R.id.CreditAuto);
+        TextView ordersCreditAutoText = view.findViewById(R.id.creditAuto);
         TextView ordersCreditManualText = view.findViewById(R.id.creditManual);
         TextView ordersCreditManualCashText = view.findViewById(R.id.creditManualCash);
-        TextView ordersCashText = view.findViewById(R.id.Cash);
+        TextView ordersCashText = view.findViewById(R.id.cash);
         TextView ordersGrubhubText = view.findViewById(R.id.grubhub);
         TextView ordersOtherText = view.findViewById(R.id.other);
-        TextView ordersTotalText = view.findViewById(R.id.Total);
+        TextView ordersTotalText = view.findViewById(R.id.total);
 
         TextView creditAutoStatic = view.findViewById(R.id.creditAutoStatic);
         TextView creditManualStatic = view.findViewById(R.id.creditManualStatic);

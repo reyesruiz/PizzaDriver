@@ -13,12 +13,13 @@
         android:ems="10"
         android:hint="@string/enter_order_number"
         android:imeOptions="actionDone"
+        android:importantForAutofill="no"
         android:inputType="number"
+        android:theme="@style/Base.Theme.MyApp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,8 +53,8 @@ public class AddOrder extends AppCompatActivity {
 
         Intent intent = getIntent();
         orderNumber = Objects.requireNonNull(intent.getExtras()).getInt("orderNumber");
-        oldOrderNumber = intent.getExtras().getInt("oldOrderNumber");
-
+        oldOrderNumber = intent.getIntExtra("oldOrderNumber", -1);
+        Log.v("test", "Oldordernumber" + oldOrderNumber.toString());
 
 
 
@@ -86,7 +86,7 @@ public class AddOrder extends AppCompatActivity {
 
         cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
 
-        if ((oldOrderNumber != null )) {
+        if ((oldOrderNumber != null && oldOrderNumber > 0)) {
             boolean updateResult = pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
             if (updateResult){
                 Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success" + oldOrderNumber, Toast.LENGTH_SHORT);
