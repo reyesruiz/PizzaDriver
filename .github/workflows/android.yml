@@ -28,16 +28,22 @@ jobs:
       ## Sign our artifact##
       - name: Sign artifact
         id: signArtifact
-        uses: r0adkll/sign-android-release@v1.0.1
+        uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/ourbuildtype/release
+          releaseDirectory: app/build/outputs/apk/apk/release
           alias: ${{ secrets.KEYALIAS }}
           signingKeyBase64: ${{ secrets.KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Upload our APK
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@master
         with:
-          name: Release artifact
-          path: app/build/outputs/apk/ourbuildtype/release/app-artifact-*.apk
+          name: release.apk
+          path: ${{steps.signArtifact.outputs.signedReleaseFile}}
+
+      - name: Upload mapping.txt
+        uses: actions/upload-artifact@master
+        with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt
