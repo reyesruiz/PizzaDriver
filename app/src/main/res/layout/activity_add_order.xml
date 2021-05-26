@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddOrder">
+    tools:context=".AddOrder"
+    >
+
 
     <com.google.android.material.chip.Chip
         android:id="@+id/orderNumberChip"
@@ -14,7 +16,6 @@
         android:layout_marginStart="16dp"
         android:text="@string/order_number"
         android:textAlignment="textStart"
-        android:theme="@style/Base.Theme.MyApp"
         app:ensureMinTouchTargetSize="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,14 +101,14 @@
         android:layout_marginTop="8dp"
         android:ems="8"
         android:hint="@string/zero_dot_zero_zero_text"
+        android:importantForAutofill="no"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tipStatic"
         app:layout_constraintTop_toBottomOf="@+id/orderType"
-        app:layout_constraintVertical_bias="0.0"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/cashCheckedBox"
@@ -147,14 +148,14 @@
         android:layout_marginStart="8dp"
         android:ems="8"
         android:hint="@string/zero_dot_zero_zero_text"
+        android:importantForAutofill="no"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/orderTotalStatic"
         app:layout_constraintTop_toBottomOf="@id/tipStatic"
-        app:layout_constraintVertical_bias="0.0"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/cashReceivedStatic"
@@ -181,14 +182,14 @@
         android:layout_marginTop="8dp"
         android:ems="8"
         android:hint="@string/zero_dot_zero_zero_text"
+        android:importantForAutofill="no"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/cashReceivedStatic"
         app:layout_constraintTop_toBottomOf="@+id/orderTotalStatic"
-        app:layout_constraintVertical_bias="0.0"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/OrderLocation"

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".addOrderNumber">
 
+
     <EditText
         android:id="@+id/orderNumber"
         android:layout_width="match_parent"
@@ -15,7 +16,6 @@
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="number"
-        android:theme="@style/Base.Theme.MyApp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

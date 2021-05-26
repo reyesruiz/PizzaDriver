@@ -64,9 +64,19 @@
 
     <!--MM Palette-->
     <color name="mm_red">#b22b2e</color>
+    <color name="mm_red_shade_1">#C53032</color>
+    <color name="mm_red_shade_2">#D75B5D</color>
     <color name="mm_red_hover">#9D2426</color>
     <color name="mm_pine_green">#004438</color>
+    <color name="mm_pine_green_shade_1">#006653</color>
+    <color name="mm_pine_green_shade_2">#00A385</color>
     <color name="mm_wild_yellow">#f5d93e</color>
+    <color name="mm_wild_yellow_shade_1">#F7E164</color>
+    <color name="mm_wild_yellow_shade_2">#F9E88B</color>
+    <color name="mm_wild_yellow_shade_3">#FAEC9E</color>
     <color name="mm_rock_grey">#58595b</color>
+    <color name="mm_rock_grey_shade_1">#646568</color>
+    <color name="mm_rock_grey_shade_2">#787A7D</color>
+    <color name="mm_rock_grey_shade_3">#F5F5F5</color>
 
 </resources>

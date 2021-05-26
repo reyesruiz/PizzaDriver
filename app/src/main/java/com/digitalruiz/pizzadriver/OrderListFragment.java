@@ -1,10 +1,7 @@
 package com.digitalruiz.pizzadriver;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +42,7 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> orders;
@@ -72,7 +70,7 @@ public class OrderListFragment extends Fragment {
 
         TableRow HeadLine = new TableRow(getContext());
         HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
-        HeadLine.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_red_hover, getContext().getTheme()));
+        HeadLine.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_1, requireContext().getTheme()));
         HeadLine.setPadding(10, 10, 0, 10);
         HeadLine.setDividerPadding(10);
 
@@ -80,26 +78,31 @@ public class OrderListFragment extends Fragment {
         OrderNumberStatic.setText(getString(R.string.number));
         OrderNumberStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderNumberStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        OrderNumberStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
+
         TextView OrderTypeStatic = new TextView(getContext());
         OrderTypeStatic.setText(R.string.type);
         OrderTypeStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderTypeStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-
+        OrderTypeStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
 
         TextView CashStatic = new TextView(getContext());
         CashStatic.setText(R.string.cash_boolean);
         CashStatic.setTypeface(CashStatic.getTypeface(), Typeface.BOLD);
         CashStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        CashStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
 
         TextView TipTextStatic = new TextView(getContext());
         TipTextStatic.setText(R.string.tip_text);
         TipTextStatic.setTypeface(TipTextStatic.getTypeface(), Typeface.BOLD);
         TipTextStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        TipTextStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
 
         TextView LocationStatic = new TextView(getContext());
         LocationStatic.setText(R.string.location);
         LocationStatic.setTypeface(LocationStatic.getTypeface(), Typeface.BOLD);
         LocationStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        LocationStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
 
         HeadLine.addView(OrderNumberStatic);
         HeadLine.addView(OrderTypeStatic);
@@ -127,11 +130,10 @@ public class OrderListFragment extends Fragment {
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
             if (counter % 2 == 0){
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow, getContext().getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
             }
             else {
-                //noinspection SpellCheckingInspection
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green, getContext().getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, getContext().getTheme()));
 
             }
             Chip orderNumberChip = new Chip(requireContext());
@@ -148,6 +150,7 @@ public class OrderListFragment extends Fragment {
             TextView OrderTypeText = new TextView(getContext());
             OrderTypeText.setText(OrderType);
             OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
 
             TextView CashText = new TextView((getContext()));
             if (Cash == 1){

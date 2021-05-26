@@ -23,10 +23,11 @@
         <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
         <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
         <!--selection controls.-->
-        <item name="colorPrimary">@color/mm_red</item>
-        <item name="colorPrimaryVariant">@color/mm_red_hover</item>
+        <item name="colorPrimary">@color/mm_pine_green</item>
+        <item name="colorPrimaryVariant">@color/mm_pine_green_shade_2</item>
         <item name="colorSecondary">@color/mm_pine_green</item>
-        <item name="colorSecondaryVariant">@color/mm_wild_yellow</item>
+        <item name="colorSecondaryVariant">@color/mm_pine_green_shade_2</item>
+
         <!--colorBackground appears behind scrollable content and is used for the default window-->
         <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
         <!--and menus. colorError is used to indicate an error state for components such as-->
@@ -64,6 +65,7 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MyTheme.BottomSheetDialog</item>
         <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+        <item name="windowNoTitle">true</item>
     </style>
     <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
@@ -71,5 +73,6 @@
         <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>
