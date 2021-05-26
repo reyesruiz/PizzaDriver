@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+
+
+
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -13,6 +17,8 @@ android {
         versionProps['VERSION_BUILD'] = "-1" // I set it to minus one so the first build is 0 which isn't super important.
         versionProps.store(versionPropsFile.newWriter(), null)
     }
+
+
 
     def runTasks = gradle.startParameter.taskNames
     if ('assembleRelease' in runTasks) {
@@ -45,6 +51,7 @@ android {
             applicationId "com.digitalruiz.pizzadrive" // 3: change to your package name
             versionCode versionProps['VERSION_NUMBER'].toInteger()
             versionName "${mVersionName} Build: ${versionProps['VERSION_BUILD']}"
+            archivesBaseName = "$applicationId"
         }
 
 
@@ -62,30 +69,31 @@ android {
         }
     }
 
-    task copyApkFiles(type: Copy){
-        from 'build/outputs/apk/release'
-        into '../apk'
-        include mFileName
-    }
 
-    afterEvaluate {
-        assembleRelease.doLast {
-            tasks.copyApkFiles.execute()
-        }
-    }
+
+
+
+
+
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+
+        }
     }
+
 
     lintOptions {
         abortOnError false
     }
 
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
