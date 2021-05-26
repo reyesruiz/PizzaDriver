@@ -44,7 +44,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-      -name: test
+      - name: test
         id: test
         run: echo ${{steps.signArtifactApk.outputs.signedReleaseFile}}
 
