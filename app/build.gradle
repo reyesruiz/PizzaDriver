@@ -38,12 +38,13 @@ android {
         versionProps['VERSION_NUMBER'] = (versionProps['VERSION_NUMBER'].toInteger() + value).toString()
         versionProps['VERSION_BUILD'] = (versionProps['VERSION_BUILD'].toInteger() + 1).toString()
 
+
         versionProps.store(versionPropsFile.newWriter(), null)
 
         // 1: change major and minor version here
         mVersionName = "v1.5.${versionProps['VERSION_PATCH']}"
         // 2: change AppName for your app name
-        mFileName = "AppName-${mVersionName}.apk"
+        mFileName = "com.digitalruiz.com.pizzadriver-${mVersionName}.apk"
 
         defaultConfig {
             minSdkVersion 26
