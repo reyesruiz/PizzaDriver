@@ -17,14 +17,7 @@ jobs:
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
           arguments: assembleRelease
-          dependencies-cache-key: |
-            **/gradle.properties
-            gradle/dependency-locks/**
-          dependencies-cache-exact: true
-          configuration-cache-key: |
-            **/gradle.properties
-            gradle/dependency-locks/**
-          configuration-cache-exact: true
+
       #- name: Run Unit Tests with emulator
       #  uses: reactivecircus/android-emulator-runner@v2
       #  with:
