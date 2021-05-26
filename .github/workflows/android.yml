@@ -44,10 +44,14 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
+      -name: test
+        id: test
+        run: echo ${{steps.signArtifactApk.outputs.signedReleaseFile}}
+
       - name: Upload our APK
         uses: actions/upload-artifact@master
         with:
-          name: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
+          name: com.digitalruiz.com.pizzadriver-release.apk
           path: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
 
 
