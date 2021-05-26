@@ -48,7 +48,7 @@ android {
         defaultConfig {
             minSdkVersion 26
             targetSdkVersion 30
-            applicationId "com.digitalruiz.pizzadrive" // 3: change to your package name
+            applicationId "com.digitalruiz.pizzadriver" // 3: change to your package name
             versionCode versionProps['VERSION_NUMBER'].toInteger()
             versionName "${mVersionName} Build: ${versionProps['VERSION_BUILD']}"
             archivesBaseName = "$applicationId"
