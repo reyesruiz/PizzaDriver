@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.digitalruiz.pizzadrive",
+  "applicationId": "com.digitalruiz.pizzadriver",
   "variantName": "release",
   "elements": [
     {
@@ -12,7 +12,7 @@
       "filters": [],
       "versionCode": 1,
       "versionName": "v1.5.5 Build: 52",
-      "outputFile": "com.digitalruiz.pizzadrive-release.apk"
+      "outputFile": "com.digitalruiz.pizzadriver-release.apk"
     }
   ]
 }
