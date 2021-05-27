@@ -6,8 +6,12 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: first ls
+        run: ls -R app/
       - name: Build the app
         run: ./gradlew build
+      - name: second ls
+          run: ls -R app/
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1
@@ -17,6 +21,8 @@ jobs:
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
           arguments: assembleRelease
+      - name: third ls
+          run: ls -R app/
 
       #- name: Run Unit Tests with emulator
       #  uses: reactivecircus/android-emulator-runner@v2
