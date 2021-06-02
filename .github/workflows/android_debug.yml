@@ -1,0 +1,55 @@
+name: Build debug
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Build the app
+        run: ./gradlew build
+      - name: Build all artifacts
+        id: buildAllApks
+        uses: eskatos/gradle-command-action@v1
+        with:
+          gradle-version: current
+          wrapper-cache-enabled: true
+          dependencies-cache-enabled: true
+          configuration-cache-enabled: true
+          arguments: assembleRelease bundleRelease
+
+
+      #- name: Run Unit Tests with emulator
+      #  uses: reactivecircus/android-emulator-runner@v2
+      #  with:
+      #    api-level: 29
+      #    target: default
+      #    arch: x86
+      #    profile: Nexus 6
+      #    script: ./gradlew connectedCheck --stacktrace
+
+      - name: apk_name
+        id: apk_name
+        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json)"
+
+      - name: bundle_name
+        id: bundle_name
+        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json|sed 's/.apk/.aab/')"
+
+      - name: Upload our APK
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{steps.apk_name.outputs.file_name}}
+          path: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
+
+      - name: Upload our Bundle
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{steps.bundle_name.outputs.file_name}}
+          path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}

@@ -1,5 +1,8 @@
-name: Build
-on: [pull_request, push]
+name: Build main release
+on:
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -70,6 +73,3 @@ jobs:
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
-
-
-

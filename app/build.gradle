@@ -82,6 +82,25 @@ android {
         }
     }
 
+    if ('assembleDebug' in runTasks) {
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                    outputFileName = mFileName
+                }
+            }
+        }
+    }
+
+    if ('bundleDebug' in runTasks) {
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                if (output.outputFile != null && output.outputFile.name.endsWith('.aab')) {
+                    outputFileName = mBundleFileName
+                }
+            }
+        }
+    }
 
 
 
