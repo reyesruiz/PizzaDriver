@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: Build the app
-        run: ./gradlew build
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1
@@ -19,7 +17,7 @@ jobs:
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
-          arguments: assembleRelease bundleRelease
+          arguments: build assembleRelease bundleRelease
 
 
       #- name: Run Unit Tests with emulator
