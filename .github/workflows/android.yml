@@ -6,12 +6,8 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: first ls
-        run: ls app/src/main/java/com/;ls app/src/main/java/com/digitalruiz/
       - name: Build the app
         run: ./gradlew build
-      - name: second ls
-        run: ls -R app/
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1
@@ -21,8 +17,7 @@ jobs:
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
           arguments: assembleRelease bundleRelease
-      - name: third ls
-        run: ls -R app/
+
 
       #- name: Run Unit Tests with emulator
       #  uses: reactivecircus/android-emulator-runner@v2
@@ -59,7 +54,10 @@ jobs:
 
       - name: bundle_name
         id: bundle_name
-        run: echo "##[set-output name=file_name;]$(ls app/build/outputs/bundle/release/)"
+        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/release/output-metadata.json|sed 's/.apk/.aab/')"
+
+      - name: ls
+        run: ls -R app/build/outputs/bundle/release/
 
       - name: Upload our APK
         uses: actions/upload-artifact@master
