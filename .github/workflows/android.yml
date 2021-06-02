@@ -20,7 +20,7 @@ jobs:
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
-          arguments: assembleRelease
+          arguments: assembleRelease bundleRelease
       - name: third ls
         run: ls -R app/
 

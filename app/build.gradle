@@ -46,7 +46,7 @@ android {
         mVersionName = "v1.5.${versionProps['VERSION_PATCH']}"
         // 2: change AppName for your app name
         mFileName = "com.digitalruiz.com.pizzadriver-${mVersionName}.apk"
-        mBundleFileName = "com.digitalruiz.com.pizzadriver-${mVersionName}.abb"
+        mBundleFileName = "com.digitalruiz.com.pizzadriver-${mVersionName}.aab"
 
         defaultConfig {
             minSdkVersion 26
@@ -75,7 +75,7 @@ android {
     if ('bundleRelease' in runTasks) {
         applicationVariants.all { variant ->
             variant.outputs.all { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.abb')) {
+                if (output.outputFile != null && output.outputFile.name.endsWith('.aab')) {
                     outputFileName = mBundleFileName
                 }
             }
