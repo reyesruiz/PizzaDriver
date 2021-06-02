@@ -44,22 +44,22 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Sign bundle artifact
-          id: signArtifacttBundle
-          uses: r0adkll/sign-android-release@v1
-          with:
-            releaseDirectory: app/build/outputs/bundle/release
-            alias: ${{ secrets.KEYALIAS }}
-            signingKeyBase64: ${{ secrets.KEYSTORE }}
-            keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-            keyPassword: ${{ secrets.KEY_PASSWORD }}
+        id: signArtifacttBundle
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          alias: ${{ secrets.KEYALIAS }}
+          signingKeyBase64: ${{ secrets.KEYSTORE }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: apk_name
         id: apk_name
         run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/release/output-metadata.json)"
 
       - name: bundle_name
-          id: bundle_name
-          run: echo "##[set-output name=file_name;]$(ls app/build/outputs/bundle/release/)"
+        id: bundle_name
+        run: echo "##[set-output name=file_name;]$(ls app/build/outputs/bundle/release/)"
 
       - name: Upload our APK
         uses: actions/upload-artifact@master
@@ -68,10 +68,10 @@ jobs:
           path: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
 
       - name: Upload our Bundle
-          uses: actions/upload-artifact@master
-          with:
-            name: ${{steps.bundle_name.outputs.file_name}}
-            path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{steps.bundle_name.outputs.file_name}}
+          path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
 
 
 
