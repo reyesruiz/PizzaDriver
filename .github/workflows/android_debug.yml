@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
-          path: app/build/outputs/bundle/debug/com.digitalruiz.pizzadriver-release.aab
+          path: app/build/outputs/bundle/debug/com.digitalruiz.pizzadriver-debug.aab
