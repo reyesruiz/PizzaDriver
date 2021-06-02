@@ -45,12 +45,12 @@ jobs:
 
       - name: apk_name
         id: apk_name
-        run: jq -r '.elements[].outputFile' app/build/outputs/apk/release/output-metadata.json
+        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/release/output-metadata.json)"
 
       - name: Upload our APK
         uses: actions/upload-artifact@master
         with:
-          name: ${{apk_name}}
+          name: ${{steps.apk_name.outputs.file_name}}
           path: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
 
 
