@@ -22,7 +22,7 @@ jobs:
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
-          arguments: assembleRelease bundleRelease
+          arguments: assembleDebug bundleDebug
 
 
       #- name: Run Unit Tests with emulator
@@ -46,10 +46,10 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{steps.apk_name.outputs.file_name}}
-          path: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
+          path: app/build/outputs/apk/debug/${{steps.apk_name.outputs.file_name}}
 
       - name: Upload our Bundle
         uses: actions/upload-artifact@master
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
-          path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
+          path: app/build/outputs/bundle/debug/${{steps.bundle_name.outputs.file_name}}
