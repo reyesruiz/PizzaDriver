@@ -39,7 +39,7 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Sign bundle artifact
-        id: signArtifacttBundle
+        id: signArtifactBundle
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/bundle/release
