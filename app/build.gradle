@@ -43,7 +43,7 @@ android {
         versionProps.store(versionPropsFile.newWriter(), null)
 
         // 1: change major and minor version here
-        mVersionName = "v1.5.${versionProps['VERSION_PATCH']}.${versionProps['VERSION_PATCH']}"
+        mVersionName = "v1.5.${versionProps['VERSION_PATCH']}.${versionProps['VERSION_BUILD']}"
         // 2: change AppName for your app name
 
 
@@ -72,16 +72,6 @@ android {
         }
     }
 
-    if ('bundleRelease' in runTasks) {
-        mBundleFileName = "com.digitalruiz.com.pizzadriver-release-${mVersionName}.aab"
-        applicationVariants.all { variant ->
-            variant.outputs.all { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.aab')) {
-                    outputFileName = mBundleFileName
-                }
-            }
-        }
-    }
 
     if ('assembleDebug' in runTasks) {
         mFileName = "com.digitalruiz.com.pizzadriver-debug-${mVersionName}.apk"
@@ -94,16 +84,6 @@ android {
         }
     }
 
-    if ('bundleDebug' in runTasks) {
-        mBundleFileName = "com.digitalruiz.com.pizzadriver-debug-${mVersionName}.aab"
-        applicationVariants.all { variant ->
-            variant.outputs.all { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.aab')) {
-                    outputFileName = mBundleFileName
-                }
-            }
-        }
-    }
 
 
 
