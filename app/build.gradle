@@ -27,7 +27,6 @@ android {
 
     def mVersionName = ""
     def mFileName = ""
-    def mBundleFileName = ""
 
 
 
@@ -62,7 +61,7 @@ android {
     }
 
     if ('assembleRelease' in runTasks) {
-        versionProps['VERSION_NUMBER'] = (versionProps['VERSION_NUMBER'].toInteger() + 1).toString()
+        versionProps['VERSION_PATCH'] = (versionProps['VERSION_PATCH'].toInteger() + 1).toString()
         mVersionName = "v1.5.${versionProps['VERSION_PATCH']}.${versionProps['VERSION_BUILD']}"
         versionProps.store(versionPropsFile.newWriter(), null)
         mFileName = "com.digitalruiz.com.pizzadriver-release-${mVersionName}.apk"
