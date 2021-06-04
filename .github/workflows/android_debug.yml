@@ -8,13 +8,12 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.AUTO_COMMIT }}
-
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1
@@ -56,17 +55,12 @@ jobs:
           path: app/build/outputs/bundle/debug/com.digitalruiz.pizzadriver-debug.aab
 
       - name: Push new files back to branch.
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: "Build version bump, #skip-ci"
           status_options: '--untracked-files=no'
           disable_globbing: true
-    else:
-      steps:
-        - name: Checkout the code
-          uses: actions/checkout@v2
-          with:
-            token: ${{ secrets.AUTO_COMMIT }}
 
 
 
