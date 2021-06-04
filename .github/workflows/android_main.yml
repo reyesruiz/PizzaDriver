@@ -18,7 +18,7 @@ jobs:
           wrapper-cache-enabled: false
           dependencies-cache-enabled: false
           configuration-cache-enabled: false
-          arguments: build assembleRelease bundleRelease
+          arguments: build assembleDebug bundleDebug assembleRelease bundleRelease
 
 
       #- name: Run Unit Tests with emulator
