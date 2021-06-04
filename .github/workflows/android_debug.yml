@@ -11,7 +11,6 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
       - name: Checkout the code
@@ -59,7 +58,7 @@ jobs:
           path: app/build/outputs/bundle/debug/com.digitalruiz.pizzadriver-debug.aab
 
       - name: Push new files back to branch.
-        if: github.event.pull_request == false
+        if: github.event.pull_request == false || !contains(github.event.head_commit.message, 'skip-ci')
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: "Build version bump, #skip-ci"

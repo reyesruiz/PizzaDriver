@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.AUTO_COMMIT }}
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1
@@ -71,6 +73,9 @@ jobs:
           path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
 
       - name: Push new files back to branch.
-        uses: EndBug/add-and-commit@v7
+        if: github.event.pull_request == false || !contains(github.event.head_commit.message, 'skip-ci')
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
-          default_author: 'github_actions'
+          commit_message: "Patch version bump, #skip-ci"
+          status_options: '--untracked-files=no'
+          disable_globbing: true
