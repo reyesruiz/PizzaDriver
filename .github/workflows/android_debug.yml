@@ -11,7 +11,7 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.actor, 'actions')"
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
       - name: Checkout the code
@@ -62,7 +62,7 @@ jobs:
         if: github.event.pull_request == false
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
-          commit_message: "Build version bump"
+          commit_message: "Build version bump, #skip-ci"
           status_options: '--untracked-files=no'
           disable_globbing: true
 
