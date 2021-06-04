@@ -11,7 +11,7 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.actor, 'github-actions')"
+    if: "!contains(github.event.actor, 'actions')"
 
     steps:
       - name: Checkout the code
@@ -62,9 +62,7 @@ jobs:
         if: github.event.pull_request == false
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
-          commit_author: 'github_actions'
           commit_message: "Build version bump"
-          commit_options: '--no-verify --signoff'
           status_options: '--untracked-files=no'
           disable_globbing: true
 
