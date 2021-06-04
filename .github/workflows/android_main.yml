@@ -58,9 +58,6 @@ jobs:
         id: bundle_name
         run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/release/output-metadata.json|sed 's/.apk/.aab/')"
 
-      - name: ls
-        run: ls -R app/build/outputs/bundle/release/
-
       - name: Upload our APK
         uses: actions/upload-artifact@master
         with:
@@ -72,3 +69,8 @@ jobs:
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
+
+      - name: Push new files back to branch.
+        uses: EndBug/add-and-commit@v7
+        with:
+          default_author: 'github_actions'
