@@ -42,7 +42,7 @@ android {
         versionProps.store(versionPropsFile.newWriter(), null)
 
         // 1: change major and minor version here
-        mVersionName = "v1.5.${versionProps['VERSION_PATCH']}.${versionProps['VERSION_BUILD']}"
+        mVersionName = "v1.5.${versionProps['VERSION_PATCH']}"
         // 2: change AppName for your app name
 
 
@@ -61,9 +61,6 @@ android {
     }
 
     if ('assembleRelease' in runTasks) {
-        versionProps['VERSION_PATCH'] = (versionProps['VERSION_PATCH'].toInteger() + 1).toString()
-        mVersionName = "v1.5.${versionProps['VERSION_PATCH']}.${versionProps['VERSION_BUILD']}"
-        versionProps.store(versionPropsFile.newWriter(), null)
         mFileName = "com.digitalruiz.com.pizzadriver-release-${mVersionName}.apk"
         applicationVariants.all { variant ->
             variant.outputs.all { output ->
