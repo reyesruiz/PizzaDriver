@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: Git Version
-        uses: codacy/git-version@2.4.0
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1

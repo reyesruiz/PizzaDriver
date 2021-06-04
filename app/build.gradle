@@ -61,7 +61,6 @@ android {
     }
 
     if ('assembleRelease' in runTasks) {
-        mFileName = "com.digitalruiz.com.pizzadriver-release-${mVersionName}.apk"
         applicationVariants.all { variant ->
             variant.outputs.all { output ->
                 if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
