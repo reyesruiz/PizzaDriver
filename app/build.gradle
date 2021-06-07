@@ -1,104 +1,36 @@
+import groovy.json.JsonSlurper
+
 apply plugin: 'com.android.application'
 
-
-
-
-
 android {
+
+
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+    def jsonFile = file('version.properties.json')
+    def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+    def mVersionCode = parsedJson.version_code
+    def major = parsedJson.app_version.major
+    def minor = parsedJson.app_version.minor
+    def patch = parsedJson.app_version.patch
+    def build = parsedJson.app_version.build
+    def mVersionName = "v${major}.${minor}.${patch} Build: ${build}"
+    def mApplicationId = "com.digitalruiz.pizzadriver"
 
-    def versionPropsFile = file('version.properties')
-    def value = 0
-    Properties versionProps = new Properties()
-    if (!versionPropsFile.exists()) {
-        versionProps['VERSION_PATCH'] = "0"
-        versionProps['VERSION_NUMBER'] = "0"
-        versionProps['VERSION_BUILD'] = "-1" // I set it to minus one so the first build is 0 which isn't super important.
-        versionProps.store(versionPropsFile.newWriter(), null)
+    defaultConfig {
+        applicationId mApplicationId
+        minSdkVersion 26
+        targetSdkVersion 30
+        versionCode mVersionCode
+        versionName mVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
-
-
-    def runTasks = gradle.startParameter.taskNames
-    if ('assembleRelease' in runTasks) {
-        value = 1
-    }
-
-    def mVersionName = ""
-    def mFileName = ""
-
-
-
-
-    if (versionPropsFile.canRead()) {
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        versionProps['VERSION_PATCH'] = (versionProps['VERSION_PATCH'].toInteger() + value).toString()
-        versionProps['VERSION_NUMBER'] = (versionProps['VERSION_NUMBER'].toInteger() + value).toString()
-        versionProps['VERSION_BUILD'] = (versionProps['VERSION_BUILD'].toInteger() + 1).toString()
-
-
-        versionProps.store(versionPropsFile.newWriter(), null)
-
-        // 1: change major and minor version here
-        mVersionName = "v1.5.${versionProps['VERSION_PATCH']}"
-        // 2: change AppName for your app name
-
-
-        defaultConfig {
-            minSdkVersion 26
-            targetSdkVersion 30
-            applicationId "com.digitalruiz.pizzadriver" // 3: change to your package name
-            versionCode versionProps['VERSION_NUMBER'].toInteger()
-            versionName "${mVersionName} Build: ${versionProps['VERSION_BUILD']}"
-            archivesBaseName = "$applicationId"
-        }
-
-
-    } else {
-        throw new FileNotFoundException("Could not read version.properties!")
-    }
-
-    if ('assembleRelease' in runTasks) {
-        applicationVariants.all { variant ->
-            variant.outputs.all { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
-                    outputFileName = mFileName
-                }
-            }
-        }
-    }
-
-
-    if ('assembleDebug' in runTasks) {
-        mFileName = "com.digitalruiz.com.pizzadriver-debug-${mVersionName}.apk"
-        applicationVariants.all { variant ->
-            variant.outputs.all { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
-                    outputFileName = mFileName
-                }
-            }
-        }
-    }
-
-
-
-
-
-
-
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
-
-        }
     }
-
 
     lintOptions {
         abortOnError false
