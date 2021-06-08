@@ -1,17 +1,19 @@
-import groovy.json.JsonSlurper
-
 apply plugin: 'com.android.application'
+import groovy.*
+
+
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-    def jsonFile = file('version.properties.json')
-    def parsedJson = new JsonSlurper().parseText(jsonFile.text)
-    def mVersionCode = parsedJson.version_code
-    def major = parsedJson.app_version.major
-    def minor = parsedJson.app_version.minor
-    def patch = parsedJson.app_version.patch
-    def build = parsedJson.app_version.build
+    def versionPropsFile = file('version.properties')
+    Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    def mVersionCode = versionProps['VERSION_CODE_NUMBER'].toInteger()
+    def major = versionProps['VERSION_MAJOR'].toInteger()
+    def minor = versionProps['VERSION_MINOR'].toInteger()
+    def patch = versionProps['VERSION_PATCH'].toInteger()
+    def build = versionProps['VERSION_BUILD'].toInteger()
     def mVersionName = "v${major}.${minor}.${patch} Build: ${build}"
     def mApplicationId = "com.digitalruiz.pizzadriver"
 
@@ -47,6 +49,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'org.json:json:20171018'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
