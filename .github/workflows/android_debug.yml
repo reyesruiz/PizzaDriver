@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.AUTO_COMMIT }}
       - name: version code
         id: version_code
-        uses: notiz-dev/github-action-json-property@releas
+        uses: notiz-dev/github-action-json-property@release
         with:
           path: 'version.properties.json'
           prop_path: 'version_code'
