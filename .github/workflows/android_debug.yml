@@ -27,12 +27,14 @@ jobs:
           path: 'app/version.properties'
           prop_path: 'VERSION_BUILD'
       - name: Update version code
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
         with:
           file: 'app/version.properties'
           field: 'VERSION_CODE_NUMBER'
           value: ${{ steps.version_code.outputs.value }} + 1
       - name: Update version build
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: jossef/action-set-json-field@v1
         with:
           file: 'app/version.properties'
@@ -40,7 +42,7 @@ jobs:
           value: ${{ steps.version_build.outputs.value }} + 1
       - name: Build all artifacts
         id: buildAllApks
-        run: ./gradlew assembleDebug bundleDebug --stacktrace --info
+        run: ./gradlew assembleDebug bundleDebug
 
 
 
