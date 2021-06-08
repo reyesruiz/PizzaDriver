@@ -19,27 +19,36 @@ jobs:
         uses: christian-draeger/read-properties@1.0.1
         with:
           path: 'app/version.properties'
-          prop_path: 'VERSION_CODE_NUMBER'
+          property: 'VERSION_CODE_NUMBER'
       - name: version build
         id: version_build
         uses: christian-draeger/read-properties@1.0.1
         with:
           path: 'app/version.properties'
-          prop_path: 'VERSION_BUILD'
+          property: 'VERSION_BUILD'
+
+      - name: new version code
+        id: new_version_code
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_code.outputs.value }} + 1" | bc)"
+      - name: new version build
+        id: new_version_build
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
+
       - name: Update version code
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
-          field: 'VERSION_CODE_NUMBER'
-          value: ${{ steps.version_code.outputs.value }} + 1
+          property: 'VERSION_CODE_NUMBER'
+          value: ${{ steps.new_version_code.outputs.value }}
       - name: Update version build
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
-          field: 'VERSION_BUILD'
-          value: ${{ steps.version_build.outputs.value }} + 1
+          property: 'VERSION_BUILD'
+          value: ${{ steps.new_version_build.outputs.value }}
+
       - name: Build all artifacts
         id: buildAllApks
         run: ./gradlew assembleDebug bundleDebug
