@@ -21,11 +21,11 @@ jobs:
           path: 'version.properties.json'
           prop_path: 'version_code'
       - name: version build
-          id: version_build
-          uses: notiz-dev/github-action-json-property@releas
-          with:
-            path: 'version.properties.json'
-            prop_path: 'app_version.build'
+        id: version_build
+        uses: notiz-dev/github-action-json-property@releas
+        with:
+          path: 'version.properties.json'
+          prop_path: 'app_version.build'
       - name: Update version code
         uses: jossef/action-set-json-field@v1
         with:
@@ -33,11 +33,11 @@ jobs:
           field: version_code
           value: ${{ steps.version_code.prop }} + 1
       - name: Update version build
-          uses: jossef/action-set-json-field@v1
-          with:
-            file: version.properties.json
-            field: app_version.build
-            value: ${{ steps.version_build.prop }} + 1
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: version.properties.json
+          field: app_version.build
+          value: ${{ steps.version_build.prop }} + 1
       - name: Build all artifacts
         id: buildAllApks
         uses: eskatos/gradle-command-action@v1
