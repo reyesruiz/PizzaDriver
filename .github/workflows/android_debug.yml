@@ -22,7 +22,7 @@ jobs:
           prop_path: 'version_code'
       - name: version build
         id: version_build
-        uses: notiz-dev/github-action-json-property@releas
+        uses: notiz-dev/github-action-json-property@release
         with:
           path: 'version.properties.json'
           prop_path: 'app_version.build'
