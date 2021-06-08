@@ -16,28 +16,28 @@ jobs:
           token: ${{ secrets.AUTO_COMMIT }}
       - name: version code
         id: version_code
-        uses: notiz-dev/github-action-json-property@release
+        uses: christian-draeger/read-properties@1.0.1
         with:
-          path: 'app/version.properties.json'
-          prop_path: 'version_code'
+          path: 'app/version.properties'
+          prop_path: 'VERSION_CODE_NUMBER'
       - name: version build
         id: version_build
-        uses: notiz-dev/github-action-json-property@release
+        uses: christian-draeger/read-properties@1.0.1
         with:
-          path: 'app/version.properties.json'
-          prop_path: 'app_version.build'
+          path: 'app/version.properties'
+          prop_path: 'VERSION_BUILD'
       - name: Update version code
-        uses: jossef/action-set-json-field@v1
+        uses: christian-draeger/write-properties@1.0.1
         with:
-          file: 'app/version.properties.json'
-          field: version_code
-          value: ${{ steps.version_code.prop }} + 1
+          file: 'app/version.properties'
+          field: 'VERSION_CODE_NUMBER'
+          value: ${{ steps.version_code.outputs.value }} + 1
       - name: Update version build
         uses: jossef/action-set-json-field@v1
         with:
-          file: 'app/version.properties.json'
-          field: app_version.build
-          value: ${{ steps.version_build.prop }} + 1
+          file: 'app/version.properties'
+          field: 'VERSION_BUILD'
+          value: ${{ steps.version_build.outputs.value }} + 1
       - name: Build all artifacts
         id: buildAllApks
         run: ./gradlew assembleDebug bundleDebug --stacktrace --info
@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
-          path: app/build/outputs/bundle/debug/com.digitalruiz.pizzadriver-debug.aab
+          path: app/build/outputs/bundle/debug/app-debug.aab
 
       - name: Push new files back to branch.
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
