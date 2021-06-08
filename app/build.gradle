@@ -16,6 +16,7 @@ android {
     def build = versionProps['VERSION_BUILD'].toInteger()
     def mVersionName = "v${major}.${minor}.${patch} Build: ${build}"
     def mApplicationId = "com.digitalruiz.pizzadriver"
+    def version_name = "v$major.$minor.$patch.$build"
 
 
 
@@ -26,6 +27,13 @@ android {
         versionCode mVersionCode
         versionName mVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${mApplicationId}-${version_name}-${variant.buildType.name}.apk"
+        }
     }
 
 

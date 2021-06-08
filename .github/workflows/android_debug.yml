@@ -28,9 +28,11 @@ jobs:
           property: 'VERSION_BUILD'
 
       - name: new version code
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_code
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_code.outputs.value }} + 1" | bc)"
       - name: new version build
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_build
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
