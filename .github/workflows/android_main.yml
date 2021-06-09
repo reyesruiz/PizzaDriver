@@ -7,20 +7,70 @@ on:
 jobs:
   build-main:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.AUTO_COMMIT }}
+      - name: version patch
+        id: version_patch
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
+      - name: version code
+        id: version_code
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_CODE_NUMBER'
+      - name: version build
+        id: version_build
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_BUILD'
+
+      - name: new version patch
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        id: new_version_build
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_patch.outputs.value }} + 1" | bc)"
+      - name: new version code
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        id: new_version_code
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_code.outputs.value }} + 1" | bc)"
+      - name: new version build
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        id: new_version_build
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
+
+      - name: Update version patch
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
+          value: ${{ steps.new_version_patch.outputs.value }}
+      - name: Update version code
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_CODE_NUMBER'
+          value: ${{ steps.new_version_code.outputs.value }}
+      - name: Update version build
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_BUILD'
+          value: ${{ steps.new_version_build.outputs.value }}
+
       - name: Build all artifacts
         id: buildAllApks
-        uses: eskatos/gradle-command-action@v1
-        with:
-          gradle-version: current
-          wrapper-cache-enabled: false
-          dependencies-cache-enabled: false
-          configuration-cache-enabled: false
-          arguments: build assembleDebug bundleDebug assembleRelease bundleRelease
+        run: ./gradlew assembleDebug bundleDebug
+
 
 
       #- name: Run Unit Tests with emulator
