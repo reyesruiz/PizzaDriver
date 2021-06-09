@@ -69,7 +69,7 @@ jobs:
 
       - name: Build all artifacts
         id: buildAllApks
-        run: ./gradlew assembleDebug bundleDebug
+        run: ./gradlew assembleRelease bundleRelease
 
 
 
