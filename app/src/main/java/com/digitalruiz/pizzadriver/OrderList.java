@@ -2,6 +2,7 @@ package com.digitalruiz.pizzadriver;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,15 @@ public class OrderList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
+
 
 
         pizzaDriverDB = new SQLiteDBHelper(this);
