@@ -26,21 +26,15 @@ jobs:
         with:
           path: 'app/version.properties'
           property: 'VERSION_BUILD'
-      - name: ls
-        run: ls app/
       - name: new version code
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_code
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_code.outputs.value }} + 1" | bc)"
-      - name: ls
-        run: ls app/
       - name: new version build
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_build
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
-      - name: ls
-        run: ls app/
       - name: Update version code
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
@@ -48,8 +42,6 @@ jobs:
           path: 'app/version.properties'
           property: 'VERSION_CODE_NUMBER'
           value: ${{ steps.new_version_code.outputs.value }}
-      - name: ls
-        run: ls app/
       - name: Update version build
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
@@ -57,12 +49,10 @@ jobs:
           path: 'app/version.properties'
           property: 'VERSION_BUILD'
           value: ${{ steps.new_version_build.outputs.value }}
-      - name: ls
-        run: ls app/
 
       - name: Build all artifacts
         id: buildAllApks
-        run: ./gradlew assembleDebug bundleDebug
+        run: ./gradlew build assembleDebug bundleDebug
 
 
 
@@ -94,15 +84,14 @@ jobs:
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: app/build/outputs/bundle/debug/app-debug.aab
-      - name: ls
-        run: ls app/
-      - name: Push new files back to branch.
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
-        uses: stefanzweifel/git-auto-commit-action@v4.11.0
-        with:
-          commit_message: "Build version bump, #skip-ci"
-          status_options: '--untracked-files=no'
-          disable_globbing: true
+
+      #- name: Push new files back to branch.
+      #  if: "!contains(github.event.head_commit.message, 'skip-ci')"
+      #  uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      #  with:
+      #    commit_message: "Build version bump, #skip-ci"
+      #    status_options: '--untracked-files=no'
+      #    disable_globbing: true
 
 
 
