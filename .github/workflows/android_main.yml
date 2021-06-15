@@ -69,7 +69,7 @@ jobs:
 
       - name: Build all artifacts
         id: buildAllApks
-        run: ./gradlew assembleRelease bundleRelease
+        run: ./gradlew build assembleRelease bundleRelease
 
 
 
@@ -121,6 +121,12 @@ jobs:
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
+
+      - name: Upload lint report
+        uses: actions/upload-artifact@master
+        with:
+          name: 'lint-results.html'
+          path: app/build/reports/lint-results.html
 
       - name: Push new files back to branch.
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
