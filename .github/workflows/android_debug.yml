@@ -85,6 +85,13 @@ jobs:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: app/build/outputs/bundle/debug/app-debug.aab
 
+      - name: Upload lint report
+        uses: actions/upload-artifact@master
+        with:
+          name: 'lint-results.html'
+          path: app/build/reports/lint-results.html
+
+
       #- name: Push new files back to branch.
       #  if: "!contains(github.event.head_commit.message, 'skip-ci')"
       #  uses: stefanzweifel/git-auto-commit-action@v4.11.0
