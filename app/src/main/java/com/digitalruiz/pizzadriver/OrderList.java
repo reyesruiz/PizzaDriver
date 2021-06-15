@@ -20,8 +20,8 @@ public class OrderList extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                Intent settings = new Intent(OrderList.this, settings.class);
+                OrderList.this.startActivity(settings);
             }
         });
 

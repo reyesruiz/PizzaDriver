@@ -44,6 +44,11 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  TABLE);
     }
 
+    public void deleteData(){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        pizza_driver_db.execSQL("DELETE FROM " +  TABLE);
+    }
+
     public boolean insertOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
