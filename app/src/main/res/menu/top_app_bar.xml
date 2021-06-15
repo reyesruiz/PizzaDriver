@@ -10,6 +10,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="Settings"
+        android:contentDescription="Settings"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/more"
         android:title="more"
         android:contentDescription="more"
