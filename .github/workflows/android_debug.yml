@@ -52,7 +52,7 @@ jobs:
 
       - name: Build all artifacts
         id: buildAllApks
-        run: ./gradlew assembleDebug bundleDebug
+        run: ./gradlew build assembleDebug bundleDebug
 
 
 
@@ -84,13 +84,21 @@ jobs:
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: app/build/outputs/bundle/debug/app-debug.aab
-      - name: Push new files back to branch.
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
-        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+
+      - name: Upload lint report
+        uses: actions/upload-artifact@master
         with:
-          commit_message: "Build version bump, #skip-ci"
-          status_options: '--untracked-files=no'
-          disable_globbing: true
+          name: 'lint-results.html'
+          path: app/build/reports/lint-results.html
+
+
+      #- name: Push new files back to branch.
+      #  if: "!contains(github.event.head_commit.message, 'skip-ci')"
+      #  uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      #  with:
+      #    commit_message: "Build version bump, #skip-ci"
+      #    status_options: '--untracked-files=no'
+      #    disable_globbing: true
 
 
 
