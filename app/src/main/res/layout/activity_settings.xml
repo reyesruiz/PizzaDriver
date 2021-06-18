@@ -1,59 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.navigation.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_navigationView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    app:menu="@menu/navigation_drawer"
     >
 
-    <TextView
-        android:id="@+id/textViewClearData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear Data"
-        android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/clear_data_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear?" />
-
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Switch" />
-
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ToggleButton" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CheckBox" />
-
-    <com.google.android.material.chip.Chip
-        android:id="@+id/chip4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <view
-        android:id="@+id/view"
-        class="androidx.appcompat.widget.ActionMenuView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contextClickable="true"
-        android:textAlignment="textEnd"
-        app:srcCompat="@drawable/ic_baseline_delete_forever_24"
-        app:tint="@color/black_900" />
-</LinearLayout>
+</com.google.android.material.navigation.NavigationView>
