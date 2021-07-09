@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Pizza Driver</string>
-    <string name="title_activity_order_list">Pizza Driver</string>
+    <string name="title_activity_main">Pizza Driver</string>
     <!-- Strings used for fragments for navigation -->
 
     <string name="zero_dot_zero_zero_text">0.00</string>
@@ -14,6 +14,7 @@
     <string name="credit_manual">Credit Manual</string>
     <string name="cash">Cash</string>
     <string name="grubhub">Grubhub</string>
+    <string name="levelup">LevelUp</string>
     <string name="other">Other</string>
     <string name="tip">Tip: $</string>
     <string name="cash_boolean">Cash?</string>
@@ -39,6 +40,7 @@
     <string name="credit_manual_cash_text">Credit Manual Cash:</string>
     <string name="cash_text">Cash:</string>
     <string name="grubhub_text">Grubhub:</string>
+    <string name="level_up_text">LevelUp:</string>
     <string name="other_text">Other:</string>
     <string name="total">Total:</string>
     <string name="tracy_text">Tracy:</string>

@@ -71,6 +71,7 @@ public class AddOrder extends AppCompatActivity {
         final Chip creditManualChip = this.findViewById(R.id.creditManualType);
         final Chip cashChip = this.findViewById(R.id.cashType);
         final Chip grubhubChip = this.findViewById(R.id.grubhubType);
+        final Chip levelUpChip = this.findViewById(R.id.levelUpType);
         final Chip otherChip = this.findViewById(R.id.otherType);
 
         final ChipGroup orderLocationChipGroup = findViewById(R.id.OrderLocation);
@@ -134,6 +135,10 @@ public class AddOrder extends AppCompatActivity {
                 case "Grubhub":
                     grubhubChip.setChecked(true);
                     grubhub();
+                    break;
+                case "LevelUp":
+                    levelUpChip.setChecked(true);
+                    levelup();
                     break;
                 case "Other":
                     otherChip.setChecked(true);
@@ -213,6 +218,16 @@ public class AddOrder extends AppCompatActivity {
                 setInvisible();
             }
         });
+
+        levelUpChip.setOnClickListener(v -> {
+            if (levelUpChip.isChecked()){
+                levelup();
+            }
+            else {
+                setInvisible();
+            }
+        });
+
         otherChip.setOnClickListener(v -> {
             if (otherChip.isChecked()){
                 other();
@@ -282,7 +297,7 @@ public class AddOrder extends AppCompatActivity {
                     CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
                 Cursor data = pizzaDriverDB.getData(orderNumber);
-                Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
+                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
                 if (data.getCount() == 1) {
                     boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                     data.close();
@@ -471,6 +486,14 @@ public class AddOrder extends AppCompatActivity {
     }
 
     private void grubhub() {
+        setInvisible();
+        TipText.setVisibility(TextView.VISIBLE);
+        tipEditText.setVisibility(EditText.VISIBLE);
+        cashCheckedBox.setVisibility(CheckBox.VISIBLE);
+        cashCheckedBox.setChecked(false);
+    }
+
+    private void levelup() {
         setInvisible();
         TipText.setVisibility(TextView.VISIBLE);
         tipEditText.setVisibility(EditText.VISIBLE);

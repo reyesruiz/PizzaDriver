@@ -10,12 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".settings"></activity>
-        <activity android:name=".addOrderNumber"></activity>
+        <activity android:name=".settings" />
+        <activity android:name=".addOrderNumber" />
         <activity android:name=".AddOrder" />
         <activity
-            android:name=".OrderList"
-            android:label="@string/title_activity_order_list"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/Theme.MyApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

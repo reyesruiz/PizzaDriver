@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrderList">
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/ic_baseline_menu_24"
             app:popupTheme="@style/Theme.MyApp"
-            app:title="@string/title_activity_order_list" />
+            app:title="@string/title_activity_main" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
