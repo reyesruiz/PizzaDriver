@@ -43,6 +43,7 @@ public class SummaryFragment extends Fragment {
         TextView ordersCreditManualCashText = view.findViewById(R.id.creditManualCash);
         TextView ordersCashText = view.findViewById(R.id.cash);
         TextView ordersGrubhubText = view.findViewById(R.id.grubhub);
+        TextView ordersLevelUpText = view.findViewById(R.id.levelup);
         TextView ordersOtherText = view.findViewById(R.id.other);
         TextView ordersTotalText = view.findViewById(R.id.total);
 
@@ -51,6 +52,7 @@ public class SummaryFragment extends Fragment {
         TextView creditManualCashStatic = view.findViewById(R.id.creditManualCashStatic);
         TextView cashStatic = view.findViewById(R.id.cashStatic);
         TextView grubhubStatic = view.findViewById(R.id.grubhubStatic);
+        TextView levelUpStatic = view.findViewById(R.id.levelUpStatic);
         TextView otherStatic = view.findViewById(R.id.otherStatic);
 
         TextView tracy = view.findViewById(R.id.tracy);
@@ -73,6 +75,7 @@ public class SummaryFragment extends Fragment {
         int OrdersCreditManualCash;
         int OrdersCash;
         int OrdersGrubhub;
+        int OrdersLevelUp;
         int OrdersOther;
         int OrdersTotal;
         int OrdersTotalFromDB;
@@ -143,8 +146,9 @@ public class SummaryFragment extends Fragment {
         OrdersCreditManualCash = pizzaDriverDB.numberOfRowsPerType("Credit Manual", "1");
         OrdersCash = pizzaDriverDB.numberOfRowsPerType("Cash", "1");
         OrdersGrubhub = pizzaDriverDB.numberOfRowsPerType("Grubhub", "*");
+        OrdersLevelUp = pizzaDriverDB.numberOfRowsPerType("LevelUp", "*");
         OrdersOther = pizzaDriverDB.numberOfRowsPerType("Other", "*");
-        OrdersTotal = OrdersCreditAuto + OrdersCreditManual + OrdersCreditManualCash + OrdersCash + OrdersGrubhub + OrdersOther;
+        OrdersTotal = OrdersCreditAuto + OrdersCreditManual + OrdersCreditManualCash + OrdersCash + OrdersGrubhub + OrdersLevelUp + OrdersOther;
         OrdersTotalFromDB = pizzaDriverDB.numberOfRows();
 
         if (OrdersTotal != OrdersTotalFromDB){
@@ -158,6 +162,7 @@ public class SummaryFragment extends Fragment {
         ordersCreditManualCashText.setText(Integer.toString(OrdersCreditManualCash));
         ordersCashText.setText(Integer.toString(OrdersCash));
         ordersGrubhubText.setText((Integer.toString(OrdersGrubhub)));
+        ordersLevelUpText.setText(Integer.toString(OrdersLevelUp));
         ordersOtherText.setText(Integer.toString(OrdersOther));
         ordersTotalText.setText(Integer.toString(OrdersTotal));
 
@@ -204,6 +209,14 @@ public class SummaryFragment extends Fragment {
 
         grubhubStatic.setOnClickListener(v -> {
             bundle.putString("OrderType", "Grubhub");
+            bundle.putString("CashBool", "*");
+            bundle.putString("Location", "*");
+            NavHostFragment.findNavController(SummaryFragment.this)
+                    .navigate(R.id.action_SummaryFragment_to_OrderListFragment, bundle);
+        });
+
+        levelUpStatic.setOnClickListener(v -> {
+            bundle.putString("OrderType", "LevelUp");
             bundle.putString("CashBool", "*");
             bundle.putString("Location", "*");
             NavHostFragment.findNavController(SummaryFragment.this)

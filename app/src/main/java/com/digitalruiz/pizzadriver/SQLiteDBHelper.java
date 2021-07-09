@@ -130,7 +130,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\" OR " + ORDER_TYPE + " = \"Grubhub\" OR " + ORDER_TYPE + " = \"Other\") AND " + TIP_CASH_BOOL + " = 0", null);
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\" OR " + ORDER_TYPE + " = \"Grubhub\" OR " + ORDER_TYPE + " = \"LevelUp\" OR " + ORDER_TYPE + " = \"Other\") AND " + TIP_CASH_BOOL + " = 0", null);
         res.moveToFirst();
         while(!res.isAfterLast()){
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
@@ -173,7 +173,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public ArrayList<Integer> getAllCashOrders() {
         ArrayList<Integer> array_list = new ArrayList<>();
 
-        //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\"", null);
         res.moveToFirst();
