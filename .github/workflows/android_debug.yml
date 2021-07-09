@@ -14,6 +14,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.AUTO_COMMIT }}
+      - name: version patch
+        id: version_patch
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
       - name: version code
         id: version_code
         uses: christian-draeger/read-properties@1.0.1
@@ -26,6 +32,11 @@ jobs:
         with:
           path: 'app/version.properties'
           property: 'VERSION_BUILD'
+
+      - name: new version patch
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        id: new_version_patch
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_patch.outputs.value }} + 1" | bc)"
       - name: new version code
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_code
@@ -35,6 +46,13 @@ jobs:
         id: new_version_build
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
+      - name: Update version patch
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
+          value: ${{ steps.new_version_patch.outputs.value }}
       - name: Update version code
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
