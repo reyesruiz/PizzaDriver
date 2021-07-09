@@ -72,6 +72,9 @@ jobs:
         id: buildAllApks
         run: ./gradlew build assembleDebug bundleDebug
 
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
 
 
       #- name: Run Unit Tests with emulator
