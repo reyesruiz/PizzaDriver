@@ -8,33 +8,30 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class OrderList extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    SQLiteDBHelper pizzaDriverDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_list);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settings = new Intent(OrderList.this, settings.class);
-                OrderList.this.startActivity(settings);
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent settings = new Intent(MainActivity.this, settings.class);
+            MainActivity.this.startActivity(settings);
         });
 
 
 
-
+        SQLiteDBHelper pizzaDriverDB;
         pizzaDriverDB = new SQLiteDBHelper(this);
 
         FloatingActionButton addOrder = findViewById(R.id.add);
 
         addOrder.setOnClickListener(view -> {
-            Intent addOrderIntent = new Intent(OrderList.this, addOrderNumber.class);
-            OrderList.this.startActivity(addOrderIntent);
+            Intent addOrderIntent = new Intent(MainActivity.this, addOrderNumber.class);
+            MainActivity.this.startActivity(addOrderIntent);
         });
 
 

@@ -282,7 +282,7 @@ public class AddOrder extends AppCompatActivity {
                     CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
                 Cursor data = pizzaDriverDB.getData(orderNumber);
-                Intent BackToMain = new Intent(AddOrder.this, OrderList.class);
+                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
                 if (data.getCount() == 1) {
                     boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                     data.close();

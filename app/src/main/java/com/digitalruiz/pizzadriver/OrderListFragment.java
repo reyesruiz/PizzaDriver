@@ -78,7 +78,7 @@ public class OrderListFragment extends Fragment {
         OrderNumberStatic.setText(getString(R.string.number));
         OrderNumberStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderNumberStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-        OrderNumberStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
+        OrderNumberStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, requireContext().getTheme()));
 
         TextView OrderTypeStatic = new TextView(getContext());
         OrderTypeStatic.setText(R.string.type);
