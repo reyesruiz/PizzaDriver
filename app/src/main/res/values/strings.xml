@@ -52,6 +52,11 @@
     <string name="location">Location</string>
 
     <string name="back_to_order_list">Back To Order List</string>
-
+    <string name="clear_data">Clear Data</string>
+    <string name="delete">Delete</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <string name="more">more</string>
+    <string name="add_description">Add new order number</string>
 
 </resources>

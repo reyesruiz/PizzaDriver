@@ -6,12 +6,16 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -26,6 +30,7 @@ import java.util.Objects;
 public class OrderListFragment extends Fragment {
 
     SQLiteDBHelper pizzaDriverDB;
+
 
 
     @Override
@@ -145,6 +150,10 @@ public class OrderListFragment extends Fragment {
                 addOrderIntent.putExtra("orderNumber", orderNumber);
                 startActivity(addOrderIntent);
             });
+            orderNumberChip.setOnLongClickListener(v -> {
+                showPopup(v, orderNumber);
+                return true;
+            });
 
 
             TextView OrderTypeText = new TextView(getContext());
@@ -182,7 +191,37 @@ public class OrderListFragment extends Fragment {
         }
 
 
-        button_first.setOnClickListener(view1 -> NavHostFragment.findNavController(OrderListFragment.this)
+        button_first.setOnClickListener(v -> NavHostFragment.findNavController(OrderListFragment.this)
                 .navigate(R.id.action_OrderListFragment_to_SummaryFragment));
+
+
+
+
+    }
+
+    private void showPopup(View view, int OrderNumber) {
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.order_number_options, popup.getMenu());
+        popup.show();
+        MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
+        delete.setOnMenuItemClickListener(v ->{
+            boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
+            if (deleted) {
+                Toast deletedToast = Toast.makeText(getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
+                deletedToast.show();
+            }
+            else {
+                Toast deletedToast = Toast.makeText(getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
+                deletedToast.show();
+            }
+            getActivity().finish();
+            startActivity(getActivity().getIntent());
+
+
+
+
+            return deleted;
+        });
     }
 }

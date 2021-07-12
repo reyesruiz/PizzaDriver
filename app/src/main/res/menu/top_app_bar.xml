@@ -5,20 +5,20 @@
     <item
         android:id="@+id/search"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="Search"
-        android:contentDescription="Search"
+        android:title="@string/search"
+        android:contentDescription="@string/search"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/settings"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:title="Settings"
-        android:contentDescription="Settings"
+        android:title="@string/settings"
+        android:contentDescription="@string/settings"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/more"
-        android:title="more"
-        android:contentDescription="more"
+        android:title="@string/more"
+        android:contentDescription="@string/more"
         app:showAsAction="never" />
 </menu>
