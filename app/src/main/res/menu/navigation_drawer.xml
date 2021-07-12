@@ -4,7 +4,7 @@
     <group >
         <item
             android:id="@+id/clear_data_menu"
-            android:title="Clear Data"
+            android:title="@string/clear_data"
             android:icon="@drawable/ic_baseline_delete_forever_24"
             android:checked="false"
             />

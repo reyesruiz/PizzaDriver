@@ -100,14 +100,17 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowUpdated != -1;
     }
 
-// --Commented out by Inspection START (5/30/2020 1:26 AM):
-//    public Integer deleteOrder (Integer OrderNumber) {
-//        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
-//        return pizza_driver_db.delete(TABLE,
-//                ORDER_NUMBER + " = ? ",
-//                new String[] { Integer.toString(OrderNumber) });
-//    }
-// --Commented out by Inspection STOP (5/30/2020 1:26 AM)
+
+    public boolean deleteOrder (Integer OrderNumber) {
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        int row_deleted = pizza_driver_db.delete(TABLE,
+                ORDER_NUMBER + " = ? ",
+                new String[] { Integer.toString(OrderNumber) });
+        Log.v("Test", "row deleted " + row_deleted);
+        return row_deleted == 1;
+
+    }
+
 
     public ArrayList<Integer> getAllOrders() {
         ArrayList<Integer> array_list = new ArrayList<>();
