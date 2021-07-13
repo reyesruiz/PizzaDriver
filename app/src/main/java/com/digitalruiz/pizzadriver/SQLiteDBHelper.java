@@ -94,10 +94,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);
-        pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OldOrderNumber) } );
-        long rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
-        Log.v("Test", "row updated " + rowUpdated);
-        return rowUpdated != -1;
+        boolean exists = checkAlreadyExist(OrderNumber);
+        if (exists){
+            return false;
+        }
+        else {
+            int rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[]{Integer.toString(OldOrderNumber)});
+            Log.v("Test", "row updated " + rowUpdated);
+            return rowUpdated != -1;
+        }
     }
 
 
@@ -244,6 +249,17 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
         res.close();
         return array_list;
+    }
+
+    public boolean checkAlreadyExist(int orderNumber){
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor result = pizza_driver_db.rawQuery("select * from " + TABLE + " where " + ORDER_NUMBER + "=" + orderNumber + "", null);
+        if (result.getCount() > 0){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 

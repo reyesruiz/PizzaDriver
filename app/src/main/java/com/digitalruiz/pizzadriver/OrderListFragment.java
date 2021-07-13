@@ -1,9 +1,11 @@
 package com.digitalruiz.pizzadriver;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -30,7 +34,6 @@ import java.util.Objects;
 public class OrderListFragment extends Fragment {
 
     SQLiteDBHelper pizzaDriverDB;
-
 
 
     @Override
@@ -204,6 +207,47 @@ public class OrderListFragment extends Fragment {
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.order_number_options, popup.getMenu());
         popup.show();
+
+        MenuItem change = popup.getMenu().findItem(R.id.order_change_number);
+        change.setOnMenuItemClickListener(v ->{
+            final String[] m_Text = {""};
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("New order number");
+            final EditText input = new EditText(getContext());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            builder.setView(input);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    m_Text[0] = input.getText().toString();
+                    int NewOrderNumber = Integer.valueOf(m_Text[0]);
+                    boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
+                    if (changed == true){
+                        Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
+                        updateToast.show();
+                        getActivity().finish();
+                        startActivity(getActivity().getIntent());
+                    }
+                    else {
+                        Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
+                        updateToast.show();
+                        dialog.cancel();
+                    }
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+          // boolean changed = pizzaDriverDB.updateOrderNumber();
+            return true;
+        });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
         delete.setOnMenuItemClickListener(v ->{
             boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
