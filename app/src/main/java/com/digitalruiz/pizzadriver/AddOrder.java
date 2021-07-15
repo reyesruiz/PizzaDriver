@@ -1,18 +1,25 @@
 package com.digitalruiz.pizzadriver;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.chip.Chip;
@@ -237,11 +244,7 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
-        orderNumberChip.setOnClickListener(v -> {
-            Intent changeNumberIntent = new Intent(AddOrder.this, addOrderNumber.class);
-            changeNumberIntent.putExtra("orderNumber", orderNumber);
-            startActivity(changeNumberIntent);
-        });
+        orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber));
 
         SaveButton.setOnClickListener(v -> {
             Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
@@ -351,6 +354,60 @@ public class AddOrder extends AppCompatActivity {
 
 
 
+    }
+    private void showPopup(View view, int OrderNumber) {
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.order_number_options, popup.getMenu());
+        popup.show();
+
+        MenuItem change = popup.getMenu().findItem(R.id.order_change_number);
+        change.setOnMenuItemClickListener(v ->{
+            final String[] m_Text = {""};
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle("New order number");
+            final EditText input = new EditText(view.getContext());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            builder.setView(input);
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                m_Text[0] = input.getText().toString();
+                int NewOrderNumber = Integer.parseInt(m_Text[0]);
+                boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
+                if (changed){
+                    Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
+                    updateToast.show();
+                    Intent addOrderIntent = new Intent(AddOrder.this, MainActivity.class);
+                    startActivity(addOrderIntent);
+                }
+                else {
+                    Toast updateToast = Toast.makeText(view.getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
+                    updateToast.show();
+                    dialog.cancel();
+                }
+
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+            builder.show();
+
+            // boolean changed = pizzaDriverDB.updateOrderNumber();
+            return true;
+        });
+        MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
+        delete.setOnMenuItemClickListener(v ->{
+            boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
+            if (deleted) {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
+                deletedToast.show();
+                Intent addOrderIntent = new Intent(AddOrder.this, MainActivity.class);
+                startActivity(addOrderIntent);
+            }
+            else {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
+                deletedToast.show();
+            }
+            return deleted;
+        });
     }
 
     private void setInvisible() {

@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         SQLiteDBHelper pizzaDriverDB;
         pizzaDriverDB = new SQLiteDBHelper(this);
+        pizzaDriverDB.getWritableDatabase();
 
         FloatingActionButton addOrder = findViewById(R.id.add);
 
