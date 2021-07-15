@@ -216,32 +216,24 @@ public class OrderListFragment extends Fragment {
             final EditText input = new EditText(getContext());
             input.setInputType(InputType.TYPE_CLASS_NUMBER);
             builder.setView(input);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    m_Text[0] = input.getText().toString();
-                    int NewOrderNumber = Integer.valueOf(m_Text[0]);
-                    boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
-                    if (changed == true){
-                        Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
-                        updateToast.show();
-                        getActivity().finish();
-                        startActivity(getActivity().getIntent());
-                    }
-                    else {
-                        Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
-                        updateToast.show();
-                        dialog.cancel();
-                    }
-
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                m_Text[0] = input.getText().toString();
+                int NewOrderNumber = Integer.parseInt(m_Text[0]);
+                boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
+                if (changed){
+                    Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
+                    updateToast.show();
+                    getActivity().finish();
+                    startActivity(getActivity().getIntent());
                 }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                else {
+                    Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
+                    updateToast.show();
                     dialog.cancel();
                 }
+
             });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
             builder.show();
 
