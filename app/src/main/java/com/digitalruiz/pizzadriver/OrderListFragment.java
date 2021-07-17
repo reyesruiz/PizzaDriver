@@ -1,6 +1,5 @@
 package com.digitalruiz.pizzadriver;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
