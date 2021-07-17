@@ -254,7 +254,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public boolean checkAlreadyExist(int orderNumber){
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor result = pizza_driver_db.rawQuery("select * from " + TABLE + " where " + ORDER_NUMBER + "=" + orderNumber + "", null);
-        return result.getCount() > 0;
+        int count = result.getCount();
+        result.close();
+        return count > 0;
     }
 
 
