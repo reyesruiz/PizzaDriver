@@ -8,8 +8,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        # Not using api level 28, 29, and 30 looks like it is timing out. Waiting for fix from reactivecircus.
-        api-level: [26,27]
+        api-level: [26,27,28,29,30]
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
