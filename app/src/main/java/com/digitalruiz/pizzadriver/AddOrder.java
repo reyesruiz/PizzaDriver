@@ -339,14 +339,6 @@ public class AddOrder extends AppCompatActivity {
         });
 
 
-
-
-        cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if ((cashReceivedEditText.getText().toString().equals("0")) || (cashReceivedEditText.getText().toString().equals("0.0")) || (cashReceivedEditText.getText().toString().equals("0.00"))){
-                cashReceivedEditText.setText("");
-            }
-        });
-
         editTextTest = findViewById(R.id.editTextTest);
         if (editTextTest.getText().toString().isEmpty()){
             editTextTest.setText("0.00");
@@ -363,6 +355,11 @@ public class AddOrder extends AppCompatActivity {
             orderTotalEditText.setText("0.00");
         }
         orderTotalChangedText();
+
+        if (cashReceivedEditText.getText().toString().isEmpty()){
+            cashReceivedEditText.setText("0.00");
+        }
+        cashReceivedChangedText();
 
 
 
@@ -453,6 +450,47 @@ public class AddOrder extends AppCompatActivity {
             }
         };
         orderTotalEditText.addTextChangedListener(orderTotalTextWatcher);
+    }
+
+    private void cashReceivedChangedText() {
+        cashReceivedTextWatcher = new TextWatcher() {
+            BigDecimal r;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("CHANGED", "beforeTextChanged: " + s.toString());
+                Log.d("CHANGED", "beforeTextChanged: " + start);
+                Log.d("CHANGED", "beforeTextChanged: " + count);
+                Log.d("CHANGED", "beforeTextChanged: " + after);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("CHANGED", "onTextChanged: " + s.toString());
+                Log.d("CHANGED", "onTextChanged: " + start);
+                Log.d("CHANGED", "onTextChanged: " + before);
+                Log.d("CHANGED", "onTextChanged: " + count);
+                r = new BigDecimal(s.toString());
+                if (before == 0){
+                    r = r.multiply(BigDecimal.valueOf(10));
+                    r = r.setScale(2);
+                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                }
+                else {
+                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("CHANGED", "afterTextChanged: " + s.toString());
+                cashReceivedEditText.removeTextChangedListener(this);
+                s.clear();
+                s.append(r.toString());
+                cashReceivedChangedText();
+
+            }
+        };
+        cashReceivedEditText.addTextChangedListener(cashReceivedTextWatcher);
     }
 
     private void changedText() {
@@ -613,43 +651,7 @@ public class AddOrder extends AppCompatActivity {
             CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
         }
 
-        cashReceivedEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.v("Test", "changed");
-                if (TextUtils.isEmpty(tipEditText.getText().toString())) {
-                    Tip = new BigDecimal("0.00");
-                }
-                else {
-                    Tip = new BigDecimal(tipEditText.getText().toString());
-                }
-                if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
-                    OrderTotal = new BigDecimal("0.00");
-                }
-                else {
-                    OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
-                }
-                if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
-                    CashReceived = new BigDecimal("0.00");
-                }
-                else {
-                    CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
-                }
-                Tip = new BigDecimal(CashReceived.subtract(OrderTotal).toString());
-                Log.v("Test", "changed" + Tip.toString());
-                tipEditText.setText(Tip.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     private void grubhub() {
