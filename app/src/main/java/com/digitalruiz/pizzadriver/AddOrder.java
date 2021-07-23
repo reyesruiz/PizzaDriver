@@ -53,6 +53,9 @@ public class AddOrder extends AppCompatActivity {
     Button SaveButton;
 
     TextWatcher eTextWatcher = null;
+    TextWatcher tipTextWatcher = null;
+    TextWatcher orderTotalTextWatcher = null;
+    TextWatcher cashReceivedTextWatcher = null;
 
 
 
@@ -335,11 +338,7 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
-        tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if ((tipEditText.getText().toString().equals("0")) || (tipEditText.getText().toString().equals("0.0")) || (tipEditText.getText().toString().equals("0.00")) ){
-                tipEditText.setText("");
-            }
-        });
+
 
         orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
             if ((orderTotalEditText.getText().toString().equals("0")) || (orderTotalEditText.getText().toString().equals("0.0")) || (orderTotalEditText.getText().toString().equals("0.00")) ){
@@ -359,11 +358,59 @@ public class AddOrder extends AppCompatActivity {
         }
         editTextTest.setSelection(editTextTest.getText().toString().length());
         changedText();
+        if (tipEditText.getText().toString().isEmpty()){
+            tipEditText.setText("0.00");
+        }
+        tipEditText.setSelection(tipEditText.getText().toString().length());
+        tipChangedText();
 
 
 
 
 
+    }
+
+
+
+    private void tipChangedText() {
+        tipTextWatcher = new TextWatcher() {
+            BigDecimal r;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("CHANGED", "beforeTextChanged: " + s.toString());
+                Log.d("CHANGED", "beforeTextChanged: " + start);
+                Log.d("CHANGED", "beforeTextChanged: " + count);
+                Log.d("CHANGED", "beforeTextChanged: " + after);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("CHANGED", "onTextChanged: " + s.toString());
+                Log.d("CHANGED", "onTextChanged: " + start);
+                Log.d("CHANGED", "onTextChanged: " + before);
+                Log.d("CHANGED", "onTextChanged: " + count);
+                r = new BigDecimal(s.toString());
+                if (before == 0){
+                    r = r.multiply(BigDecimal.valueOf(10));
+                    r = r.setScale(2);
+                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                }
+                else {
+                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("CHANGED", "afterTextChanged: " + s.toString());
+                tipEditText.removeTextChangedListener(this);
+                s.clear();
+                s.append(r.toString());
+                tipChangedText();
+
+            }
+        };
+        tipEditText.addTextChangedListener(tipTextWatcher);
     }
 
     private void changedText() {
