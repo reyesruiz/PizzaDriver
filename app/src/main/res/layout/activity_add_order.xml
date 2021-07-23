@@ -158,6 +158,13 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/editTextTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/OrderLocation"
         android:layout_width="wrap_content"
