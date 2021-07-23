@@ -28,7 +28,7 @@ class AddOrderNumber {
     var mActivityTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun addOrderNumber() {
+    fun addOrderNumberTest() {
         val imageButton = onView(
 allOf(withId(R.id.add),
 withParent(withParent(withId(android.R.id.content))),
