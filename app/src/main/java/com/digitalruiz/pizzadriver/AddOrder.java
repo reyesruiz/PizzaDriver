@@ -37,7 +37,6 @@ public class AddOrder extends AppCompatActivity {
     public EditText orderTotalEditText;
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
-    public EditText editTextTest;
 
     String orderType;
     String OrderLocation;
@@ -339,12 +338,6 @@ public class AddOrder extends AppCompatActivity {
         });
 
 
-        editTextTest = findViewById(R.id.editTextTest);
-        if (editTextTest.getText().toString().isEmpty()){
-            editTextTest.setText("0.00");
-        }
-        editTextTest.setSelection(editTextTest.getText().toString().length());
-        changedText();
         if (tipEditText.getText().toString().isEmpty()){
             tipEditText.setText("0.00");
         }
@@ -366,8 +359,6 @@ public class AddOrder extends AppCompatActivity {
 
 
     }
-
-
 
     private void tipChangedText() {
         tipTextWatcher = new TextWatcher() {
@@ -502,52 +493,6 @@ public class AddOrder extends AppCompatActivity {
         cashReceivedEditText.addTextChangedListener(cashReceivedTextWatcher);
     }
 
-    private void changedText() {
-        eTextWatcher = new TextWatcher() {
-            BigDecimal b;
-            BigDecimal a;
-            BigDecimal r;
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d("CHANGED", "beforeTextChanged: " + s.toString());
-                Log.d("CHANGED", "beforeTextChanged: " + start);
-                Log.d("CHANGED", "beforeTextChanged: " + count);
-                Log.d("CHANGED", "beforeTextChanged: " + after);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("CHANGED", "onTextChanged: " + s.toString());
-                Log.d("CHANGED", "onTextChanged: " + start);
-                Log.d("CHANGED", "onTextChanged: " + before);
-                Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                Log.d("CHANGED", "onTextChangedR: " + r);
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
-                }
-                else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
-                }
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.d("CHANGED", "afterTextChanged: " + s.toString());
-                a = new BigDecimal(s.toString());
-                Log.d("CHANGED", "afterTextChanged: " + a);
-                editTextTest.removeTextChangedListener(this);
-                s.clear();
-                s.append(r.toString());
-                changedText();
-            }
-        };
-        editTextTest.addTextChangedListener(eTextWatcher);
-    }
     private void showPopup(View view, int OrderNumber) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
