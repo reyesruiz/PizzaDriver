@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.math.RoundingMode;
 import java.util.Objects;
 
 public class AddOrder extends AppCompatActivity {
@@ -51,7 +50,6 @@ public class AddOrder extends AppCompatActivity {
 
     Button SaveButton;
 
-    TextWatcher eTextWatcher = null;
     TextWatcher tipTextWatcher = null;
     TextWatcher orderTotalTextWatcher = null;
     TextWatcher cashReceivedTextWatcher = null;
