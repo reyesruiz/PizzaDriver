@@ -486,6 +486,15 @@ public class AddOrder extends AppCompatActivity {
                 cashReceivedEditText.removeTextChangedListener(this);
                 s.clear();
                 s.append(r.toString());
+                tipEditText.removeTextChangedListener(tipTextWatcher);
+                BigDecimal cashReceived;
+                cashReceived = new BigDecimal(r.toString());
+                BigDecimal orderTotal;
+                orderTotal = new BigDecimal(orderTotalEditText.getText().toString());
+                BigDecimal newTip;
+                newTip = new BigDecimal(String.valueOf(cashReceived.subtract(orderTotal)));
+                tipEditText.setText(newTip.toString());
+                tipChangedText();
                 cashReceivedChangedText();
 
             }
