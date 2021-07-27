@@ -336,18 +336,18 @@ public class AddOrder extends AppCompatActivity {
         });
 
 
-        if (tipEditText.getText().toString().isEmpty()){
+        if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")){
             tipEditText.setText("0.00");
         }
         tipEditText.setSelection(tipEditText.getText().toString().length());
         tipChangedText();
 
-        if (orderTotalEditText.getText().toString().isEmpty()){
+        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")){
             orderTotalEditText.setText("0.00");
         }
         orderTotalChangedText();
 
-        if (cashReceivedEditText.getText().toString().isEmpty()){
+        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")){
             cashReceivedEditText.setText("0.00");
         }
         cashReceivedChangedText();
