@@ -57,6 +57,7 @@ public class AddOrder extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +191,7 @@ public class AddOrder extends AppCompatActivity {
 
 
         }
+
 
 
         creditAutoChip.setOnClickListener(v -> {
@@ -335,32 +337,20 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
+        tipChangedText();
+        orderTotalChangedText();
+        cashReceivedChangedText();
+    }
 
+    private void tipChangedText() {
         if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")){
             tipEditText.setText("0.00");
         }
         tipEditText.setSelection(tipEditText.getText().toString().length());
-        tipChangedText();
 
-        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")){
-            orderTotalEditText.setText("0.00");
-        }
-        orderTotalChangedText();
-
-        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")){
-            cashReceivedEditText.setText("0.00");
-        }
-        cashReceivedChangedText();
-
-
-
-
-
-    }
-
-    private void tipChangedText() {
         tipTextWatcher = new TextWatcher() {
             BigDecimal r;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d("CHANGED", "beforeTextChanged: " + s.toString());
@@ -401,6 +391,10 @@ public class AddOrder extends AppCompatActivity {
 
 
     private void orderTotalChangedText() {
+        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")){
+            orderTotalEditText.setText("0.00");
+        }
+        orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
         orderTotalTextWatcher = new TextWatcher() {
             BigDecimal r;
             @Override
@@ -442,6 +436,10 @@ public class AddOrder extends AppCompatActivity {
     }
 
     private void cashReceivedChangedText() {
+        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")){
+            cashReceivedEditText.setText("0.00");
+        }
+        cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
         cashReceivedTextWatcher = new TextWatcher() {
             BigDecimal r;
             @Override
@@ -489,6 +487,14 @@ public class AddOrder extends AppCompatActivity {
             }
         };
         cashReceivedEditText.addTextChangedListener(cashReceivedTextWatcher);
+    }
+
+    public void tipEditTextOnClick (View v){
+        Log.d("ONCLICK", "tipEditTextOnClick: " + "CLICKED");
+        if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")){
+            tipEditText.setText("0.00");
+        }
+        tipEditText.setSelection(tipEditText.getText().toString().length());
     }
 
     private void showPopup(View view, int OrderNumber) {
