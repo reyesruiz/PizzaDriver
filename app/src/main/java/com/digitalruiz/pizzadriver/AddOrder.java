@@ -25,6 +25,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddOrder extends AppCompatActivity {
 
@@ -173,6 +175,7 @@ public class AddOrder extends AppCompatActivity {
             }
 
             Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
+            Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             tipEditText.setText(Tip.toString());
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
@@ -365,14 +368,25 @@ public class AddOrder extends AppCompatActivity {
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                Log.d("TESTS", s.toString());
+                Pattern p = Pattern.compile("^\\.\\d*$");
+                Matcher m = p.matcher(s.toString());
+                boolean b = m.matches();
+                if (b == true){
+                    Log.d("MATCHED", "MATCHED: " + b);
+                    s = "0" + s;
+                    Log.d("MATCHED", "MATCHED: " + s);
+                    r = new BigDecimal(s.toString());
                 }
                 else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                    r = new BigDecimal(s.toString());
+                    if (before == 0) {
+                        r = r.multiply(BigDecimal.valueOf(10));
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                    } else {
+                        r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                    }
                 }
             }
 
