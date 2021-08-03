@@ -182,9 +182,11 @@ public class AddOrder extends AppCompatActivity {
             cashCheckedBox.setChecked(TipCashBool == 1);
 
             OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
+            OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             orderTotalEditText.setText(OrderTotal.toString());
 
             CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
+            CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             cashReceivedEditText.setText(CashReceived.toString());
 
 
@@ -425,14 +427,25 @@ public class AddOrder extends AppCompatActivity {
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                Log.d("TESTS", s.toString());
+                Pattern p = Pattern.compile("^\\.\\d*$");
+                Matcher m = p.matcher(s.toString());
+                boolean b = m.matches();
+                if (b == true){
+                    Log.d("MATCHED", "MATCHED: " + b);
+                    s = "0" + s;
+                    Log.d("MATCHED", "MATCHED: " + s);
+                    r = new BigDecimal(s.toString());
                 }
                 else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                    r = new BigDecimal(s.toString());
+                    if (before == 0) {
+                        r = r.multiply(BigDecimal.valueOf(10));
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                    } else {
+                        r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                    }
                 }
             }
 
@@ -470,14 +483,25 @@ public class AddOrder extends AppCompatActivity {
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                Log.d("TESTS", s.toString());
+                Pattern p = Pattern.compile("^\\.\\d*$");
+                Matcher m = p.matcher(s.toString());
+                boolean b = m.matches();
+                if (b == true){
+                    Log.d("MATCHED", "MATCHED: " + b);
+                    s = "0" + s;
+                    Log.d("MATCHED", "MATCHED: " + s);
+                    r = new BigDecimal(s.toString());
                 }
                 else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                    r = new BigDecimal(s.toString());
+                    if (before == 0) {
+                        r = r.multiply(BigDecimal.valueOf(10));
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                    } else {
+                        r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                    }
                 }
             }
 
