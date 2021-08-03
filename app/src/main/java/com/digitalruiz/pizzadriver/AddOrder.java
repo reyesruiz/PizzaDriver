@@ -12,8 +12,10 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -177,6 +179,13 @@ public class AddOrder extends AppCompatActivity {
             Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
             Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             tipEditText.setText(Tip.toString());
+            tipEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    Log.d("TEST", "onFocusChange: ");
+                    tipEditText.setSelection(tipEditText.getText().toString().length());
+                }
+            });
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
             cashCheckedBox.setChecked(TipCashBool == 1);
@@ -184,6 +193,20 @@ public class AddOrder extends AppCompatActivity {
             OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
             OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             orderTotalEditText.setText(OrderTotal.toString());
+            orderTotalEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    Log.d("TEST", "onFocusChange: ");
+                    orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
+                }
+            });
+            orderTotalEditText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("TEST", "onClick: ");
+                    orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
+                }
+            });
 
             CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
             CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
