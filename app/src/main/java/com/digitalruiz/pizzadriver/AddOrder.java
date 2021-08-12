@@ -385,6 +385,7 @@ public class AddOrder extends AppCompatActivity {
                 Log.d("CHANGED", "beforeTextChanged: " + start);
                 Log.d("CHANGED", "beforeTextChanged: " + count);
                 Log.d("CHANGED", "beforeTextChanged: " + after);
+                Log.d("CHANGED", "beforeTextChanged: " + s.toString().length());
             }
 
             @Override
@@ -550,13 +551,6 @@ public class AddOrder extends AppCompatActivity {
         cashReceivedEditText.addTextChangedListener(cashReceivedTextWatcher);
     }
 
-    public void tipEditTextOnClick (View v){
-        Log.d("ONCLICK", "tipEditTextOnClick: " + "CLICKED");
-        if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")){
-            tipEditText.setText("0.00");
-        }
-        tipEditText.setSelection(tipEditText.getText().toString().length());
-    }
 
     private void showPopup(View view, int OrderNumber) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
