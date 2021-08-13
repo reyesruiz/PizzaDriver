@@ -25,6 +25,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddOrder extends AppCompatActivity {
 
@@ -53,6 +55,7 @@ public class AddOrder extends AppCompatActivity {
     TextWatcher tipTextWatcher = null;
     TextWatcher orderTotalTextWatcher = null;
     TextWatcher cashReceivedTextWatcher = null;
+
 
 
 
@@ -172,16 +175,31 @@ public class AddOrder extends AppCompatActivity {
             }
 
             Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
+            Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             tipEditText.setText(Tip.toString());
+            tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                Log.d("TEST", "onFocusChange: ");
+                tipEditText.setSelection(tipEditText.getText().toString().length());
+            });
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
             cashCheckedBox.setChecked(TipCashBool == 1);
 
             OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
+            OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             orderTotalEditText.setText(OrderTotal.toString());
+            orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                Log.d("TEST", "onFocusChange: ");
+                orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
+            });
 
             CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
+            CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             cashReceivedEditText.setText(CashReceived.toString());
+            cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                Log.d("TEST", "onFocusChange: ");
+                cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
+            });
 
 
             result.close();
@@ -190,6 +208,7 @@ public class AddOrder extends AppCompatActivity {
 
 
         }
+
 
 
         creditAutoChip.setOnClickListener(v -> {
@@ -335,54 +354,71 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
+        tipChangedText();
+        orderTotalChangedText();
+        cashReceivedChangedText();
+    }
 
+    private void tipChangedText() {
         if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")){
             tipEditText.setText("0.00");
         }
         tipEditText.setSelection(tipEditText.getText().toString().length());
-        tipChangedText();
 
-        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")){
-            orderTotalEditText.setText("0.00");
-        }
-        orderTotalChangedText();
-
-        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")){
-            cashReceivedEditText.setText("0.00");
-        }
-        cashReceivedChangedText();
-
-
-
-
-
-    }
-
-    private void tipChangedText() {
         tipTextWatcher = new TextWatcher() {
             BigDecimal r;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d("CHANGED", "beforeTextChanged: " + s.toString());
                 Log.d("CHANGED", "beforeTextChanged: " + start);
                 Log.d("CHANGED", "beforeTextChanged: " + count);
                 Log.d("CHANGED", "beforeTextChanged: " + after);
+                Log.d("CHANGED", "beforeTextChanged: " + s.toString().length());
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int l = s.toString().length();
+                int diff;
+                diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                Log.d("CHANGED", "onTextChanged: " + l);
+                Log.d("CHANGED","OnTextChanged: " + diff);
+                Pattern p = Pattern.compile("^\\.\\d*$");
+                Matcher m = p.matcher(s.toString());
+                boolean b = m.matches();
+                if (b){
+                    Log.d("MATCHED", "MATCHED: " + true);
+                    s = "0" + s;
+                    Log.d("MATCHED", "MATCHED: " + s);
+                    r = new BigDecimal(s.toString());
                 }
                 else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                    r = new BigDecimal(s.toString());
+                    if (before == 0) {
+                        if (diff < 4) {
+                            r = r.multiply(BigDecimal.valueOf(10));
+                        }
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                    } else {
+                        if (diff < 2) {
+                            r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else if (diff == 2) {
+                            StringBuilder sb = new StringBuilder(s);
+                            sb.deleteCharAt(start - 1);
+                            r = new BigDecimal(sb.toString());
+                            r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else {
+                            r = r.setScale(2);
+                        }
+                    }
                 }
             }
 
@@ -401,6 +437,10 @@ public class AddOrder extends AppCompatActivity {
 
 
     private void orderTotalChangedText() {
+        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")){
+            orderTotalEditText.setText("0.00");
+        }
+        orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
         orderTotalTextWatcher = new TextWatcher() {
             BigDecimal r;
             @Override
@@ -413,18 +453,46 @@ public class AddOrder extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int l = s.toString().length();
+                int diff;
+                diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                Log.d("CHANGED", "onTextChanged: " + l);
+                Log.d("CHANGED","OnTextChanged: " + diff);
+                Pattern p = Pattern.compile("^\\.\\d*$");
+                Matcher m = p.matcher(s.toString());
+                boolean b = m.matches();
+                if (b){
+                    Log.d("MATCHED", "MATCHED: " + true);
+                    s = "0" + s;
+                    Log.d("MATCHED", "MATCHED: " + s);
+                    r = new BigDecimal(s.toString());
                 }
                 else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                    r = new BigDecimal(s.toString());
+                    if (before == 0) {
+                        if (diff < 4) {
+                            r = r.multiply(BigDecimal.valueOf(10));
+                        }
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                    } else {
+                        if (diff < 2) {
+                            r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else if (diff == 2) {
+                            StringBuilder sb = new StringBuilder(s);
+                            sb.deleteCharAt(start - 1);
+                            r = new BigDecimal(sb.toString());
+                            r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else {
+                            r = r.setScale(2);
+                        }
+                    }
                 }
             }
 
@@ -442,6 +510,10 @@ public class AddOrder extends AppCompatActivity {
     }
 
     private void cashReceivedChangedText() {
+        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")){
+            cashReceivedEditText.setText("0.00");
+        }
+        cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
         cashReceivedTextWatcher = new TextWatcher() {
             BigDecimal r;
             @Override
@@ -454,18 +526,46 @@ public class AddOrder extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int l = s.toString().length();
+                int diff;
+                diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                r = new BigDecimal(s.toString());
-                if (before == 0){
-                    r = r.multiply(BigDecimal.valueOf(10));
-                    r = r.setScale(2);
-                    Log.d("CHANGED", "onTextChangedHERE: " + r);
+                Log.d("CHANGED", "onTextChanged: " + l);
+                Log.d("CHANGED","OnTextChanged: " + diff);
+                Pattern p = Pattern.compile("^\\.\\d*$");
+                Matcher m = p.matcher(s.toString());
+                boolean b = m.matches();
+                if (b){
+                    Log.d("MATCHED", "MATCHED: " + true);
+                    s = "0" + s;
+                    Log.d("MATCHED", "MATCHED: " + s);
+                    r = new BigDecimal(s.toString());
                 }
                 else {
-                    r = r.divide(BigDecimal.valueOf(10),2, BigDecimal.ROUND_UNNECESSARY);
+                    r = new BigDecimal(s.toString());
+                    if (before == 0) {
+                        if (diff < 4) {
+                            r = r.multiply(BigDecimal.valueOf(10));
+                        }
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                    } else {
+                        if (diff < 2) {
+                            r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else if (diff == 2) {
+                            StringBuilder sb = new StringBuilder(s);
+                            sb.deleteCharAt(start - 1);
+                            r = new BigDecimal(sb.toString());
+                            r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else {
+                            r = r.setScale(2);
+                        }
+                    }
                 }
             }
 
@@ -490,6 +590,7 @@ public class AddOrder extends AppCompatActivity {
         };
         cashReceivedEditText.addTextChangedListener(cashReceivedTextWatcher);
     }
+
 
     private void showPopup(View view, int OrderNumber) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
