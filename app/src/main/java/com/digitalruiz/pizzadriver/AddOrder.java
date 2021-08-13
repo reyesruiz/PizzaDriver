@@ -12,10 +12,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -179,12 +177,9 @@ public class AddOrder extends AppCompatActivity {
             Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
             Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             tipEditText.setText(Tip.toString());
-            tipEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    Log.d("TEST", "onFocusChange: ");
-                    tipEditText.setSelection(tipEditText.getText().toString().length());
-                }
+            tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                Log.d("TEST", "onFocusChange: ");
+                tipEditText.setSelection(tipEditText.getText().toString().length());
             });
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
@@ -193,17 +188,18 @@ public class AddOrder extends AppCompatActivity {
             OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
             OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             orderTotalEditText.setText(OrderTotal.toString());
-            orderTotalEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    Log.d("TEST", "onFocusChange: ");
-                    orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
-                }
+            orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                Log.d("TEST", "onFocusChange: ");
+                orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
             });
 
             CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
             CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
             cashReceivedEditText.setText(CashReceived.toString());
+            cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                Log.d("TEST", "onFocusChange: ");
+                cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
+            });
 
 
             result.close();
@@ -384,7 +380,7 @@ public class AddOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int l = s.toString().length();
-                int diff = 0;
+                int diff;
                 diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
@@ -395,8 +391,8 @@ public class AddOrder extends AppCompatActivity {
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
-                if (b == true){
-                    Log.d("MATCHED", "MATCHED: " + b);
+                if (b){
+                    Log.d("MATCHED", "MATCHED: " + true);
                     s = "0" + s;
                     Log.d("MATCHED", "MATCHED: " + s);
                     r = new BigDecimal(s.toString());
@@ -406,13 +402,9 @@ public class AddOrder extends AppCompatActivity {
                     if (before == 0) {
                         if (diff < 4) {
                             r = r.multiply(BigDecimal.valueOf(10));
-                            r = r.setScale(2);
-                            Log.d("CHANGED", "onTextChangedHERE: " + r);
                         }
-                        else {
-                            r = r.setScale(2);
-                            Log.d("CHANGED", "onTextChangedHERE: " + r);
-                        }
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
                     } else {
                         if (diff < 2) {
                             r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
@@ -462,7 +454,7 @@ public class AddOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int l = s.toString().length();
-                int diff = 0;
+                int diff;
                 diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
@@ -473,8 +465,8 @@ public class AddOrder extends AppCompatActivity {
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
-                if (b == true){
-                    Log.d("MATCHED", "MATCHED: " + b);
+                if (b){
+                    Log.d("MATCHED", "MATCHED: " + true);
                     s = "0" + s;
                     Log.d("MATCHED", "MATCHED: " + s);
                     r = new BigDecimal(s.toString());
@@ -484,13 +476,9 @@ public class AddOrder extends AppCompatActivity {
                     if (before == 0) {
                         if (diff < 4) {
                             r = r.multiply(BigDecimal.valueOf(10));
-                            r = r.setScale(2);
-                            Log.d("CHANGED", "onTextChangedHERE: " + r);
                         }
-                        else {
-                            r = r.setScale(2);
-                            Log.d("CHANGED", "onTextChangedHERE: " + r);
-                        }
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
                     } else {
                         if (diff < 2) {
                             r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
@@ -539,7 +527,7 @@ public class AddOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int l = s.toString().length();
-                int diff = 0;
+                int diff;
                 diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
@@ -550,8 +538,8 @@ public class AddOrder extends AppCompatActivity {
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
-                if (b == true){
-                    Log.d("MATCHED", "MATCHED: " + b);
+                if (b){
+                    Log.d("MATCHED", "MATCHED: " + true);
                     s = "0" + s;
                     Log.d("MATCHED", "MATCHED: " + s);
                     r = new BigDecimal(s.toString());
@@ -561,13 +549,9 @@ public class AddOrder extends AppCompatActivity {
                     if (before == 0) {
                         if (diff < 4) {
                             r = r.multiply(BigDecimal.valueOf(10));
-                            r = r.setScale(2);
-                            Log.d("CHANGED", "onTextChangedHERE: " + r);
                         }
-                        else {
-                            r = r.setScale(2);
-                            Log.d("CHANGED", "onTextChangedHERE: " + r);
-                        }
+                        r = r.setScale(2);
+                        Log.d("CHANGED", "onTextChangedHERE: " + r);
                     } else {
                         if (diff < 2) {
                             r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
