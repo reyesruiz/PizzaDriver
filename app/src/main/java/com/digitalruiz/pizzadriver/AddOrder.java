@@ -414,7 +414,18 @@ public class AddOrder extends AppCompatActivity {
                             Log.d("CHANGED", "onTextChangedHERE: " + r);
                         }
                     } else {
-                        r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        if (diff < 2) {
+                            r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else if (diff == 2) {
+                            StringBuilder sb = new StringBuilder(s);
+                            sb.deleteCharAt(start - 1);
+                            r = new BigDecimal(sb.toString());
+                            r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else {
+                            r = r.setScale(2);
+                        }
                     }
                 }
             }
@@ -481,7 +492,18 @@ public class AddOrder extends AppCompatActivity {
                             Log.d("CHANGED", "onTextChangedHERE: " + r);
                         }
                     } else {
-                        r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        if (diff < 2) {
+                            r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else if (diff == 2) {
+                            StringBuilder sb = new StringBuilder(s);
+                            sb.deleteCharAt(start - 1);
+                            r = new BigDecimal(sb.toString());
+                            r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else {
+                            r = r.setScale(2);
+                        }
                     }
                 }
             }
@@ -547,7 +569,18 @@ public class AddOrder extends AppCompatActivity {
                             Log.d("CHANGED", "onTextChangedHERE: " + r);
                         }
                     } else {
-                        r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        if (diff < 2) {
+                            r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else if (diff == 2) {
+                            StringBuilder sb = new StringBuilder(s);
+                            sb.deleteCharAt(start - 1);
+                            r = new BigDecimal(sb.toString());
+                            r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
+                        }
+                        else {
+                            r = r.setScale(2);
+                        }
                     }
                 }
             }
