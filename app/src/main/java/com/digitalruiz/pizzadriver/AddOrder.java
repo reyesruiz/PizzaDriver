@@ -200,13 +200,6 @@ public class AddOrder extends AppCompatActivity {
                     orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
                 }
             });
-            orderTotalEditText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("TEST", "onClick: ");
-                    orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
-                }
-            });
 
             CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
             CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
@@ -390,11 +383,15 @@ public class AddOrder extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int l = s.toString().length();
+                int diff = 0;
+                diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                Log.d("TESTS", s.toString());
+                Log.d("CHANGED", "onTextChanged: " + l);
+                Log.d("CHANGED","OnTextChanged: " + diff);
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
@@ -407,9 +404,15 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     r = new BigDecimal(s.toString());
                     if (before == 0) {
-                        r = r.multiply(BigDecimal.valueOf(10));
-                        r = r.setScale(2);
-                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        if (diff < 4) {
+                            r = r.multiply(BigDecimal.valueOf(10));
+                            r = r.setScale(2);
+                            Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        }
+                        else {
+                            r = r.setScale(2);
+                            Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        }
                     } else {
                         r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
                     }
@@ -447,11 +450,15 @@ public class AddOrder extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int l = s.toString().length();
+                int diff = 0;
+                diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                Log.d("TESTS", s.toString());
+                Log.d("CHANGED", "onTextChanged: " + l);
+                Log.d("CHANGED","OnTextChanged: " + diff);
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
@@ -464,9 +471,15 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     r = new BigDecimal(s.toString());
                     if (before == 0) {
-                        r = r.multiply(BigDecimal.valueOf(10));
-                        r = r.setScale(2);
-                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        if (diff < 4) {
+                            r = r.multiply(BigDecimal.valueOf(10));
+                            r = r.setScale(2);
+                            Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        }
+                        else {
+                            r = r.setScale(2);
+                            Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        }
                     } else {
                         r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
                     }
@@ -503,11 +516,15 @@ public class AddOrder extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int l = s.toString().length();
+                int diff = 0;
+                diff = l - start;
                 Log.d("CHANGED", "onTextChanged: " + s.toString());
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
-                Log.d("TESTS", s.toString());
+                Log.d("CHANGED", "onTextChanged: " + l);
+                Log.d("CHANGED","OnTextChanged: " + diff);
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
@@ -520,9 +537,15 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     r = new BigDecimal(s.toString());
                     if (before == 0) {
-                        r = r.multiply(BigDecimal.valueOf(10));
-                        r = r.setScale(2);
-                        Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        if (diff < 4) {
+                            r = r.multiply(BigDecimal.valueOf(10));
+                            r = r.setScale(2);
+                            Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        }
+                        else {
+                            r = r.setScale(2);
+                            Log.d("CHANGED", "onTextChangedHERE: " + r);
+                        }
                     } else {
                         r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
                     }
