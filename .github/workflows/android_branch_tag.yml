@@ -38,9 +38,9 @@ jobs:
       - name: tag
         id: tag
         uses: mathieudutour/github-tag-action@v5.6
-        custom_tag: {{ steps.tag_name.outputs.value }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.tag_name.outputs.value }}
 
 
 
