@@ -6,7 +6,7 @@ on:
       - 2.0.x
 
 jobs:
-  build-main:
+  build-branch:
     runs-on: ubuntu-latest
 
     steps:
