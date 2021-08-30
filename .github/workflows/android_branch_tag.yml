@@ -1,0 +1,47 @@
+name: Build branch release
+on:
+  push:
+    branches:
+      - 1.5.x
+      - 2.0.x
+
+jobs:
+  build-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.AUTO_COMMIT }}
+      - name: version patch
+        id: version_major
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_MAJOR'
+      - name: version minor
+          id: version_minor
+          uses: christian-draeger/read-properties@1.0.1
+          with:
+            path: 'app/version.properties'
+            property: 'VERSION_MINOR'
+      - name: version patch
+        id: version_patch
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
+      - name: tag name
+        id: tag_name
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_major.outputs.value }}"."${{ steps.version_minor.outputs.value }}"."${{ steps.version_patch.outputs.value }})"
+      - name: tag
+        id: tag
+        uses: mathieudutour/github-tag-action@v5.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: {{ steps.tag_name.outputs.value }}
+
+
+
+
