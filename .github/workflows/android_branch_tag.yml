@@ -34,7 +34,7 @@ jobs:
           property: 'VERSION_PATCH'
       - name: tag name
         id: tag_name
-        run: echo "##[set-output name=value;]$(echo "${{ steps.version_major.outputs.value }}.${{ steps.version_minor.outputs.value }}.${{ steps.version_patch.outputs.value }})"
+        run: echo "##[set-output name=value;]'${{ steps.version_major.outputs.value }}.//${{ steps.version_minor.outputs.value }}.//${{ steps.version_patch.outputs.value }})'
       - name: tag
         if: "contains(github.event.head_commit.message, 'skip-ci')"
         id: tag
