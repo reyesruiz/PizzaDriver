@@ -1,4 +1,4 @@
-name: Build main release
+name: Build branch release
 on:
   push:
     branches:
