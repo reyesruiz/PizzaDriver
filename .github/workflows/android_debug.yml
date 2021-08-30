@@ -4,6 +4,8 @@ on:
     branches:
       - '*'
       - '!main'
+      - '!1.5.x'
+      - '!2.0.x'
 
 jobs:
   build-debug:
@@ -46,13 +48,7 @@ jobs:
         id: new_version_build
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
-      - name: Update version patch
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
-        uses: christian-draeger/write-properties@1.0.1
-        with:
-          path: 'app/version.properties'
-          property: 'VERSION_PATCH'
-          value: ${{ steps.new_version_patch.outputs.value }}
+      # Not need to update version patch, it will be updated when doing release.
       - name: Update version code
         if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
@@ -75,16 +71,6 @@ jobs:
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
-
-
-      #- name: Run Unit Tests with emulator
-      #  uses: reactivecircus/android-emulator-runner@v2
-      #  with:
-      #    api-level: 29
-      #    target: default
-      #    arch: x86
-      #    profile: Nexus 6
-      #    script: ./gradlew connectedCheck --stacktrace
 
       - name: apk_name
         id: apk_name
@@ -111,15 +97,3 @@ jobs:
         with:
           name: 'lint-results.html'
           path: app/build/reports/lint-results.html
-
-
-      #- name: Push new files back to branch.
-      #  if: "!contains(github.event.head_commit.message, 'skip-ci')"
-      #  uses: stefanzweifel/git-auto-commit-action@v4.11.0
-      #  with:
-      #    commit_message: "Build version bump, #skip-ci"
-      #    status_options: '--untracked-files=no'
-      #    disable_globbing: true
-
-
-

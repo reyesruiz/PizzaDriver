@@ -3,6 +3,8 @@ on:
   pull_request:
     branches:
       - 'main'
+      - '1.5.x'
+      - '2.0.x'
 jobs:
   test:
     runs-on: macos-latest
