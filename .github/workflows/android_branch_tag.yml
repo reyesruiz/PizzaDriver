@@ -1,4 +1,4 @@
-name: Build branch release
+name: Branch Tag
 on:
   push:
     branches:
