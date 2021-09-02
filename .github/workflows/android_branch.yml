@@ -7,6 +7,7 @@ on:
 
 jobs:
   build-branch:
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
     runs-on: ubuntu-latest
 
     steps:
@@ -34,28 +35,23 @@ jobs:
           property: 'VERSION_BUILD'
 
       - name: new version patch
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_patch
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_patch.outputs.value }} + 1" | bc)"
       - name: new version code
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_code
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_code.outputs.value }} + 1" | bc)"
       - name: new version build
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         id: new_version_build
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
       # Not need to update version patch, will be taken care in release
       - name: Update version code
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
           property: 'VERSION_CODE_NUMBER'
           value: ${{ steps.new_version_code.outputs.value }}
       - name: Update version build
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
@@ -118,7 +114,6 @@ jobs:
           path: app/build/reports/lint-results.html
 
       - name: Push new files back to branch.
-        if: "!contains(github.event.head_commit.message, 'skip-ci')"
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: "Patch version bump, #skip-ci"
