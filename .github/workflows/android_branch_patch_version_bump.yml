@@ -1,4 +1,4 @@
-name: Build branch release
+name: Bump patch version number
 on:
   workflow_dispatch:
     branches:
@@ -6,7 +6,7 @@ on:
       - 2.0.x
 
 jobs:
-  branch-release:
+  bump-patch:
     if: "contains(github.event.head_commit.message, 'skip-ci')"
     runs-on: ubuntu-latest
 
