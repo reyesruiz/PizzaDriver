@@ -1,15 +1,13 @@
-name: Build debug
+name: Build branch release
 on:
-  push:
+  workflow_dispatch:
     branches:
-      - '*'
-      - '!main'
-      - '!1.5.x'
-      - '!2.0.x'
+      - 1.5.x
+      - 2.0.x
 
 jobs:
-  build-debug:
-    if: "!contains(github.event.head_commit.message, '#skip-ci')"
+  branch-release:
+    if: "contains(github.event.head_commit.message, 'skip-ci')"
     runs-on: ubuntu-latest
 
     steps:
@@ -46,7 +44,12 @@ jobs:
         id: new_version_build
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
-      # Not need to update version patch, it will be updated when doing release.
+      - name: Update version patch
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
+          value: ${{ steps.new_version_patch.outputs.value }}
       - name: Update version code
         uses: christian-draeger/write-properties@1.0.1
         with:
@@ -60,36 +63,9 @@ jobs:
           property: 'VERSION_BUILD'
           value: ${{ steps.new_version_build.outputs.value }}
 
-      - name: Build all artifacts
-        id: buildAllApks
-        run: ./gradlew build assembleDebug bundleDebug
-
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
-
-      - name: apk_name
-        id: apk_name
-        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json)"
-
-      - name: bundle_name
-        id: bundle_name
-        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json|sed 's/.apk/.aab/')"
-
-      - name: Upload our APK
-        uses: actions/upload-artifact@master
+      - name: Push new files back to branch.
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
-          name: ${{steps.apk_name.outputs.file_name}}
-          path: app/build/outputs/apk/debug/${{steps.apk_name.outputs.file_name}}
-
-      - name: Upload our Bundle
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{steps.bundle_name.outputs.file_name}}
-          path: app/build/outputs/bundle/debug/app-debug.aab
-
-      - name: Upload lint report
-        uses: actions/upload-artifact@master
-        with:
-          name: 'lint-results.html'
-          path: app/build/reports/lint-results.html
+          commit_message: "#Patch version bump, #skip-ci"
+          status_options: '--untracked-files=no'
+          disable_globbing: true
