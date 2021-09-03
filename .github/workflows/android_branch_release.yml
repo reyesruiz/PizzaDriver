@@ -10,7 +10,7 @@ on:
       - 2.0.x
 
 jobs:
-  branch-tag:
+  branch-release:
     runs-on: ubuntu-latest
 
     steps:
