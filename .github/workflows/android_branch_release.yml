@@ -1,10 +1,6 @@
 name: Branch Release
 on:
   workflow_dispatch:
-    inputs:
-      git_tag:
-        description: 'Git tag to use for the release'
-        required: true
     branches:
       - 1.5.x
       - 2.0.x
@@ -19,7 +15,7 @@ jobs:
         with:
           token: ${{ secrets.AUTO_COMMIT }}
           ref: ${{ github.event.inputs.git_tag }}
-      - name: version patch
+      - name: version major
         id: version_major
         uses: christian-draeger/read-properties@1.0.1
         with:
@@ -38,9 +34,52 @@ jobs:
           path: 'app/version.properties'
           property: 'VERSION_PATCH'
 
+      - name: new version patch
+        id: new_version_patch
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_patch.outputs.value }} + 1" | bc)"
+      - name: new version code
+        id: new_version_code
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_code.outputs.value }} + 1" | bc)"
+      - name: new version build
+        id: new_version_build
+        run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
+
+      - name: Update version patch
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_PATCH'
+          value: ${{ steps.new_version_patch.outputs.value }}
+      - name: Update version code
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_CODE_NUMBER'
+          value: ${{ steps.new_version_code.outputs.value }}
+      - name: Update version build
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'app/version.properties'
+          property: 'VERSION_BUILD'
+          value: ${{ steps.new_version_build.outputs.value }}
+
+      - name: Push new files back to branch.
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        with:
+          commit_message: "#Patch version bump, #skip-ci"
+          status_options: '--untracked-files=no'
+          disable_globbing: true
+
       - name: tag name
         id: tag_name
-        run: echo "##[set-output name=value;]${{ steps.version_major.outputs.value }}.${{ steps.version_minor.outputs.value }}.${{ steps.version_patch.outputs.value }}"
+        run: echo "##[set-output name=value;]${{ steps.version_major.outputs.value }}.${{ steps.version_minor.outputs.value }}.${{ steps.new_version_patch.outputs.value }}"
+
+      - name: tag
+        id: tag
+        uses: mathieudutour/github-tag-action@v5.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.tag_name.outputs.value }}
 
       - name: Build all artifacts
         id: buildAllApks
@@ -96,10 +135,10 @@ jobs:
           name: 'lint-results.html'
           path: app/build/reports/lint-results.html
 
-
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{steps.signArtifactApk.outputs.signedReleaseFile}}, ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
+          artifacts: ${{steps.apk_name.outputs.file_name}}, ${{steps.bundle_name.outputs.file_name}}
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.tag_name.outputs.value }}
+
