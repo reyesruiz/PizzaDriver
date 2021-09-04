@@ -103,7 +103,7 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{steps.signArtifactApk.outputs.signedReleaseFile}}, {{steps.signArtifactBundle.outputs.signedReleaseFile}}
+          artifacts: ${{steps.signArtifactApk.outputs.signedReleaseFile}}, ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.tag_name.outputs.value }}
+          tag: ${{ steps.tag.outputs.new_tag }}
 
