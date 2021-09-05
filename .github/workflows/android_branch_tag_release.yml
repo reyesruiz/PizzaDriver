@@ -106,4 +106,3 @@ jobs:
           artifacts: ${{steps.signArtifactApk.outputs.signedReleaseFile}}, ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.tag.outputs.new_tag }}
-
