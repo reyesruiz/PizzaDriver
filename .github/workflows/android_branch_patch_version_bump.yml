@@ -2,7 +2,7 @@ name: Branch Patch Version Bump
 on:
   workflow_dispatch:
     branches:
-      - 1.5.x
+      - main
       - 2.0.x
 
 jobs:

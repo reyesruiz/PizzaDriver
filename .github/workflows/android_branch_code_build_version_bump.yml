@@ -2,7 +2,7 @@ name: Bump code and build version number
 on:
   push:
     branches:
-      - 1.5.x
+      - main
       - 2.0.x
 
 jobs:
