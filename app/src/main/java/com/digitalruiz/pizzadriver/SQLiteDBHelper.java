@@ -10,17 +10,34 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "pizza_driver";
-    public static final String TABLE = "Orders";
-    public static final String ORDER_NUMBER = "OrderNumber";
-    public static final String ORDER_TYPE = "OrderType";
-    public static final String TIP = "Tip";
-    public static final String TIP_CASH_BOOL = "TipCashBool";
-    public static final String ORDER_TOTAL = "OrderTotal";
-    public static final String CASH_RECEIVED = "CashReceived";
-    public static final String LOCATION = "Location";
 
+    //OrdersTable
+    public static final String ORDERS_TABLE = "Orders";
+    public static final String ORDER_ID = "OrderId";
+    public static final String DATE = "Date";
+    public static final String ORDER_NUMBER = "OrderNumber";
+    public static final String TIP_ID = "TipId";
+    public static final String LOCATION_ID = "LocationId";
+    public static final String ARCHIVED = "Archived";
+
+    //Locations Table
+    public static final String LOCATIONS_TABLE = "Locations";
+    public static final String NAME = "Name";
+    public static final String RATE = "Rate";
+
+    //Tips Table
+    public static final String TIPS_TABLE = "Tips";
+    public static final String AMOUNT = "Amount";
+    public static final String TYPE = "Type";
+    public static final String CASH = "Cash";
+    public static final String CASH_ORDER_ID = "CashOrderId";
+
+    //CashOrders
+    public static final String CASH_ORDERS_TABLE = "CashOrders";
+    public static final String TOTAL = "Total";
+    public static final String RECEIVED = "Received";
 
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,27 +45,50 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase pizza_driver_db) {
-        pizza_driver_db.execSQL("CREATE TABLE " + TABLE + " (" +
-                ORDER_NUMBER + " INTEGER PRIMARY KEY UNIQUE, " +
-                ORDER_TYPE + " TEXT, " +
-                TIP + " REAL, " +
-                TIP_CASH_BOOL + " INTEGER, " +
-                ORDER_TOTAL + " REAL, " +
-                CASH_RECEIVED + " REAL, " +
-                LOCATION + " TEXT" + ")");
+        pizza_driver_db.execSQL("CREATE TABLE " + ORDERS_TABLE + " (" +
+                ORDER_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                DATE + " TEXT NOT NULL, " +
+                ORDER_NUMBER + " INTEGER NOT NULL, " +
+                TIP_ID + " INTEGER NOT NULL, " +
+                LOCATION_ID + " INTEGER NOT NULL, " +
+                ARCHIVED + " INTEGER NOT NULL " + ")"
+        );
+
+        pizza_driver_db.execSQL("CREATE TABLE " + TIPS_TABLE + " (" +
+                TIP_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                AMOUNT + " REAL NOT NULL, " +
+                TYPE + " TEXT NOT NULL, " +
+                CASH + " INTEGER NOT NULL, " +
+                CASH_ORDER_ID + " INTEGER " + ")"
+        );
+
+        pizza_driver_db.execSQL("CREATE TABLE " + CASH_ORDERS_TABLE + " (" +
+                CASH_ORDER_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                TOTAL + " REAL, " +
+                RECEIVED + " REAL " + ")"
+        );
+
+        pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +
+                LOCATION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                NAME + " TEXT NOT NULL, " +
+                RATE + " REAL NOT NULL " + ")"
+        );
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase pizza_driver_db, int oldVersion, int newVersion) {
-        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  TABLE);
+        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  ORDERS_TABLE);
+        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  TIPS_TABLE);
+        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  CASH_ORDERS_TABLE);
+        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  LOCATIONS_TABLE);
     }
 
     public void deleteData(){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
-        pizza_driver_db.execSQL("DELETE FROM " +  TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " +  ORDERS_TABLE);
     }
-
+    /*
     public boolean insertOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -258,6 +298,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         result.close();
         return count > 0;
     }
+    */
 
 
 }
