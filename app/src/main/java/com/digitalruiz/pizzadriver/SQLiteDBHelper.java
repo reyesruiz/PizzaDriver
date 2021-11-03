@@ -49,13 +49,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 ORDER_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 DATE + " TEXT NOT NULL, " +
                 ORDER_NUMBER + " INTEGER NOT NULL, " +
-                TIP_ID + " INTEGER NOT NULL, " +
                 LOCATION_ID + " INTEGER NOT NULL, " +
-                ARCHIVED + " INTEGER NOT NULL " + ")"
+                ARCHIVED + " INTEGER NOT NULL, " +
+                "UNIQUE (" + DATE + "," + ORDER_NUMBER + ")" +
+                ")"
         );
 
         pizza_driver_db.execSQL("CREATE TABLE " + TIPS_TABLE + " (" +
                 TIP_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                ORDER_ID + " INTEGER NOT NULL, " +
                 AMOUNT + " REAL NOT NULL, " +
                 TYPE + " TEXT NOT NULL, " +
                 CASH + " INTEGER NOT NULL, " +
@@ -74,6 +76,19 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 RATE + " REAL NOT NULL " + ")"
         );
 
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LOCATION_ID, 1);
+        contentValues.put(NAME, "Tracy");
+        contentValues.put(RATE, "1.75");
+        pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
+
+        contentValues.clear();
+        contentValues.put(LOCATION_ID, 2);
+        contentValues.put(NAME, "Mountain House");
+        contentValues.put(RATE, "2.50");
+        pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
+
+
     }
 
     @Override
@@ -87,22 +102,59 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public void deleteData(){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         pizza_driver_db.execSQL("DELETE FROM " +  ORDERS_TABLE);
-    }
-    /*
-    public boolean insertOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location){
-        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        pizza_driver_db.execSQL("DELETE FROM " +  TIPS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " +  CASH_ORDERS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " +  LOCATIONS_TABLE);
+        Log.d("TEST", "deleteData: ");
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ORDER_NUMBER, OrderNumber);
-        contentValues.put(ORDER_TYPE, OrderType);
-        contentValues.put(TIP, Tip);
-        contentValues.put(TIP_CASH_BOOL, TipCashBool);
-        contentValues.put(ORDER_TOTAL, OrderTotal);
-        contentValues.put(CASH_RECEIVED, CashReceived);
-        contentValues.put(LOCATION, Location);
-        long rowInserted  = pizza_driver_db.insert(TABLE, null, contentValues);
-        return rowInserted != -1;
+        contentValues.put(LOCATION_ID, 1);
+        contentValues.put(NAME, "Tracy");
+        contentValues.put(RATE, "1.75");
+        pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
+
+        contentValues.clear();
+        contentValues.put(LOCATION_ID, 2);
+        contentValues.put(NAME, "Mountain House");
+        contentValues.put(RATE, "2.50");
+        pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
     }
 
+    public long insertOrder (String WorkingDate, Integer OrderNumber, Integer LocationID, Integer Archived){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DATE, WorkingDate);
+        contentValues.put(ORDER_NUMBER, OrderNumber);
+        contentValues.put(LOCATION_ID, LocationID);
+        contentValues.put(ARCHIVED, Archived);
+        long rowInserted  = pizza_driver_db.insert(ORDERS_TABLE, null, contentValues);
+        Log.d("TEST", "insertOrder: " + rowInserted);
+        return rowInserted;
+    }
+
+    public long insertTip (String Amount,  String Type, Integer TipCashBool, long OrderId){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(AMOUNT, Amount);
+        contentValues.put(TYPE, Type);
+        contentValues.put(CASH, TipCashBool);
+        contentValues.put(ORDER_ID, OrderId);
+        long rowInserted  = pizza_driver_db.insert(TIPS_TABLE, null, contentValues);
+        Log.d("TEST", "insertOrder: " + rowInserted);
+        return rowInserted;
+    }
+
+    public long insertCashOrder (String Total,  String Received, long TipId){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TOTAL, Total);
+        contentValues.put(RECEIVED, Received);
+        contentValues.put(TIP_ID, TipId);
+        long rowInserted  = pizza_driver_db.insert(CASH_ORDERS_TABLE, null, contentValues);
+        Log.d("TEST", "insertOrder: " + rowInserted);
+        return rowInserted;
+    }
+
+    /*
     public Cursor getData(int orderNumber) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         return pizza_driver_db.rawQuery( "select * from " + TABLE + " where " + ORDER_NUMBER + "="+orderNumber+"", null );

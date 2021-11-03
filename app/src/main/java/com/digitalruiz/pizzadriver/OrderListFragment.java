@@ -53,6 +53,7 @@ public class OrderListFragment extends Fragment {
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> orders;
+        /*
         if (getArguments() == null){
             orders = pizzaDriverDB.getAllOrders();
         }
@@ -69,6 +70,7 @@ public class OrderListFragment extends Fragment {
                 orders = pizzaDriverDB.getAllOrdersPerLocation(getArguments().getString("Location"));
             }
         }
+
         Log.v("Test", "Array is " + orders);
 
 
@@ -158,6 +160,8 @@ public class OrderListFragment extends Fragment {
             });
 
 
+
+
             TextView OrderTypeText = new TextView(getContext());
             OrderTypeText.setText(OrderType);
             OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -192,6 +196,8 @@ public class OrderListFragment extends Fragment {
             WrapperTable.addView(Row);
         }
 
+         */
+
 
         button_first.setOnClickListener(v -> NavHostFragment.findNavController(OrderListFragment.this)
                 .navigate(R.id.action_OrderListFragment_to_SummaryFragment));
@@ -218,18 +224,18 @@ public class OrderListFragment extends Fragment {
             builder.setPositiveButton("OK", (dialog, which) -> {
                 m_Text[0] = input.getText().toString();
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
-                boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
-                if (changed){
-                    Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
-                    updateToast.show();
-                    getActivity().finish();
-                    startActivity(getActivity().getIntent());
-                }
-                else {
-                    Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
-                    updateToast.show();
-                    dialog.cancel();
-                }
+                //boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
+                //if (changed){
+                //    Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
+                //    updateToast.show();
+                 //   getActivity().finish();
+                  //  startActivity(getActivity().getIntent());
+               // }
+                //else {
+                 //   Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
+                  //  updateToast.show();
+                   // dialog.cancel();
+               // }
 
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -241,22 +247,23 @@ public class OrderListFragment extends Fragment {
         });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
         delete.setOnMenuItemClickListener(v ->{
-            boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
-            if (deleted) {
-                Toast deletedToast = Toast.makeText(getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
-                deletedToast.show();
-            }
-            else {
-                Toast deletedToast = Toast.makeText(getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
-                deletedToast.show();
-            }
+     //       boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
+       //     if (deleted) {
+         //       Toast deletedToast = Toast.makeText(getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
+           //     deletedToast.show();
+           // }
+           // else {
+            //    Toast deletedToast = Toast.makeText(getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
+             //   deletedToast.show();
+           // }
             getActivity().finish();
             startActivity(getActivity().getIntent());
 
 
 
 
-            return deleted;
+          //  return deleted;
+            return true;
         });
     }
 }

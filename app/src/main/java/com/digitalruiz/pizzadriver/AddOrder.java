@@ -28,6 +28,11 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class AddOrder extends AppCompatActivity {
 
 
@@ -42,7 +47,6 @@ public class AddOrder extends AppCompatActivity {
     String orderType;
     String OrderLocation;
     Integer orderNumber;
-    Integer oldOrderNumber;
     BigDecimal Tip;
     Integer TipCashBool;
     BigDecimal OrderTotal;
@@ -68,13 +72,11 @@ public class AddOrder extends AppCompatActivity {
 
         Intent intent = getIntent();
         orderNumber = Objects.requireNonNull(intent.getExtras()).getInt("orderNumber");
-        oldOrderNumber = intent.getIntExtra("oldOrderNumber", -1);
-        Log.v("test", "Oldordernumber" + oldOrderNumber.toString());
-
 
 
         pizzaDriverDB = new SQLiteDBHelper(this);
         SaveButton = findViewById(R.id.saveButton);
+        String workingDate;
 
         final Chip orderNumberChip = this.findViewById(R.id.orderNumberChip);
 
@@ -102,6 +104,12 @@ public class AddOrder extends AppCompatActivity {
 
         cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
 
+        //TODO Implement a way to start and end a working day
+        Date date = Calendar.getInstance().getTime();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        workingDate = formatter.format(date);
+
+        /*
         if ((oldOrderNumber != null && oldOrderNumber > 0)) {
             boolean updateResult = pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
             if (updateResult){
@@ -115,6 +123,7 @@ public class AddOrder extends AppCompatActivity {
             }
         }
 
+        */
         orderNumberChip.setText(orderNumber.toString());
 
 
@@ -127,7 +136,7 @@ public class AddOrder extends AppCompatActivity {
         setInvisible();
 
 
-
+        /*
         Cursor result = pizzaDriverDB.getData(orderNumber);
         if (result.getCount() == 1){
             result.moveToFirst();
@@ -210,7 +219,7 @@ public class AddOrder extends AppCompatActivity {
         }
 
 
-
+        */
         creditAutoChip.setOnClickListener(v -> {
             if (creditAutoChip.isChecked()){
                 creditAuto();
@@ -321,9 +330,12 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
-                Cursor data = pizzaDriverDB.getData(orderNumber);
-                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
-                if (data.getCount() == 1) {
+                //Cursor data = pizzaDriverDB.getData(orderNumber);
+                //Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
+                //if (data.getCount() == 1) {
+                if (0 == 1) {
+                    Log.d("TEST", "getData ");
+                    /*
                     boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
                     data.close();
                     if (updateResult){
@@ -335,14 +347,29 @@ public class AddOrder extends AppCompatActivity {
                         Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
                         updateToast.show();
                     }
-
+                */
                 }
                 else {
-                    boolean result1 = pizzaDriverDB.insertOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
-                    if (result1) {
+                    //TODO set this programatically
+                    int LocationID = 0;
+                    if (OrderLocation.equals("Tracy")){
+                        LocationID = 1;
+                    }
+                    else if(OrderLocation.equals("Mountain House")){
+                        LocationID = 2;
+                    }
+                    int archived = 0;
+                    long insert_result_order = pizzaDriverDB.insertOrder(workingDate, orderNumber, LocationID, archived);
+                    if (insert_result_order != -1) {
+                        long insert_result_tip = pizzaDriverDB.insertTip(Tip.toString(), orderType, TipCashBool, insert_result_order);
+                        if (insert_result_tip != -1){
+                            if (TipCashBool == 1){
+                                long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
+                            }
+                        }
                         Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                         toast.show();
-                        startActivity(BackToMain);
+                        //startActivity(BackToMain);
 
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
@@ -609,7 +636,9 @@ public class AddOrder extends AppCompatActivity {
             builder.setPositiveButton("OK", (dialog, which) -> {
                 m_Text[0] = input.getText().toString();
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
-                boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
+                //TODO
+                //boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
+                boolean changed = true;
                 if (changed){
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
@@ -632,7 +661,9 @@ public class AddOrder extends AppCompatActivity {
         });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
         delete.setOnMenuItemClickListener(v ->{
-            boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
+            //TODO
+            //boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
+            boolean deleted = true;
             if (deleted) {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
                 deletedToast.show();
@@ -734,4 +765,6 @@ public class AddOrder extends AppCompatActivity {
         cashReceivedText.setVisibility(TextView.VISIBLE);
         cashReceivedEditText.setVisibility(EditText.VISIBLE);
     }
+
 }
+
