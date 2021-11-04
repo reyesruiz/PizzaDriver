@@ -60,14 +60,16 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 ORDER_ID + " INTEGER NOT NULL, " +
                 AMOUNT + " REAL NOT NULL, " +
                 TYPE + " TEXT NOT NULL, " +
-                CASH + " INTEGER NOT NULL, " +
-                CASH_ORDER_ID + " INTEGER " + ")"
+                CASH + " INTEGER NOT NULL " +
+                ")"
         );
 
         pizza_driver_db.execSQL("CREATE TABLE " + CASH_ORDERS_TABLE + " (" +
                 CASH_ORDER_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 TOTAL + " REAL, " +
-                RECEIVED + " REAL " + ")"
+                RECEIVED + " REAL, " +
+                TIP_ID + " INTEGER NOT NULL " +
+                ")"
         );
 
         pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +

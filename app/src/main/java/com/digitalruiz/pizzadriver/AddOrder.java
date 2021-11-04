@@ -44,6 +44,7 @@ public class AddOrder extends AppCompatActivity {
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
 
+    String TAG = "TEST";
     String orderType;
     String OrderLocation;
     Integer orderNumber;
@@ -360,21 +361,36 @@ public class AddOrder extends AppCompatActivity {
                     }
                     int archived = 0;
                     long insert_result_order = pizzaDriverDB.insertOrder(workingDate, orderNumber, LocationID, archived);
+                    Log.d(TAG, "onCreate order: " + insert_result_order);
+                    boolean data_inserted = true;
                     if (insert_result_order != -1) {
                         long insert_result_tip = pizzaDriverDB.insertTip(Tip.toString(), orderType, TipCashBool, insert_result_order);
+                        Log.d(TAG, "onCreate tip: " + insert_result_tip);
                         if (insert_result_tip != -1){
                             if (TipCashBool == 1){
                                 long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
+                                Log.d(TAG, "onCreate cash: " + insert_result_cash);
+                            }
+                            else {
+                                data_inserted = false;
                             }
                         }
-                        Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
-                        toast.show();
+                        else {
+                            data_inserted = false;
+                        }
+
                         //startActivity(BackToMain);
 
                     } else {
+                        data_inserted = false;
+                    }
+                    if (data_inserted == true){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else {
                         Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
                         toast.show();
-
                     }
                 }
 
