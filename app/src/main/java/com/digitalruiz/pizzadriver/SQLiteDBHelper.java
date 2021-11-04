@@ -178,6 +178,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getCashOrderData(int tipId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + TIP_ID + " = " + tipId;
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
+    }
+
 
     /*
 

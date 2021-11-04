@@ -211,41 +211,35 @@ public class AddOrder extends AppCompatActivity {
 
                 TipCashBool = CashBool;
                 cashCheckedBox.setChecked(TipCashBool == 1);
+
+                if (Type.equals("Cash")){
+                    Cursor cash_order_result = pizzaDriverDB.getCashOrderData(TipId);
+                    cash_order_result.moveToFirst();
+                    int cash_Order_Id = cash_order_result.getInt(cash_order_result.getColumnIndex("CashOrderId"));
+                    String Total = cash_order_result.getString(cash_order_result.getColumnIndex("Total"));
+                    String Received = cash_order_result.getString(cash_order_result.getColumnIndex("Received"));
+
+                    OrderTotal = new BigDecimal(Received);
+                    OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
+                    orderTotalEditText.setText(OrderTotal.toString());
+                    orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                        Log.d("TEST", "onFocusChange: ");
+                        orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
+                    });
+
+                    CashReceived = new BigDecimal(Received);
+                    CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
+                    cashReceivedEditText.setText(CashReceived.toString());
+                    cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                        Log.d("TEST", "onFocusChange: ");
+                        cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
+                    });
+                }
             }
 
-        }
-        /*
-
-
-            TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
-            cashCheckedBox.setChecked(TipCashBool == 1);
-
-            OrderTotal = new BigDecimal(result.getString(result.getColumnIndex("OrderTotal")));
-            OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
-            orderTotalEditText.setText(OrderTotal.toString());
-            orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
-                Log.d("TEST", "onFocusChange: ");
-                orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
-            });
-
-            CashReceived = new BigDecimal(result.getString(result.getColumnIndex("CashReceived")));
-            CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
-            cashReceivedEditText.setText(CashReceived.toString());
-            cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
-                Log.d("TEST", "onFocusChange: ");
-                cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
-            });
-
-
-            result.close();
-
-
-
 
         }
 
-
-        */
         creditAutoChip.setOnClickListener(v -> {
             if (creditAutoChip.isChecked()){
                 creditAuto();
@@ -392,7 +386,7 @@ public class AddOrder extends AppCompatActivity {
                         long insert_result_tip = pizzaDriverDB.insertTip(Tip.toString(), orderType, TipCashBool, insert_result_order);
                         Log.d(TAG, "onCreate tip: " + insert_result_tip);
                         if (insert_result_tip != -1){
-                            if (TipCashBool == 1){
+                            if (orderType.equals("Cash")){
                                 long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
                                 Log.d(TAG, "onCreate cash: " + insert_result_cash);
                                 if (insert_result_cash != -1){
