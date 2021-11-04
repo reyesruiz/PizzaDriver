@@ -136,61 +136,86 @@ public class AddOrder extends AppCompatActivity {
         }
         setInvisible();
 
+        Cursor order_result = pizzaDriverDB.getOrderData(workingDate, orderNumber);
+        Log.d(TAG, "result: " + order_result.getCount());
 
+        if (order_result.getCount() == 1) {
+            order_result.moveToFirst();
+            int OrderId = order_result.getInt(order_result.getColumnIndex("OrderId"));
+            int LocationId = order_result.getInt(order_result.getColumnIndex("LocationId"));
+            Cursor location_result = pizzaDriverDB.getLocationData(LocationId);
+            if (location_result.getCount() <= 1){
+                location_result.moveToFirst();
+                String Location = location_result.getString(location_result.getColumnIndex("Name"));
+                String rate = location_result.getString(location_result.getColumnIndex("Rate"));
+
+                switch (Location) {
+                    case "Tracy":
+                        tracyChip.setChecked(true);
+                        break;
+                    case "Mountain House":
+                        mountainHouseChip.setChecked(true);
+                        break;
+                    default:
+                        //Nothing
+                        break;
+                }
+
+            }
+            Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
+            if (tip_result.getCount() >= 1){
+                //TODO Right now only moving to first, will need to implement multiple tips per order.
+                tip_result.moveToFirst();
+                int TipId = tip_result.getInt(tip_result.getColumnIndex("TipId"));
+                String Amount = tip_result.getString(tip_result.getColumnIndex("Amount"));
+                String Type = tip_result.getString(tip_result.getColumnIndex("Type"));
+                int CashBool = tip_result.getInt(tip_result.getColumnIndex("Cash"));
+
+                switch (Type) {
+                    case "Credit Auto":
+                        creditAutoChip.setChecked(true);
+                        creditAuto();
+                        break;
+                    case "Credit Manual":
+                        creditManualChip.setChecked(true);
+                        creditManual();
+                        break;
+                    case "Cash":
+                        cashChip.setChecked(true);
+                        cash();
+                        break;
+                    case "Grubhub":
+                        grubhubChip.setChecked(true);
+                        grubhub();
+                        break;
+                    case "LevelUp":
+                        levelUpChip.setChecked(true);
+                        levelup();
+                        break;
+                    case "Other":
+                        otherChip.setChecked(true);
+                        other();
+                        break;
+                    default:
+                        //Nothing
+                        break;
+                }
+
+                Tip = new BigDecimal(Amount);
+                Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
+                tipEditText.setText(Tip.toString());
+                tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                    Log.d("TEST", "onFocusChange: ");
+                    tipEditText.setSelection(tipEditText.getText().toString().length());
+                });
+
+                TipCashBool = CashBool;
+                cashCheckedBox.setChecked(TipCashBool == 1);
+            }
+
+        }
         /*
-        Cursor result = pizzaDriverDB.getData(orderNumber);
-        if (result.getCount() == 1){
-            result.moveToFirst();
-            orderType = result.getString(result.getColumnIndex("OrderType"));
-            switch (orderType) {
-                case "Credit Auto":
-                    creditAutoChip.setChecked(true);
-                    creditAuto();
-                    break;
-                case "Credit Manual":
-                    creditManualChip.setChecked(true);
-                    creditManual();
-                    break;
-                case "Cash":
-                    cashChip.setChecked(true);
-                    cash();
-                    break;
-                case "Grubhub":
-                    grubhubChip.setChecked(true);
-                    grubhub();
-                    break;
-                case "LevelUp":
-                    levelUpChip.setChecked(true);
-                    levelup();
-                    break;
-                case "Other":
-                    otherChip.setChecked(true);
-                    other();
-                    break;
-                default:
-                    //Nothing
-                    break;
-            }
 
-            OrderLocation = result.getString(result.getColumnIndex("Location"));
-            if (OrderLocation.equals("Tracy")){
-                tracyChip.setChecked(true);
-            }
-            else if (OrderLocation.equals("Mountain House")){
-                mountainHouseChip.setChecked(true);
-            }
-            else {
-                // What to do here, set default?
-                tracyChip.setChecked(true);
-            }
-
-            Tip = new BigDecimal(result.getString(result.getColumnIndex("Tip")));
-            Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
-            tipEditText.setText(Tip.toString());
-            tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
-                Log.d("TEST", "onFocusChange: ");
-                tipEditText.setSelection(tipEditText.getText().toString().length());
-            });
 
             TipCashBool = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
             cashCheckedBox.setChecked(TipCashBool == 1);
@@ -370,9 +395,15 @@ public class AddOrder extends AppCompatActivity {
                             if (TipCashBool == 1){
                                 long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
                                 Log.d(TAG, "onCreate cash: " + insert_result_cash);
+                                if (insert_result_cash != -1){
+                                    //nothing all good
+                                }
+                                else {
+                                    data_inserted = false;
+                                }
                             }
                             else {
-                                data_inserted = false;
+                                //nothing
                             }
                         }
                         else {

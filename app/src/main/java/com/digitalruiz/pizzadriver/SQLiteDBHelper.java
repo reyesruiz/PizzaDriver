@@ -156,12 +156,30 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
-    /*
-    public Cursor getData(int orderNumber) {
+
+    public Cursor getOrderData(String WorkingDate, int orderNumber) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        return pizza_driver_db.rawQuery( "select * from " + TABLE + " where " + ORDER_NUMBER + "="+orderNumber+"", null );
+        String sql = "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_NUMBER + " = " + orderNumber + " AND " + DATE + " = " + "\""+WorkingDate+"\"";
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
     }
 
+    public Cursor getTipData(int orderId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " = " + orderId;
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
+    }
+
+    public Cursor getLocationData(int locationId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + LOCATIONS_TABLE + " WHERE " + LOCATION_ID + " = " + locationId;
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
+    }
+
+
+    /*
 
     public int numberOfRows(){
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
