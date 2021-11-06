@@ -110,21 +110,7 @@ public class AddOrder extends AppCompatActivity {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         workingDate = formatter.format(date);
 
-        /*
-        if ((oldOrderNumber != null && oldOrderNumber > 0)) {
-            boolean updateResult = pizzaDriverDB.updateOrderNumber(oldOrderNumber, orderNumber);
-            if (updateResult){
-                Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success" + oldOrderNumber, Toast.LENGTH_SHORT);
-                updateToast.show();
 
-            }
-            else {
-                Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update Order Number", Toast.LENGTH_LONG);
-                updateToast.show();
-            }
-        }
-
-        */
         orderNumberChip.setText(orderNumber.toString());
 
 
@@ -300,6 +286,8 @@ public class AddOrder extends AppCompatActivity {
         SaveButton.setOnClickListener(v -> {
             Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
             int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
+            int LocationID = 0;
+            int archived = 0;
             // TODO SIMPLIFY THIS
             boolean error = false;
 
@@ -318,6 +306,13 @@ public class AddOrder extends AppCompatActivity {
             else {
                 Chip OrderLocationSelectedChip = findViewById(OrderLocationSelectedChipID);
                 OrderLocation = OrderLocationSelectedChip.getText().toString();
+                //TODO set this programatically
+                if (OrderLocation.equals("Tracy")){
+                    LocationID = 1;
+                }
+                else if(OrderLocation.equals("Mountain House")){
+                    LocationID = 2;
+                }
             }
             if (error){
                 Toast toast = Toast.makeText(getApplicationContext(), "Please select all options", Toast.LENGTH_LONG);
@@ -350,15 +345,17 @@ public class AddOrder extends AppCompatActivity {
                 else {
                     CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
-                //Cursor data = pizzaDriverDB.getData(orderNumber);
-                //Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
-                //if (data.getCount() == 1) {
-                if (0 == 1) {
+
+                Cursor data = pizzaDriverDB.getOrderData(workingDate, orderNumber);
+                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
+                if (data.getCount() == 1) {
+                    data.moveToFirst();
+                    long OrderId = data.getInt(data.getColumnIndex("OrderId"));
                     Log.d("TEST", "getData ");
-                    /*
-                    boolean updateResult = pizzaDriverDB.updateOrder(orderNumber, orderType, Tip.toString(), TipCashBool, OrderTotal.toString(), CashReceived.toString(), OrderLocation);
+
+                    int updateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID, archived);
                     data.close();
-                    if (updateResult){
+                    if (updateResult == 1){
                         Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
                         updateToast.show();
                         startActivity(BackToMain);
@@ -367,28 +364,19 @@ public class AddOrder extends AppCompatActivity {
                         Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
                         updateToast.show();
                     }
-                */
+
                 }
                 else {
-                    //TODO set this programatically
-                    int LocationID = 0;
-                    if (OrderLocation.equals("Tracy")){
-                        LocationID = 1;
-                    }
-                    else if(OrderLocation.equals("Mountain House")){
-                        LocationID = 2;
-                    }
-                    int archived = 0;
                     long insert_result_order = pizzaDriverDB.insertOrder(workingDate, orderNumber, LocationID, archived);
-                    Log.d(TAG, "onCreate order: " + insert_result_order);
+                    Log.d(TAG, "insert order: " + insert_result_order);
                     boolean data_inserted = true;
                     if (insert_result_order != -1) {
                         long insert_result_tip = pizzaDriverDB.insertTip(Tip.toString(), orderType, TipCashBool, insert_result_order);
-                        Log.d(TAG, "onCreate tip: " + insert_result_tip);
+                        Log.d(TAG, "insert tip: " + insert_result_tip);
                         if (insert_result_tip != -1){
                             if (orderType.equals("Cash")){
                                 long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
-                                Log.d(TAG, "onCreate cash: " + insert_result_cash);
+                                Log.d(TAG, "insert cash: " + insert_result_cash);
                                 if (insert_result_cash != -1){
                                     //nothing all good
                                 }
@@ -404,7 +392,7 @@ public class AddOrder extends AppCompatActivity {
                             data_inserted = false;
                         }
 
-                        //startActivity(BackToMain);
+                        startActivity(BackToMain);
 
                     } else {
                         data_inserted = false;

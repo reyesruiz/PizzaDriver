@@ -141,7 +141,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(CASH, TipCashBool);
         contentValues.put(ORDER_ID, OrderId);
         long rowInserted  = pizza_driver_db.insert(TIPS_TABLE, null, contentValues);
-        Log.d("TEST", "insertOrder: " + rowInserted);
+        Log.d("TEST", "insertTip: " + rowInserted);
         return rowInserted;
     }
 
@@ -152,7 +152,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(RECEIVED, Received);
         contentValues.put(TIP_ID, TipId);
         long rowInserted  = pizza_driver_db.insert(CASH_ORDERS_TABLE, null, contentValues);
-        Log.d("TEST", "insertOrder: " + rowInserted);
+        Log.d("TEST", "insertCash: " + rowInserted);
         return rowInserted;
     }
 
@@ -193,21 +193,21 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return (int) DatabaseUtils.queryNumEntries(pizza_driver_db, TABLE);
     }
 
-    public boolean updateOrder (Integer OrderNumber,  String OrderType, String Tip, Integer TipCashBool, String OrderTotal, String CashReceived, String Location) {
+*/
+
+    public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID, Integer Archived){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(DATE, WorkingDate);
         contentValues.put(ORDER_NUMBER, OrderNumber);
-        contentValues.put(ORDER_TYPE, OrderType);
-        contentValues.put(TIP, Tip);
-        contentValues.put(TIP_CASH_BOOL, TipCashBool);
-        contentValues.put(ORDER_TOTAL, OrderTotal);
-        contentValues.put(CASH_RECEIVED, CashReceived);
-        contentValues.put(LOCATION, Location);
-        pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
-        long rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[] { Integer.toString(OrderNumber) } );
-        Log.v("Test", "row updated " + rowUpdated);
-        return rowUpdated != -1;
+        contentValues.put(LOCATION_ID, LocationID);
+        contentValues.put(ARCHIVED, Archived);
+        int rowUpdated  = pizza_driver_db.update(ORDERS_TABLE, contentValues, ORDER_ID + " = ? ", new String[]{String.valueOf(OrderId)});
+        Log.d("TEST", "rowUpdated: " + rowUpdated);
+        return rowUpdated;
     }
+
+    /*
 
     public boolean updateOrderNumber (Integer OldOrderNumber, Integer OrderNumber){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
