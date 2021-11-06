@@ -61,6 +61,7 @@ public class AddOrder extends AppCompatActivity {
     TextWatcher orderTotalTextWatcher = null;
     TextWatcher cashReceivedTextWatcher = null;
 
+    String workingDate;
 
 
 
@@ -77,7 +78,6 @@ public class AddOrder extends AppCompatActivity {
 
         pizzaDriverDB = new SQLiteDBHelper(this);
         SaveButton = findViewById(R.id.saveButton);
-        String workingDate;
 
         final Chip orderNumberChip = this.findViewById(R.id.orderNumberChip);
 
@@ -146,6 +146,7 @@ public class AddOrder extends AppCompatActivity {
                         //Nothing
                         break;
                 }
+                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId));
 
             }
             Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
@@ -281,7 +282,7 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
-        orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber));
+
 
         SaveButton.setOnClickListener(v -> {
             Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
@@ -648,7 +649,7 @@ public class AddOrder extends AppCompatActivity {
     }
 
 
-    private void showPopup(View view, int OrderNumber) {
+    private void showPopup(View view, int OrderNumber, int OrderId) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.order_number_options, popup.getMenu());
@@ -666,8 +667,9 @@ public class AddOrder extends AppCompatActivity {
                 m_Text[0] = input.getText().toString();
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
                 //TODO
-                //boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
-                boolean changed = true;
+                Log.d(TAG, "showPopup: " + workingDate);
+                boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, OrderNumber, NewOrderNumber, OrderId);
+
                 if (changed){
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();

@@ -207,23 +207,24 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowUpdated;
     }
 
-    /*
 
-    public boolean updateOrderNumber (Integer OldOrderNumber, Integer OrderNumber){
+
+    public boolean updateOrderNumber (String WorkingDate, Integer OldOrderNumber, Integer OrderNumber, Integer OrderId){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);
-        boolean exists = checkAlreadyExist(OrderNumber);
+        boolean exists = checkAlreadyExist(WorkingDate, OrderNumber);
         if (exists){
             return false;
         }
         else {
-            int rowUpdated = pizza_driver_db.update(TABLE, contentValues, ORDER_NUMBER + " = ? ", new String[]{Integer.toString(OldOrderNumber)});
+            int rowUpdated = pizza_driver_db.update(ORDERS_TABLE, contentValues, ORDER_ID + " = ? ", new String[]{(String.valueOf(OrderId))});
             Log.v("Test", "row updated " + rowUpdated);
             return rowUpdated != -1;
         }
     }
 
+     /*
 
     public boolean deleteOrder (Integer OrderNumber) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
@@ -370,14 +371,21 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public boolean checkAlreadyExist(int orderNumber){
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor result = pizza_driver_db.rawQuery("select * from " + TABLE + " where " + ORDER_NUMBER + "=" + orderNumber + "", null);
-        int count = result.getCount();
-        result.close();
-        return count > 0;
+*/
+
+    public boolean checkAlreadyExist(String workingDate, int orderNumber){
+        Cursor cursor = getOrderData(workingDate, orderNumber);
+        int count = cursor.getCount();
+        Log.d("TEST", "checkAlreadyExist: " + count);
+        if (count > 0){
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
-    */
+
 
 
 }
