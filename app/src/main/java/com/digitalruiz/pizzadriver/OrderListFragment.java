@@ -27,12 +27,17 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 public class OrderListFragment extends Fragment {
 
     SQLiteDBHelper pizzaDriverDB;
+    String workingDate;
 
 
     @Override
@@ -49,17 +54,24 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //TODO Implement a way to start and end a working day
+        Date date = Calendar.getInstance().getTime();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        workingDate = formatter.format(date);
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
-        ArrayList<Integer> orders;
-        /*
+        ArrayList<Integer> orders_ids;
+
         if (getArguments() == null){
-            orders = pizzaDriverDB.getAllOrders();
+            //In case no arguments get passed
+            orders_ids = pizzaDriverDB.getAllOrders(workingDate);
         }
         else {
+            //Need to rework this
+            /*
             if ((Objects.equals(requireArguments().getString("OrderType"), "*")) && (Objects.equals(requireArguments().getString("CashBool"), "*")) && (Objects.equals(requireArguments().getString("Location"), "*"))) {
-                orders = pizzaDriverDB.getAllOrders();
+                orders = pizzaDriverDB.getAllOrders(workingDate);
             }
             else if (Objects.equals(requireArguments().getString("Location"), "*")){
                 Log.v("TEST", "GetAllOrdersPerType");
@@ -69,9 +81,13 @@ public class OrderListFragment extends Fragment {
             else {
                 orders = pizzaDriverDB.getAllOrdersPerLocation(getArguments().getString("Location"));
             }
+
+             */
+            //Just a placeholder
+            orders_ids = pizzaDriverDB.getAllOrders(workingDate);
         }
 
-        Log.v("Test", "Array is " + orders);
+        Log.v("Test", "Array is " + orders_ids);
 
 
         TableLayout WrapperTable = view.findViewById(R.id.wrapperTableLayout);
@@ -121,20 +137,29 @@ public class OrderListFragment extends Fragment {
 
         WrapperTable.addView(HeadLine);
         int counter = 0;
-        for (final Integer orderNumber: orders ){
+        for (final Integer orderId: orders_ids ){
             counter = counter + 1;
-            Log.v("Test", "Order number is " + orderNumber);
+            Log.v("Test", "Order id is " + orderId);
 
-            Cursor result = pizzaDriverDB.getData(orderNumber);
-            result.moveToFirst();
-            String OrderType = result.getString(result.getColumnIndex("OrderType"));
-            String Tip = result.getString(result.getColumnIndex("Tip"));
-            int Cash = Integer.parseInt(result.getString(result.getColumnIndex("TipCashBool")));
-            String OrderLocation = result.getString(result.getColumnIndex("Location"));
+            Cursor order_result = pizzaDriverDB.getOrderDataByOrderId(orderId);
+            order_result.moveToFirst();
+            Cursor tip_result = pizzaDriverDB.getTipData(orderId);
+            tip_result.moveToFirst();
+            int tipId = Integer.parseInt(tip_result.getString(tip_result.getColumnIndex("TipId")));
+            Cursor cash_order_result = pizzaDriverDB.getCashOrderData(tipId);
+            if (cash_order_result.getCount() > 0) {
+                cash_order_result.moveToFirst();
+            }
+            Integer orderNumber = Integer.parseInt(order_result.getString(order_result.getColumnIndex("OrderNumber")));
+            String OrderType = tip_result.getString(tip_result.getColumnIndex("Type"));
+            String Tip = tip_result.getString(tip_result.getColumnIndex("Amount"));
+            int Cash = Integer.parseInt(tip_result.getString(tip_result.getColumnIndex("Cash")));
+            int LocationId = Integer.parseInt(order_result.getString(order_result.getColumnIndex("LocationId")));
+            Cursor locations_result = pizzaDriverDB.getLocationData(LocationId);
+            locations_result.moveToFirst();
+            String OrderLocation = locations_result.getString(locations_result.getColumnIndex("Name"));
+            String Rate = locations_result.getString(locations_result.getColumnIndex("Rate"));
 
-            Log.v("Test", "cursor " + result);
-            result.close();
-            Log.v("Test", "Cash " + Cash);
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
@@ -196,7 +221,7 @@ public class OrderListFragment extends Fragment {
             WrapperTable.addView(Row);
         }
 
-         */
+
 
 
         button_first.setOnClickListener(v -> NavHostFragment.findNavController(OrderListFragment.this)

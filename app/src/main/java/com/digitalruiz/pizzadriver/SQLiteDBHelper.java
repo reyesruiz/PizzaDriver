@@ -164,6 +164,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getOrderDataByOrderId(int orderId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_ID + " = " + orderId;
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
+    }
+
     public Cursor getTipData(int orderId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " = " + orderId;
@@ -282,23 +289,25 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return row_deleted == 1;
     }
 
-     /*
 
-    public ArrayList<Integer> getAllOrders() {
+
+    public ArrayList<Integer> getAllOrders(String workingDate) {
         ArrayList<Integer> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select * from " + TABLE, null );
+        Cursor res =  pizza_driver_db.rawQuery( "select * from " + ORDERS_TABLE + " where " + DATE + " = " + "\"" + workingDate + "\"", null );
         res.moveToFirst();
 
         while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_ID))));
             res.moveToNext();
         }
         res.close();
         return array_list;
     }
+
+    /*
 
     public ArrayList<Integer> getAllCredit() {
         ArrayList<Integer> array_list = new ArrayList<>();
