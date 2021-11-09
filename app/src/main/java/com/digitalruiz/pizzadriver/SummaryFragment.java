@@ -163,21 +163,23 @@ public class SummaryFragment extends Fragment {
         NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
         netCashText.setText(NetCash.toString());
 
-        /*
-        OrdersCreditAuto = pizzaDriverDB.numberOfRowsPerType("Credit Auto", "0");
-        OrdersCreditManual = pizzaDriverDB.numberOfRowsPerType("Credit Manual", "0");
-        OrdersCreditManualCash = pizzaDriverDB.numberOfRowsPerType("Credit Manual", "1");
-        OrdersCash = pizzaDriverDB.numberOfRowsPerType("Cash", "1");
-        OrdersGrubhub = pizzaDriverDB.numberOfRowsPerType("Grubhub", "*");
-        OrdersLevelUp = pizzaDriverDB.numberOfRowsPerType("LevelUp", "*");
-        OrdersOther = pizzaDriverDB.numberOfRowsPerType("Other", "*");
-        OrdersTotal = OrdersCreditAuto + OrdersCreditManual + OrdersCreditManualCash + OrdersCash + OrdersGrubhub + OrdersLevelUp + OrdersOther;
-        OrdersTotalFromDB = pizzaDriverDB.numberOfRows();
+        Cursor creditAuto = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips,"Credit Auto", "0");
+        OrdersCreditAuto = creditAuto.getCount();
+        Cursor creditManual = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Credit Manual", "0");
+        OrdersCreditManual = creditManual.getCount();
+        Cursor creditManualCash = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Credit Manual", "1");
+        OrdersCreditManualCash = creditManualCash.getCount();
+        Cursor cash = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Cash", "1");
+        OrdersCash = cash.getCount();
+        Cursor grubHub = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Grubhub", "*");
+        OrdersGrubhub = grubHub.getCount();
+        Cursor levelUp = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "LevelUp", "*");
+        OrdersLevelUp = levelUp.getCount();
+        Cursor other = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Grubhub", "*");
+        OrdersOther = other.getCount();
+        OrdersTotal = allTips.size();
 
-        if (OrdersTotal != OrdersTotalFromDB){
-            Toast toast = Toast.makeText(getContext(), "Number of Orders does not match the number of Records in DB", Toast.LENGTH_LONG);
-            toast.show();
-        }
+
 
 
         ordersCreditAutoText.setText(Integer.toString(OrdersCreditAuto));
@@ -271,8 +273,4 @@ public class SummaryFragment extends Fragment {
         });
 
     }
-
-         */
-    }
-//Delete
 }

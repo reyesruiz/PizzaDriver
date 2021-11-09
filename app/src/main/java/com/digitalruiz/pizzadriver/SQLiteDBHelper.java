@@ -408,26 +408,20 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-     /*
-    public int numberOfRowsPerType(String Type, String TipCashBool){
+    public Cursor getTipDataPerTypeAndCashBool(ArrayList<Integer> tipsIds, String Type, String TipCashBool){
+        String tipsIdsString = tipsIds.stream().map(Object::toString).collect(Collectors.joining(", "));
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;
-        if (TipCashBool.equals("*")){
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"", null);
+        if (TipCashBool.equals("*")) {
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \"" + Type + "\"", null);
         }
         else {
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"" + " AND " + TIP_CASH_BOOL + " = " + TipCashBool, null);
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \"" + Type + "\"" + " AND " + CASH + " = " + TipCashBool, null);
         }
-        res.moveToFirst();
-        int counter = 0;
-        while(!res.isAfterLast()){
-            counter = counter + 1;
-            res.moveToNext();
-        }
-        res.close();
-        return counter;
+            return res;
     }
 
+    /*
 
     public ArrayList<Integer> getAllOrdersPerType(String Type, String TipCashBool) {
         ArrayList<Integer> array_list = new ArrayList<>();
