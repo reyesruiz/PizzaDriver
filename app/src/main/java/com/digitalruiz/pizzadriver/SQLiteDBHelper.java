@@ -376,7 +376,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<Integer> getAllOrdersPerLocationId(ArrayList<Integer> ordersIds, int locationId) {
+    public ArrayList<Integer> getAllOrdersPerLocationId(ArrayList<Integer> ordersIds, String locationId) {
         ArrayList<Integer> array_list = new ArrayList<>();
         String ordersIdsString = ordersIds.stream().map(Object::toString).collect(Collectors.joining(", "));
 
@@ -413,56 +413,14 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;
         if (TipCashBool.equals("*")) {
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \"" + Type + "\"", null);
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \'" + Type + "\'", null);
         }
         else {
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \"" + Type + "\"" + " AND " + CASH + " = " + TipCashBool, null);
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \'" + Type + "\'" + " AND " + CASH + " = " + TipCashBool, null);
         }
-            return res;
+        return res;
     }
 
-    /*
-
-    public ArrayList<Integer> getAllOrdersPerType(String Type, String TipCashBool) {
-        ArrayList<Integer> array_list = new ArrayList<>();
-
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res;
-        if (TipCashBool.equals("*")){
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"", null);
-        }
-        else {
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"" + Type + "\"" + " AND " + TIP_CASH_BOOL + " = " + TipCashBool, null);
-            Log.v("TEST", res + "");
-        }
-        res.moveToFirst();
-
-        while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
-            res.moveToNext();
-        }
-        res.close();
-        return array_list;
-    }
-
-    public ArrayList<Integer> getAllOrdersPerLocation(String Location) {
-        ArrayList<Integer> array_list = new ArrayList<>();
-
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res;
-        res = pizza_driver_db.rawQuery("SELECT * FROM " + TABLE + " WHERE " + LOCATION + " = \"" + Location + "\"", null);
-
-        res.moveToFirst();
-
-        while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
-            res.moveToNext();
-        }
-        res.close();
-        return array_list;
-    }
-
-*/
 
     public boolean checkAlreadyExist(String workingDate, int orderNumber){
         Cursor cursor = getOrderData(workingDate, orderNumber);

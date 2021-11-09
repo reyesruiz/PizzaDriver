@@ -61,30 +61,41 @@ public class OrderListFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
+        ArrayList<Integer> all_orders_ids;
         ArrayList<Integer> orders_ids;
+        orders_ids = new ArrayList<Integer>();
+
+        all_orders_ids = pizzaDriverDB.getAllOrders(workingDate);
+        ArrayList<Integer> allTips = pizzaDriverDB.getAllTips(all_orders_ids);
 
         if (getArguments() == null){
             //In case no arguments get passed
-            orders_ids = pizzaDriverDB.getAllOrders(workingDate);
+            orders_ids = all_orders_ids;
         }
         else {
             //Need to rework this
-            /*
-            if ((Objects.equals(requireArguments().getString("OrderType"), "*")) && (Objects.equals(requireArguments().getString("CashBool"), "*")) && (Objects.equals(requireArguments().getString("Location"), "*"))) {
-                orders = pizzaDriverDB.getAllOrders(workingDate);
+
+            if ((Objects.equals(requireArguments().getString("Type"), "*")) && (Objects.equals(requireArguments().getString("CashBool"), "*")) && (Objects.equals(requireArguments().getString("LocationId"), "*"))) {
+                orders_ids = all_orders_ids;
             }
-            else if (Objects.equals(requireArguments().getString("Location"), "*")){
-                Log.v("TEST", "GetAllOrdersPerType");
-                orders = pizzaDriverDB.getAllOrdersPerType(getArguments().getString("OrderType"), Objects.requireNonNull(requireArguments().getString("CashBool")));
-                Log.v("TEST", orders + "");
+            else if (Objects.equals(requireArguments().getString("LocationId"), "*")){
+                Log.d("TEST", "TYPE: " + getArguments().getString("Type"));
+                Cursor tips_result = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, getArguments().getString("Type"), getArguments().getString("CashBool"));
+                while (tips_result.moveToNext()){
+                    int order_id = tips_result.getInt(tips_result.getColumnIndex("OrderId"));
+                    if (orders_ids.contains(order_id)){
+                        //nothing
+                    }
+                    else{
+                        orders_ids.add(order_id);
+                    }
+                }
+
             }
             else {
-                orders = pizzaDriverDB.getAllOrdersPerLocation(getArguments().getString("Location"));
+                orders_ids = pizzaDriverDB.getAllOrdersPerLocationId(all_orders_ids, getArguments().getString("LocationId"));
             }
 
-             */
-            //Just a placeholder
-            orders_ids = pizzaDriverDB.getAllOrders(workingDate);
         }
 
         Log.v("Test", "Array is " + orders_ids);
