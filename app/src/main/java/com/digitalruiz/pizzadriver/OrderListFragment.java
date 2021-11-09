@@ -180,7 +180,7 @@ public class OrderListFragment extends Fragment {
                 startActivity(addOrderIntent);
             });
             orderNumberChip.setOnLongClickListener(v -> {
-                showPopup(v, orderNumber);
+                showPopup(v, orderNumber, orderId);
                 return true;
             });
 
@@ -232,7 +232,7 @@ public class OrderListFragment extends Fragment {
 
     }
 
-    private void showPopup(View view, int OrderNumber) {
+    private void showPopup(View view, int OrderNumber, int OrderId) {
         PopupMenu popup = new PopupMenu(getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.order_number_options, popup.getMenu());
@@ -249,46 +249,61 @@ public class OrderListFragment extends Fragment {
             builder.setPositiveButton("OK", (dialog, which) -> {
                 m_Text[0] = input.getText().toString();
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
-                //boolean changed = pizzaDriverDB.updateOrderNumber(OrderNumber, NewOrderNumber);
-                //if (changed){
-                //    Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
-                //    updateToast.show();
-                 //   getActivity().finish();
-                  //  startActivity(getActivity().getIntent());
-               // }
-                //else {
-                 //   Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
-                  //  updateToast.show();
-                   // dialog.cancel();
-               // }
+                boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, OrderNumber, NewOrderNumber, OrderId);
+                if (changed){
+                    Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
+                    updateToast.show();
+                    getActivity().finish();
+                    startActivity(getActivity().getIntent());
+                }
+                else {
+                    Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
+                    updateToast.show();
+                    dialog.cancel();
+                }
 
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
             builder.show();
 
-          // boolean changed = pizzaDriverDB.updateOrderNumber();
             return true;
         });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
         delete.setOnMenuItemClickListener(v ->{
-     //       boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
-       //     if (deleted) {
-         //       Toast deletedToast = Toast.makeText(getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
-           //     deletedToast.show();
-           // }
-           // else {
-            //    Toast deletedToast = Toast.makeText(getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
-             //   deletedToast.show();
-           // }
+            //TODO
+            Log.d("TEST", "showPopup: deleted");
+            ArrayList<Integer> tipsInOrder = new ArrayList<Integer>();
+            tipsInOrder = pizzaDriverDB.getAllTipsPerOrderId(OrderId);
+            ArrayList<Integer> cashOrders = new ArrayList<Integer>();
+            for (final Integer tipId: tipsInOrder ){
+                ArrayList<Integer> ids =  pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
+                cashOrders.addAll(ids);
+            }
+            // Now Delete all information pertaining to the OrderNumber
+            if (cashOrders.size() > 0){
+                for (final Integer cashOrderId: cashOrders ){
+                    boolean deleted = pizzaDriverDB.deleteCashOrder(cashOrderId);
+                }
+            }
+            if (tipsInOrder.size() > 0){
+                for (final Integer tipId: tipsInOrder ){
+                    boolean deleted = pizzaDriverDB.deleteTip(tipId);
+                }
+            }
+            boolean deleted = pizzaDriverDB.deleteOrder(OrderId);
+            if (deleted) {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
+                deletedToast.show();
+            }
+            else {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
+                deletedToast.show();
+            }
+
             getActivity().finish();
             startActivity(getActivity().getIntent());
-
-
-
-
-          //  return deleted;
-            return true;
+            return deleted;
         });
     }
 }
