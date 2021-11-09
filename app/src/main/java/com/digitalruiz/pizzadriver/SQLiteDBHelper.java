@@ -21,7 +21,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String ORDER_NUMBER = "OrderNumber";
     public static final String TIP_ID = "TipId";
     public static final String LOCATION_ID = "LocationId";
-    public static final String ARCHIVED = "Archived";
 
     //Locations Table
     public static final String LOCATIONS_TABLE = "Locations";
@@ -51,7 +50,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 DATE + " TEXT NOT NULL, " +
                 ORDER_NUMBER + " INTEGER NOT NULL, " +
                 LOCATION_ID + " INTEGER NOT NULL, " +
-                ARCHIVED + " INTEGER NOT NULL, " +
                 "UNIQUE (" + DATE + "," + ORDER_NUMBER + ")" +
                 ")"
         );
@@ -122,13 +120,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
     }
 
-    public long insertOrder (String WorkingDate, Integer OrderNumber, Integer LocationID, Integer Archived){
+    public long insertOrder (String WorkingDate, Integer OrderNumber, Integer LocationID){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DATE, WorkingDate);
         contentValues.put(ORDER_NUMBER, OrderNumber);
         contentValues.put(LOCATION_ID, LocationID);
-        contentValues.put(ARCHIVED, Archived);
         long rowInserted  = pizza_driver_db.insert(ORDERS_TABLE, null, contentValues);
         Log.d("TEST", "insertOrder: " + rowInserted);
         return rowInserted;
@@ -217,13 +214,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
 */
 
-    public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID, Integer Archived){
+    public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DATE, WorkingDate);
         contentValues.put(ORDER_NUMBER, OrderNumber);
         contentValues.put(LOCATION_ID, LocationID);
-        contentValues.put(ARCHIVED, Archived);
         int rowUpdated  = pizza_driver_db.update(ORDERS_TABLE, contentValues, ORDER_ID + " = ? ", new String[]{String.valueOf(OrderId)});
         Log.d("TEST", "rowUpdated: " + rowUpdated);
         return rowUpdated;

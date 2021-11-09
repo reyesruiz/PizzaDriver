@@ -289,7 +289,6 @@ public class AddOrder extends AppCompatActivity {
             Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
             int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
             int LocationID = 0;
-            int archived = 0;
             // TODO SIMPLIFY THIS
             boolean error = false;
 
@@ -355,7 +354,7 @@ public class AddOrder extends AppCompatActivity {
                     long OrderId = data.getInt(data.getColumnIndex("OrderId"));
                     Log.d("TEST", "getData ");
 
-                    int updateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID, archived);
+                    int updateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID);
                     data.close();
                     if (updateResult == 1){
                         Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
@@ -369,7 +368,7 @@ public class AddOrder extends AppCompatActivity {
 
                 }
                 else {
-                    long insert_result_order = pizzaDriverDB.insertOrder(workingDate, orderNumber, LocationID, archived);
+                    long insert_result_order = pizzaDriverDB.insertOrder(workingDate, orderNumber, LocationID);
                     Log.d(TAG, "insert order: " + insert_result_order);
                     boolean data_inserted = true;
                     if (insert_result_order != -1) {
