@@ -92,8 +92,9 @@ public class SummaryFragment extends Fragment {
         int OrdersTotalFromDB;
         ArrayList<Integer> orders_ids;
         orders_ids = pizzaDriverDB.getAllOrders(workingDate);
+        ArrayList<Integer> allTips = pizzaDriverDB.getAllTips(orders_ids);
 
-        ArrayList<Integer> tipsCredit = pizzaDriverDB.getAllCredit(orders_ids);
+        ArrayList<Integer> tipsCredit = pizzaDriverDB.getAllCredit(allTips);
         Log.d("TEST", "onViewCreated: " + tipsCredit);
         CreditTotal = new BigDecimal("0.00");
         for (final int tipId: tipsCredit ){
@@ -107,7 +108,7 @@ public class SummaryFragment extends Fragment {
         TipsCreditText.setText(CreditTotal.toString());
 
 
-        ArrayList<Integer> tipsCash = pizzaDriverDB.getAllCash(orders_ids);
+        ArrayList<Integer> tipsCash = pizzaDriverDB.getAllCash(allTips);
         Log.d("TEST", "onViewCreated: " + tipsCash);
         for (final int tipId: tipsCash ){
             Cursor result = pizzaDriverDB.getTipDataByTipId(tipId);
