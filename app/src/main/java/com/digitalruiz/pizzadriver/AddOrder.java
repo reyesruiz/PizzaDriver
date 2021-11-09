@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -687,14 +688,32 @@ public class AddOrder extends AppCompatActivity {
 
             builder.show();
 
-            // boolean changed = pizzaDriverDB.updateOrderNumber();
             return true;
         });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
         delete.setOnMenuItemClickListener(v ->{
             //TODO
-            //boolean deleted = pizzaDriverDB.deleteOrder(OrderNumber);
-            boolean deleted = true;
+            Log.d(TAG, "showPopup: deleted");
+            ArrayList<Integer> tipsInOrder = new ArrayList<Integer>();
+            tipsInOrder = pizzaDriverDB.getAllTipsPerOrderId(OrderId);
+            ArrayList<Integer> cashOrders = new ArrayList<Integer>();
+            for (final Integer tipId: tipsInOrder ){
+                ArrayList<Integer> ids =  pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
+                cashOrders.addAll(ids);
+            }
+            // Now Delete all information pertaining to the OrderNumber
+            if (cashOrders.size() > 0){
+                for (final Integer cashOrderId: cashOrders ){
+                    boolean deleted = pizzaDriverDB.deleteCashOrder(cashOrderId);
+                }
+            }
+            if (tipsInOrder.size() > 0){
+                for (final Integer tipId: tipsInOrder ){
+                    boolean deleted = pizzaDriverDB.deleteTip(tipId);
+                }
+            }
+            boolean deleted = pizzaDriverDB.deleteOrder(OrderId);
+
             if (deleted) {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
                 deletedToast.show();

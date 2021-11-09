@@ -224,18 +224,65 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
     }
 
-     /*
+    public ArrayList<Integer> getAllTipsPerOrderId(Integer orderId) {
+        ArrayList<Integer> array_list = new ArrayList<>();
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "select * from " + TIPS_TABLE + " where " + ORDER_ID + " = " + orderId, null );
 
-    public boolean deleteOrder (Integer OrderNumber) {
-        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
-        int row_deleted = pizza_driver_db.delete(TABLE,
-                ORDER_NUMBER + " = ? ",
-                new String[] { Integer.toString(OrderNumber) });
-        Log.v("Test", "row deleted " + row_deleted);
-        return row_deleted == 1;
+        res.moveToFirst();
 
+        while(!res.isAfterLast()){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
     }
 
+    public ArrayList<Integer> getAllCashOrdersPerTipId(Integer tipId) {
+        ArrayList<Integer> array_list = new ArrayList<>();
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "select * from " + CASH_ORDERS_TABLE + " where " + TIP_ID + " = " + tipId, null );
+        res.moveToFirst();
+
+        while(!res.isAfterLast()){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(CASH_ORDER_ID))));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
+
+    public boolean deleteCashOrder (Integer cashOrderId) {
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        int row_deleted = pizza_driver_db.delete(CASH_ORDERS_TABLE,
+                CASH_ORDER_ID + " = ? ",
+                new String[] { Integer.toString(cashOrderId) });
+        Log.v("Test", "row deleted " + row_deleted);
+        return row_deleted == 1;
+    }
+
+    public boolean deleteTip (Integer tipId) {
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        int row_deleted = pizza_driver_db.delete(TIPS_TABLE,
+                TIP_ID + " = ? ",
+                new String[] { Integer.toString(tipId) });
+        Log.v("Test", "row deleted " + row_deleted);
+        return row_deleted == 1;
+    }
+
+    public boolean deleteOrder (Integer orderId) {
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        int row_deleted = pizza_driver_db.delete(ORDERS_TABLE,
+                ORDER_ID + " = ? ",
+                new String[] { Integer.toString(orderId) });
+        Log.v("Test", "row deleted " + row_deleted);
+        return row_deleted == 1;
+    }
+
+     /*
 
     public ArrayList<Integer> getAllOrders() {
         ArrayList<Integer> array_list = new ArrayList<>();
