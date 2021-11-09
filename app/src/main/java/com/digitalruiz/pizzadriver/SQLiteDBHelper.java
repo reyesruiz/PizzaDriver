@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
@@ -178,6 +179,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getTipDataByTipId(int tipId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " = " + tipId;
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
+    }
+
     public Cursor getLocationData(int locationId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + LOCATIONS_TABLE + " WHERE " + LOCATION_ID + " = " + locationId;
@@ -188,6 +196,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public Cursor getCashOrderData(int tipId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + TIP_ID + " = " + tipId;
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        return cursor;
+    }
+
+    public Cursor getCashOrderDataByCashOrderId(int orderId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + CASH_ORDER_ID + " = " + orderId;
         Cursor cursor = pizza_driver_db.rawQuery(sql, null);
         return cursor;
     }
@@ -307,67 +322,77 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    /*
 
-    public ArrayList<Integer> getAllCredit() {
+
+    public ArrayList<Integer> getAllCredit(ArrayList<Integer> ordersIds) {
         ArrayList<Integer> array_list = new ArrayList<>();
+        Log.d("TEST", "getAllCredit: " + ordersIds);
+        String ordersIdsString = ordersIds.stream().map(Object::toString).collect(Collectors.joining(", "));
+
+        Log.d("TEST", "getAllCredit: " + ordersIdsString);
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ") AND " + CASH + " = " + 0, null);
+        res.moveToFirst();
+        while(!res.isAfterLast()){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
+
+    public ArrayList<Integer> getAllCash(ArrayList<Integer> ordersIds) {
+        ArrayList<Integer> array_list = new ArrayList<>();
+        Log.d("TEST", "getAllCash: " + ordersIds);
+        String ordersIdsString = ordersIds.stream().map(Object::toString).collect(Collectors.joining(", "));
+
+        Log.d("TEST", "getAllCash: " + ordersIdsString);
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ") AND " + CASH + " = " + 1, null);
+        res.moveToFirst();
+        while(!res.isAfterLast()){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
+
+    public ArrayList<Integer> getAllOrdersPerLocationId(ArrayList<Integer> ordersIds, int locationId) {
+        ArrayList<Integer> array_list = new ArrayList<>();
+        String ordersIdsString = ordersIds.stream().map(Object::toString).collect(Collectors.joining(", "));
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE (" + ORDER_TYPE + " = \"Credit Manual\" OR " + ORDER_TYPE + " = \"Credit Auto\" OR " + ORDER_TYPE + " = \"Grubhub\" OR " + ORDER_TYPE + " = \"LevelUp\" OR " + ORDER_TYPE + " = \"Other\") AND " + TIP_CASH_BOOL + " = 0", null);
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ") AND " + LOCATION_ID + " = " + locationId, null);
         res.moveToFirst();
         while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_ID))));
             res.moveToNext();
         }
         res.close();
         return array_list;
     }
 
-    public ArrayList<Integer> getAllCash() {
+    public ArrayList<Integer> getAllCashOrders(ArrayList<Integer> tipsCashIds) {
         ArrayList<Integer> array_list = new ArrayList<>();
 
-        //hp = new HashMap();
+        String tipsIdsString = tipsCashIds.stream().map(Object::toString).collect(Collectors.joining(", "));
+
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\" OR " + TIP_CASH_BOOL + " = 1", null);
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")", null);
         res.moveToFirst();
         while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(CASH_ORDER_ID))));
             res.moveToNext();
         }
         res.close();
         return array_list;
     }
 
-    public ArrayList<Integer> getAllLocation(String location) {
-        ArrayList<Integer> array_list = new ArrayList<>();
-
-        //hp = new HashMap();
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + LOCATION + " = \"" + location + "\"", null);
-        res.moveToFirst();
-        while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
-            res.moveToNext();
-        }
-        res.close();
-        return array_list;
-    }
-
-    public ArrayList<Integer> getAllCashOrders() {
-        ArrayList<Integer> array_list = new ArrayList<>();
-
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TABLE + " WHERE " + ORDER_TYPE + " = \"Cash\"", null);
-        res.moveToFirst();
-        while(!res.isAfterLast()){
-            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_NUMBER))));
-            res.moveToNext();
-        }
-        res.close();
-        return array_list;
-    }
-
+     /*
     public int numberOfRowsPerType(String Type, String TipCashBool){
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;
