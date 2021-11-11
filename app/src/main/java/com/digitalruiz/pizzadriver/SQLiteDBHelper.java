@@ -144,6 +144,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public long insertCashOrder (String Total,  String Received, long TipId){
+        Log.d("TEST", "insertCashOrder: " + Total + " " + Received);
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TOTAL, Total);
@@ -227,7 +228,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean updateOrderNumber (String WorkingDate, Integer OldOrderNumber, Integer OrderNumber, Integer OrderId){
+    public boolean updateOrderNumber (String WorkingDate, Integer OrderNumber, Integer OrderId){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);

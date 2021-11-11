@@ -207,7 +207,7 @@ public class AddOrder extends AppCompatActivity {
                     String Total = cash_order_result.getString(cash_order_result.getColumnIndex("Total"));
                     String Received = cash_order_result.getString(cash_order_result.getColumnIndex("Received"));
 
-                    OrderTotal = new BigDecimal(Received);
+                    OrderTotal = new BigDecimal(Total);
                     OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
                     orderTotalEditText.setText(OrderTotal.toString());
                     orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
@@ -668,7 +668,7 @@ public class AddOrder extends AppCompatActivity {
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
                 //TODO
                 Log.d(TAG, "showPopup: " + workingDate);
-                boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, OrderNumber, NewOrderNumber, OrderId);
+                boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, NewOrderNumber, OrderId);
 
                 if (changed){
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
