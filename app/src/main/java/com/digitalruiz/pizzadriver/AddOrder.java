@@ -63,6 +63,9 @@ public class AddOrder extends AppCompatActivity {
     TextWatcher cashReceivedTextWatcher = null;
 
     String workingDate;
+    int OrderId;
+    int TipId;
+    int CashOrderId;
 
 
 
@@ -128,7 +131,7 @@ public class AddOrder extends AppCompatActivity {
 
         if (order_result.getCount() == 1) {
             order_result.moveToFirst();
-            int OrderId = order_result.getInt(order_result.getColumnIndex("OrderId"));
+            OrderId = order_result.getInt(order_result.getColumnIndex("OrderId"));
             int LocationId = order_result.getInt(order_result.getColumnIndex("LocationId"));
             Cursor location_result = pizzaDriverDB.getLocationData(LocationId);
             if (location_result.getCount() <= 1){
@@ -154,7 +157,7 @@ public class AddOrder extends AppCompatActivity {
             if (tip_result.getCount() >= 1){
                 //TODO Right now only moving to first, will need to implement multiple tips per order.
                 tip_result.moveToFirst();
-                int TipId = tip_result.getInt(tip_result.getColumnIndex("TipId"));
+                TipId = tip_result.getInt(tip_result.getColumnIndex("TipId"));
                 String Amount = tip_result.getString(tip_result.getColumnIndex("Amount"));
                 String Type = tip_result.getString(tip_result.getColumnIndex("Type"));
                 int CashBool = tip_result.getInt(tip_result.getColumnIndex("Cash"));
@@ -203,7 +206,7 @@ public class AddOrder extends AppCompatActivity {
                 if (Type.equals("Cash")){
                     Cursor cash_order_result = pizzaDriverDB.getCashOrderData(TipId);
                     cash_order_result.moveToFirst();
-                    int cash_Order_Id = cash_order_result.getInt(cash_order_result.getColumnIndex("CashOrderId"));
+                    CashOrderId = cash_order_result.getInt(cash_order_result.getColumnIndex("CashOrderId"));
                     String Total = cash_order_result.getString(cash_order_result.getColumnIndex("Total"));
                     String Received = cash_order_result.getString(cash_order_result.getColumnIndex("Received"));
 
@@ -347,16 +350,34 @@ public class AddOrder extends AppCompatActivity {
                     CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
 
-                Cursor data = pizzaDriverDB.getOrderData(workingDate, orderNumber);
-                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
-                if (data.getCount() == 1) {
-                    data.moveToFirst();
-                    long OrderId = data.getInt(data.getColumnIndex("OrderId"));
-                    Log.d("TEST", "getData ");
 
-                    int updateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID);
-                    data.close();
-                    if (updateResult == 1){
+                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
+
+                if (OrderId >= 1) {
+                    int OrderUpdateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID);
+                    if (OrderUpdateResult == 1){
+                        if (TipId >=1) {
+                            int TipUpdateResult = pizzaDriverDB.updateTip(TipId, Tip.toString(), orderType, TipCashBool, OrderId);
+                            if (TipUpdateResult == 1){
+                                if (orderType.equals("Cash")){
+                                    if (CashOrderId >= 1){
+                                        int CashOrderUpdateResult = pizzaDriverDB.updateCashOrder(CashOrderId, OrderTotal.toString(), CashReceived.toString(), TipId);
+                                    }
+                                    else {
+                                        long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), TipId);
+                                    }
+
+                                }
+                                else {
+                                    if (CashOrderId >=1 ){
+                                        boolean deleted = pizzaDriverDB.deleteCashOrder(CashOrderId);
+                                    }
+                                }
+                            }
+                        }
+                        else {
+
+                        }
                         Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
                         updateToast.show();
                         startActivity(BackToMain);
