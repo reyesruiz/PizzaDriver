@@ -3,10 +3,10 @@ package com.digitalruiz.pizzadriver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -159,61 +159,45 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public Cursor getOrderData(String WorkingDate, int orderNumber) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_NUMBER + " = " + orderNumber + " AND " + DATE + " = " + "\""+WorkingDate+"\"";
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
     public Cursor getOrderDataByOrderId(int orderId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_ID + " = " + orderId;
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
     public Cursor getTipData(int orderId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " = " + orderId;
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
     public Cursor getTipDataByTipId(int tipId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " = " + tipId;
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
     public Cursor getLocationData(int locationId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + LOCATIONS_TABLE + " WHERE " + LOCATION_ID + " = " + locationId;
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
     public Cursor getCashOrderData(int tipId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + TIP_ID + " = " + tipId;
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
     public Cursor getCashOrderDataByCashOrderId(int orderId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + CASH_ORDER_ID + " = " + orderId;
-        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
-        return cursor;
+        return pizza_driver_db.rawQuery(sql, null);
     }
 
-
-    /*
-
-    public int numberOfRows(){
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        return (int) DatabaseUtils.queryNumEntries(pizza_driver_db, TABLE);
-    }
-
-*/
 
     public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
@@ -433,10 +417,10 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;
         if (TipCashBool.equals("*")) {
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \'" + Type + "\'", null);
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = '" + Type + "'", null);
         }
         else {
-            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = \'" + Type + "\'" + " AND " + CASH + " = " + TipCashBool, null);
+            res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = '" + Type + "'" + " AND " + CASH + " = " + TipCashBool, null);
         }
         return res;
     }
@@ -446,12 +430,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Cursor cursor = getOrderData(workingDate, orderNumber);
         int count = cursor.getCount();
         Log.d("TEST", "checkAlreadyExist: " + count);
-        if (count > 0){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return count > 0;
 
     }
 
