@@ -144,6 +144,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public long insertCashOrder (String Total,  String Received, long TipId){
+        Log.d("TEST", "insertCashOrder: " + Total + " " + Received);
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TOTAL, Total);
@@ -225,9 +226,32 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowUpdated;
     }
 
+    public int updateTip (long TipId, String Amount,  String Type, Integer TipCashBool, long OrderId){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(AMOUNT, Amount);
+        contentValues.put(TYPE, Type);
+        contentValues.put(CASH, TipCashBool);
+        contentValues.put(ORDER_ID, OrderId);
+        int rowUpdated  = pizza_driver_db.update(TIPS_TABLE, contentValues, TIP_ID + " = ? ", new String[]{String.valueOf(TipId)});
+        Log.d("TEST", "rowUpdated: " + rowUpdated);
+        return rowUpdated;
+    }
+
+    public int updateCashOrder (long CashOrderId, String Total,  String Received, long TipId){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TOTAL, Total);
+        contentValues.put(RECEIVED, Received);
+        contentValues.put(TIP_ID, TipId);
+        int rowUpdated  = pizza_driver_db.update(CASH_ORDERS_TABLE, contentValues, CASH_ORDER_ID + " = ? ", new String[]{String.valueOf(CashOrderId)});
+        Log.d("TEST", "rowUpdated: " + rowUpdated);
+        return rowUpdated;
+    }
 
 
-    public boolean updateOrderNumber (String WorkingDate, Integer OldOrderNumber, Integer OrderNumber, Integer OrderId){
+
+    public boolean updateOrderNumber (String WorkingDate, Integer OrderNumber, Integer OrderId){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);

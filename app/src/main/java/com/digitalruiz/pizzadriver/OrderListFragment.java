@@ -160,6 +160,7 @@ public class OrderListFragment extends Fragment {
             Cursor cash_order_result = pizzaDriverDB.getCashOrderData(tipId);
             if (cash_order_result.getCount() > 0) {
                 cash_order_result.moveToFirst();
+
             }
             Integer orderNumber = Integer.parseInt(order_result.getString(order_result.getColumnIndex("OrderNumber")));
             String OrderType = tip_result.getString(tip_result.getColumnIndex("Type"));
@@ -260,7 +261,7 @@ public class OrderListFragment extends Fragment {
             builder.setPositiveButton("OK", (dialog, which) -> {
                 m_Text[0] = input.getText().toString();
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
-                boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, OrderNumber, NewOrderNumber, OrderId);
+                boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, NewOrderNumber, OrderId);
                 if (changed){
                     Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
