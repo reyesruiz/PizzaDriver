@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -76,8 +76,8 @@ public class SummaryFragment extends Fragment {
         BigDecimal CashTotal = new BigDecimal("0.00");
         BigDecimal TipsTotal;
         BigDecimal ReimbursementTotal;
-        BigDecimal TracyTotal = new BigDecimal("0.00");
-        BigDecimal MountainHouseTotal = new BigDecimal("0.00");
+        BigDecimal TracyTotal;
+        BigDecimal MountainHouseTotal;
         BigDecimal CompensationTotal;
         BigDecimal CashOrdersTotal = new BigDecimal("0.00");
         BigDecimal NetCash;
@@ -89,7 +89,6 @@ public class SummaryFragment extends Fragment {
         int OrdersLevelUp;
         int OrdersOther;
         int OrdersTotal;
-        int OrdersTotalFromDB;
         ArrayList<Integer> orders_ids;
         orders_ids = pizzaDriverDB.getAllOrders(workingDate);
         ArrayList<Integer> allTips = pizzaDriverDB.getAllTips(orders_ids);

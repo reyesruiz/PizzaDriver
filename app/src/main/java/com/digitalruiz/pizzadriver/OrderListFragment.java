@@ -63,7 +63,7 @@ public class OrderListFragment extends Fragment {
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> all_orders_ids;
         ArrayList<Integer> orders_ids;
-        orders_ids = new ArrayList<Integer>();
+        orders_ids = new ArrayList<>();
 
         all_orders_ids = pizzaDriverDB.getAllOrders(workingDate);
         ArrayList<Integer> allTips = pizzaDriverDB.getAllTips(all_orders_ids);
@@ -170,7 +170,6 @@ public class OrderListFragment extends Fragment {
             Cursor locations_result = pizzaDriverDB.getLocationData(LocationId);
             locations_result.moveToFirst();
             String OrderLocation = locations_result.getString(locations_result.getColumnIndex("Name"));
-            String Rate = locations_result.getString(locations_result.getColumnIndex("Rate"));
 
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -285,9 +284,9 @@ public class OrderListFragment extends Fragment {
         delete.setOnMenuItemClickListener(v ->{
             //TODO
             Log.d("TEST", "showPopup: deleted");
-            ArrayList<Integer> tipsInOrder = new ArrayList<Integer>();
+            ArrayList<Integer> tipsInOrder;
             tipsInOrder = pizzaDriverDB.getAllTipsPerOrderId(OrderId);
-            ArrayList<Integer> cashOrders = new ArrayList<Integer>();
+            ArrayList<Integer> cashOrders = new ArrayList<>();
             for (final Integer tipId: tipsInOrder ){
                 ArrayList<Integer> ids =  pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
                 cashOrders.addAll(ids);

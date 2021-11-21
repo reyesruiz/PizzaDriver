@@ -45,7 +45,7 @@ public class AddOrder extends AppCompatActivity {
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
 
-    String TAG = "TEST";
+    final String TAG = "TEST";
     String orderType;
     String OrderLocation;
     Integer orderNumber;
@@ -137,7 +137,6 @@ public class AddOrder extends AppCompatActivity {
             if (location_result.getCount() <= 1){
                 location_result.moveToFirst();
                 String Location = location_result.getString(location_result.getColumnIndex("Name"));
-                String rate = location_result.getString(location_result.getColumnIndex("Rate"));
 
                 switch (Location) {
                     case "Tracy":
@@ -375,9 +374,6 @@ public class AddOrder extends AppCompatActivity {
                                 }
                             }
                         }
-                        else {
-
-                        }
                         Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
                         updateToast.show();
                         startActivity(BackToMain);
@@ -406,9 +402,8 @@ public class AddOrder extends AppCompatActivity {
                                     data_inserted = false;
                                 }
                             }
-                            else {
-                                //nothing
-                            }
+                            //nothing
+
                         }
                         else {
                             data_inserted = false;
@@ -419,7 +414,7 @@ public class AddOrder extends AppCompatActivity {
                     } else {
                         data_inserted = false;
                     }
-                    if (data_inserted == true){
+                    if (data_inserted){
                         Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -714,9 +709,9 @@ public class AddOrder extends AppCompatActivity {
         delete.setOnMenuItemClickListener(v ->{
             //TODO
             Log.d(TAG, "showPopup: deleted");
-            ArrayList<Integer> tipsInOrder = new ArrayList<Integer>();
+            ArrayList<Integer> tipsInOrder;
             tipsInOrder = pizzaDriverDB.getAllTipsPerOrderId(OrderId);
-            ArrayList<Integer> cashOrders = new ArrayList<Integer>();
+            ArrayList<Integer> cashOrders = new ArrayList<>();
             for (final Integer tipId: tipsInOrder ){
                 ArrayList<Integer> ids =  pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
                 cashOrders.addAll(ids);
