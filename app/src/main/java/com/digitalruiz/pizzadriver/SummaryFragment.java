@@ -1,5 +1,6 @@
 package com.digitalruiz.pizzadriver;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.icu.math.BigDecimal;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class SummaryFragment extends Fragment {
 
@@ -67,10 +69,6 @@ public class SummaryFragment extends Fragment {
 
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
-        //TODO Implement a way to start and end a working day
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        workingDate = formatter.format(date);
 
         BigDecimal CreditTotal;
         BigDecimal CashTotal = new BigDecimal("0.00");
