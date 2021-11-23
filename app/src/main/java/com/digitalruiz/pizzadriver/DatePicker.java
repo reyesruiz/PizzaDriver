@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.TextView;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,11 +19,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
+import kotlin.Pair;
 
 
 public class DatePicker extends AppCompatActivity {
     String selectedDate;
     String workingDate;
+    private Button mPickDateButton;
+    private TextView mShowSelectedDateText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +43,11 @@ public class DatePicker extends AppCompatActivity {
 
         }
 
-        // Create the calendar view
-        CalendarView datePicker = this.findViewById(R.id.datePicker);
         // Create a calendar instance inside the system
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         // Date Formatter to transform date from calendar instance to a simple date format
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         // Date formatted (This will be today's date)
         selectedDate = formatter.format(cal.getTime());
         Log.d("TEST", "onCreate: " + selectedDate);
@@ -51,26 +59,32 @@ public class DatePicker extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Now we set the calendar view to the date passed.
-        datePicker.setDate(cal.getTimeInMillis());
+        MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        materialDateBuilder.setTitleText("SELECT A DATE");
+        materialDateBuilder.setSelection(cal.getTimeInMillis());
+        final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
 
-        // Now accessing the calendar view to see if user selected something else.
-        datePicker.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+        mPickDateButton = findViewById(R.id.pick_date_button);
+        mShowSelectedDateText = findViewById(R.id.show_selected_date);
+
+        mPickDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                // Grabbing the selected date from calendar view, then updating the calendar from the system
-                cal.set(year, month, dayOfMonth);
-                // Converting that date that was set in the system calendar to the formatted version
-                selectedDate = formatter.format(cal.getTime());
-                Log.d("TEST", "onCreate: " + selectedDate);
+            public void onClick(View v) {
+                materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
             }
         });
 
-        Button setDateBtn = this.findViewById(R.id.btn_set_date);
-        setDateBtn.setOnClickListener(new View.OnClickListener() {
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
             @Override
-            public void onClick(View v) {
-                Log.d("TEST", "onClick: " + selectedDate);
+            public void onPositiveButtonClick(Long selection) {
+                mShowSelectedDateText.setText("Current Selected Date is : " + materialDatePicker.getHeaderText());
+                // Setting the system calendar to the one selected from the picker.
+                cal.setTimeInMillis(selection);
+                cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+                // Converting that date that was set in the system calendar to the formatted version
+                selectedDate = formatter.format(cal.getTimeInMillis());
+                Log.d("TEST", "onPositiveButtonClick: " + selection);
                 Intent BackToMain = new Intent(DatePicker.this, MainActivity.class);
                 BackToMain.putExtra("SelectedDate", selectedDate);
                 startActivity(BackToMain);

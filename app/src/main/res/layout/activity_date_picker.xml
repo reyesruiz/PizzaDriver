@@ -15,14 +15,25 @@
         android:inputType="textPersonName"
         android:text="Choose a Date" />
 
-    <CalendarView
-        android:id="@+id/datePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btn_set_date"
-        android:layout_width="match_parent"
+    <!--simple text view to show the selected date by the user-->
+    <TextView
+        android:id="@+id/show_selected_date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Date" />
+        android:layout_gravity="center"
+        android:layout_marginTop="128dp"
+        android:text="Current Selected Date is : "
+        android:textSize="18sp" />
+
+    <!--button to open the material design date picker dialog-->
+    <Button
+        android:id="@+id/pick_date_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:text="Select Date"
+        android:textSize="18sp"
+         />
 </LinearLayout>
