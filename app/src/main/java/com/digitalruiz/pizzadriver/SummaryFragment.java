@@ -38,6 +38,21 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Intent intent = getActivity().getIntent();
+        if(intent != null){
+            workingDate = intent.getStringExtra("SelectedDate");
+            if (workingDate == null){
+                Date date = Calendar.getInstance().getTime();
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                workingDate = formatter.format(date);
+            }
+        }
+        else {
+            Date date = Calendar.getInstance().getTime();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            workingDate = formatter.format(date);
+        }
+
         TextView TipsCreditText = view.findViewById(R.id.tipsCredit);
         TextView TipsCashText = view.findViewById(R.id.tipsCash);
         TextView TipsTotalText = view.findViewById(R.id.tipsTotal);

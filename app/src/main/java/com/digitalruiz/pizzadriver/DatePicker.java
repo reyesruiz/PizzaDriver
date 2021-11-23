@@ -59,7 +59,7 @@ public class DatePicker extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
         materialDateBuilder.setTitleText("SELECT A DATE");
         materialDateBuilder.setSelection(cal.getTimeInMillis());
         final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
