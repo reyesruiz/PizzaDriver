@@ -54,11 +54,6 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //TODO Implement a way to start and end a working day
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        workingDate = formatter.format(date);
-
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> all_orders_ids;
