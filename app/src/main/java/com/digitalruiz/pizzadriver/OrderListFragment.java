@@ -54,6 +54,21 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Intent intent = getActivity().getIntent();
+        if(intent != null){
+            workingDate = intent.getStringExtra("SelectedDate");
+            if (workingDate == null){
+                Date date = Calendar.getInstance().getTime();
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                workingDate = formatter.format(date);
+            }
+        }
+        else {
+            Date date = Calendar.getInstance().getTime();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            workingDate = formatter.format(date);
+        }
+
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> all_orders_ids;
