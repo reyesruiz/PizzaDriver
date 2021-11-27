@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     String workingDate;
 
@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0,0);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.top_app_bar);
+        toolbar.setOnMenuItemClickListener(this);
         Intent intent = getIntent();
         if(intent != null){
             workingDate = intent.getStringExtra("SelectedDate");
@@ -49,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.startActivity(settings);
         });
 
-        ActionMenuItemView settings = findViewById(R.id.settings);
-
         SQLiteDBHelper pizzaDriverDB;
         pizzaDriverDB = new SQLiteDBHelper(this);
         pizzaDriverDB.getWritableDatabase();
@@ -64,4 +64,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.settings:
+                Intent date_picker = new Intent(MainActivity.this, DatePicker.class);
+                date_picker.putExtra("SelectedDate", workingDate);
+                MainActivity.this.startActivity(date_picker);
+                return true;
+        }
+        return false;
+    }
+
 }
