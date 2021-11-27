@@ -50,15 +50,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ActionMenuItemView settings = findViewById(R.id.settings);
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent date_picker = new Intent(MainActivity.this, DatePicker.class);
-                date_picker.putExtra("SelectedDate", workingDate);
-                MainActivity.this.startActivity(date_picker);
-            }
-        });
-
 
         SQLiteDBHelper pizzaDriverDB;
         pizzaDriverDB = new SQLiteDBHelper(this);
