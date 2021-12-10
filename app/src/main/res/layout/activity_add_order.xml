@@ -9,7 +9,6 @@
     android:orientation="vertical"
     tools:context=".AddOrder">
 
-
     <com.google.android.material.chip.Chip
         android:id="@+id/orderNumberChip"
         android:layout_width="wrap_content"
@@ -19,166 +18,17 @@
         android:textAlignment="textStart"
         app:ensureMinTouchTargetSize="true" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/orderType"
+    <include
+        layout="@layout/view_add_order_location"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:scrollbarStyle="insideOverlay"
-        app:singleSelection="true">
+        android:layout_height="wrap_content">
+    </include>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/creditAutoType"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/credit_auto" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/creditManualType"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/credit_manual" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/cashType"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cash" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/grubhubType"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/grubhub" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/levelUpType"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/levelup" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/otherType"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/other" />
-    </com.google.android.material.chip.ChipGroup>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tipStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/tip"
-            android:textAlignment="textStart"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="8"
-            android:hint="@string/zero_dot_zero_zero_text"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal"
-            android:textSize="18sp" />
-
-        <CheckBox
-            android:id="@+id/cashCheckedBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/cash_boolean"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/orderTotalStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/order_total"
-            android:textAlignment="textStart"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/orderTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="8"
-            android:hint="@string/zero_dot_zero_zero_text"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/cashReceivedStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/cash_received"
-            android:textAlignment="textStart"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/cashReceived"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="8"
-            android:hint="@string/zero_dot_zero_zero_text"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/OrderLocation"
+    <include
+        layout="@layout/view_add_order_tip"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/tracyChip"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tracy" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/mountainHouseChip"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mountain_house" />
-    </com.google.android.material.chip.ChipGroup>
+        android:layout_height="wrap_content">
+    </include>
 
     <Button
         android:id="@+id/saveButton"
