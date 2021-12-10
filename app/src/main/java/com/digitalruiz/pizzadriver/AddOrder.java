@@ -44,8 +44,12 @@ public class AddOrder extends AppCompatActivity {
     public EditText orderTotalEditText;
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
+    public TextView tipCounterText;
+
 
     final String TAG = "TEST";
+
+    String TipConuterString = "0 of 0";
     String orderType;
     String OrderLocation;
     Integer orderNumber;
@@ -109,6 +113,9 @@ public class AddOrder extends AppCompatActivity {
 
         cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
 
+        tipCounterText = this.findViewById(R.id.TipCountText);
+        tipCounterText.setText(TipConuterString);
+
         //TODO Implement a way to start and end a working day
         Date date = Calendar.getInstance().getTime();
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -155,6 +162,9 @@ public class AddOrder extends AppCompatActivity {
             Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
             if (tip_result.getCount() >= 1){
                 //TODO Right now only moving to first, will need to implement multiple tips per order.
+                //HERE will need to iterate through all results.
+                TipConuterString = "1 of " + tip_result.getCount();
+                tipCounterText.setText(TipConuterString);
                 tip_result.moveToFirst();
                 TipId = tip_result.getInt(tip_result.getColumnIndex("TipId"));
                 String Amount = tip_result.getString(tip_result.getColumnIndex("Amount"));

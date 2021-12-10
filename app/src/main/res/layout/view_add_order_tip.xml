@@ -5,6 +5,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/TipCountText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textSize="18sp" />
+    </LinearLayout>
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/orderType"
         android:layout_width="wrap_content"
@@ -79,6 +93,7 @@
             android:hint="@string/zero_dot_zero_zero_text"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
+            android:textColorHint="#757575"
             android:textSize="18sp" />
 
         <CheckBox
@@ -114,7 +129,9 @@
             android:hint="@string/zero_dot_zero_zero_text"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
-            android:textSize="18sp" />
+            android:textColorHint="#757575"
+            android:textSize="18sp"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -141,6 +158,7 @@
             android:hint="@string/zero_dot_zero_zero_text"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
+            android:textColorHint="#757575"
             android:textSize="18sp" />
     </LinearLayout>
 
