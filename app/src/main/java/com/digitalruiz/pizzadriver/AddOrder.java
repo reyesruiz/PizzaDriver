@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,9 @@ public class AddOrder extends AppCompatActivity {
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
     public TextView tipCounterText;
+    public ImageView previousTipBtn;
+    public ImageView nextTipBtn;
+    public ImageView newTipBtn;
 
 
     final String TAG = "TEST";
@@ -116,6 +120,15 @@ public class AddOrder extends AppCompatActivity {
         tipCounterText = this.findViewById(R.id.TipCountText);
         tipCounterText.setText(TipConuterString);
 
+        previousTipBtn = this.findViewById(R.id.btn_previous_tip);
+        nextTipBtn = this.findViewById(R.id.btn_next_tip);
+        newTipBtn = this.findViewById(R.id.btn_new_tip);
+
+        previousTipBtn.setVisibility(View.INVISIBLE);
+        nextTipBtn.setVisibility(View.INVISIBLE);
+        newTipBtn.setVisibility(View.INVISIBLE);
+
+
         //TODO Implement a way to start and end a working day
         Date date = Calendar.getInstance().getTime();
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -164,8 +177,9 @@ public class AddOrder extends AppCompatActivity {
                 //TODO Right now only moving to first, will need to implement multiple tips per order.
                 //HERE will need to iterate through all results.
                 TipConuterString = "1 of " + tip_result.getCount();
+                newTipBtn.setVisibility(View.VISIBLE);
                 tipCounterText.setText(TipConuterString);
-                tip_result.moveToFirst();
+                tip_result.moveToPosition(0);
                 TipId = tip_result.getInt(tip_result.getColumnIndex("TipId"));
                 String Amount = tip_result.getString(tip_result.getColumnIndex("Amount"));
                 String Type = tip_result.getString(tip_result.getColumnIndex("Type"));
