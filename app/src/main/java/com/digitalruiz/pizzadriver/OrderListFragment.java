@@ -198,6 +198,7 @@ public class OrderListFragment extends Fragment {
             orderNumberChip.setOnClickListener(v -> {
                 Intent addOrderIntent = new Intent(getActivity(), AddOrder.class);
                 addOrderIntent.putExtra("orderNumber", orderNumber);
+                addOrderIntent.putExtra("SelectedDate", workingDate);
                 startActivity(addOrderIntent);
             });
             orderNumberChip.setOnLongClickListener(v -> {

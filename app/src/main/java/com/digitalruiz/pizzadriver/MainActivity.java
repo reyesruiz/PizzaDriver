@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         addOrder.setOnClickListener(view -> {
             Intent addOrderIntent = new Intent(MainActivity.this, addOrderNumber.class);
+            addOrderIntent.putExtra("SelectedDate", workingDate);
             MainActivity.this.startActivity(addOrderIntent);
         });
 

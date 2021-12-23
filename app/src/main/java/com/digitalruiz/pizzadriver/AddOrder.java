@@ -78,6 +78,7 @@ public class AddOrder extends AppCompatActivity {
 
         Intent intent = getIntent();
         orderNumber = Objects.requireNonNull(intent.getExtras()).getInt("orderNumber");
+        workingDate = Objects.requireNonNull(intent.getExtras()).getString("SelectedDate");
 
 
         pizzaDriverDB = new SQLiteDBHelper(this);
@@ -109,15 +110,7 @@ public class AddOrder extends AppCompatActivity {
 
         cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
 
-        //TODO Implement a way to start and end a working day
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        workingDate = formatter.format(date);
-
-
         orderNumberChip.setText(orderNumber.toString());
-
-
 
         Log.v("test", "bla" + "");
 
@@ -351,6 +344,7 @@ public class AddOrder extends AppCompatActivity {
 
 
                 Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
+                BackToMain.putExtra("SelectedDate", workingDate);
 
                 if (OrderId >= 1) {
                     int OrderUpdateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID);
