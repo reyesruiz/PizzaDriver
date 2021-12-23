@@ -8,13 +8,19 @@ import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import java.util.Objects;
 
 public class addOrderNumber extends AppCompatActivity {
+
+    String workingDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_order_number);
+
+        Intent intent = getIntent();
+        workingDate = Objects.requireNonNull(intent.getExtras()).getString("SelectedDate");
 
         final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         final EditText orderNumberText = this.findViewById(R.id.orderNumber);
@@ -29,6 +35,7 @@ public class addOrderNumber extends AppCompatActivity {
                 int orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
                 Intent addOrderIntent = new Intent(addOrderNumber.this, AddOrder.class);
                 addOrderIntent.putExtra("orderNumber", orderNumber);
+                addOrderIntent.putExtra("SelectedDate", workingDate);
                 startActivity(addOrderIntent);
             }
             return false;
