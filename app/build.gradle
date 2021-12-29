@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
 android {
     compileSdkVersion 31
     buildToolsVersion '31.0.0'
@@ -39,9 +36,12 @@ android {
 
 
     buildTypes {
+        def localProperties = new Properties()
+        localProperties.load(new FileInputStream(rootProject.file("local.properties")))
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "API_KEY", "\"" + localProperties['places_api_key'] + "\"")
 
         }
 
