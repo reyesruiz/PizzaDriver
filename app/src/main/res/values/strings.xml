@@ -59,5 +59,6 @@
     <string name="more">more</string>
     <string name="add_description">Add new order number</string>
     <string name="change_order_number">Change order number</string>
+    <string name="add_location">Add Location</string>
 
 </resources>
