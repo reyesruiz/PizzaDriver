@@ -39,6 +39,8 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0,0);
+
         setContentView(R.layout.activity_main_locations);
 
         Toolbar toolbar = findViewById(R.id.locations_toolbar);

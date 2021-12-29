@@ -7,44 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainLocationsActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.MyApp">
+    <include layout="@layout/main_locations_coordinator_layout"></include>
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/locations_toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:menu="@menu/top_app_bar_locations"
-            app:navigationIcon="@drawable/ic_baseline_menu_24"
-            app:popupTheme="@style/Theme.MyApp"
-            app:title="@string/title_activity_main" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Note: A RecyclerView can also be used -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <!-- Scrollable content -->
-
-    </androidx.core.widget.NestedScrollView>
-
-
-    <TextView
-        android:id="@+id/locationResultText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <Button
-        android:id="@+id/find_location_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Find Location" />
 </LinearLayout>
