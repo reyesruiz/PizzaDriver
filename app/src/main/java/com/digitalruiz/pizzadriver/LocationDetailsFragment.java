@@ -33,7 +33,8 @@ public class LocationDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = this.getArguments();
-        Log.d(TAG, "onViewCreated: " + bundle);
+        Log.d(TAG, "Details: " + bundle);
+        Log.d(TAG, "onViewCreated: " + "BLAA");
         int AddressId = bundle.getInt("ADDRESS_ID");
 
         AddressText = view.findViewById(R.id.AddressTextView);

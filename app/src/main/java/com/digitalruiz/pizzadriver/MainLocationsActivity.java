@@ -3,6 +3,7 @@ package com.digitalruiz.pizzadriver;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -87,9 +88,25 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                 pizzaDriverDB.getWritableDatabase();
 
                 long insert_result_location_address = pizzaDriverDB.insertLocationAddress(place.getId(), place.getName(), place.getAddress(), place.getAddressComponents().toString());
+                Log.d(TAG, "onActivityResult: " + insert_result_location_address);
+                if (insert_result_location_address > 0){
 
-                finish();
-                startActivity(getIntent());
+                    int AddressId;
+                    AddressId = ((int) insert_result_location_address);
+
+                    Bundle bundle;
+                    bundle = new Bundle();
+                    bundle.putInt("ADDRESS_ID", AddressId);
+                    Log.d(TAG, "Bzz: " + bundle);
+
+                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                            .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
+
+                }
+                else {
+                    //TODO check if exists in database otherwise show error.
+                }
+
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
