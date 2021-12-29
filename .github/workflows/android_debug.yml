@@ -59,6 +59,11 @@ jobs:
           property: 'VERSION_BUILD'
           value: ${{ steps.new_version_build.outputs.value }}
 
+      - name: Access PLACES_API_KEY
+        env:
+          APOD_API_KEY: ${{ secrets.API_KEY }}
+        run: echo APOD_API_KEY=\"$API_KEY\" > ./local.properties
+
       - name: Build all artifacts
         id: buildAllApks
         run: ./gradlew build assembleDebug bundleDebug
