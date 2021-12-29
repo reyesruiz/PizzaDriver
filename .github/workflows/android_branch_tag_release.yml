@@ -35,6 +35,11 @@ jobs:
           path: 'app/version.properties'
           property: 'VERSION_PATCH'
 
+      - name: Access PLACES_API_KEY
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: echo API_KEY=\"$API_KEY\" > ./local.properties
+
       - name: Build all artifacts
         id: buildAllApks
         run: ./gradlew build assembleRelease bundleRelease
