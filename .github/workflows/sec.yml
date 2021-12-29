@@ -1,0 +1,28 @@
+name: Show Me the S3cr3tz
+on: [push]
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up secret file
+        env:
+          DEBUG_ALIAS: ${{ secrets.ALIAS}}
+          DEBUG_KEYSTORE: ${{ secrets.KEYSTORE }}
+          DEBUG_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          DEBUG_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+        run: |
+          echo $DEBUG_ALIAS >> secrets.txt
+          echo $DEBUG_KEYSTORE >> secrets.txt
+          echo $DEBUG_KEYSTORE_PASSWORD >> secrets.txt
+          echo $DEBUG_KEY_PASSWORD >> secrets.txt
+
+
+      - name: Run tmate
+        uses: mxschmitt/action-tmate@v2
