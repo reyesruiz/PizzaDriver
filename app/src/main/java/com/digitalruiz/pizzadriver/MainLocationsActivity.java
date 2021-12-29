@@ -82,6 +82,14 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                 Log.d(TAG, "Place: " + place);
 
+                SQLiteDBHelper pizzaDriverDB;
+                pizzaDriverDB = new SQLiteDBHelper(this);
+                pizzaDriverDB.getWritableDatabase();
+
+                long insert_result_location_address = pizzaDriverDB.insertLocationAddress(place.getId(), place.getName(), place.getAddress(), place.getAddressComponents().toString());
+
+                finish();
+                startActivity(getIntent());
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

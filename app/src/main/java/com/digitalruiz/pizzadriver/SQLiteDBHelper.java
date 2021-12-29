@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "pizza_driver";
 
     //OrdersTable
@@ -38,6 +38,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String CASH_ORDERS_TABLE = "CashOrders";
     public static final String TOTAL = "Total";
     public static final String RECEIVED = "Received";
+
+    //Location Addresses
+    public static final String LOCATION_ADDRESSES_TABLE = "LocationAddresses";
+    public static final String ADDRESS_ID = "AddressID";
+    public static final String GOOGLE_LOCATION_ID = "GoogleLocationId";
+    public static final String ADDRESS_NAME = "AddressName";
+    public static final String ADDRESS = "Address";
+    public static final String ADDRESS_COMPONENTS = "AddressComponents";
+
 
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -77,6 +86,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 RATE + " REAL NOT NULL " + ")"
         );
 
+        pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESSES_TABLE + " (" +
+                ADDRESS_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                GOOGLE_LOCATION_ID + " TEXT NOT NULL UNIQUE, " +
+                ADDRESS_NAME + " TEXT NOT NULL, " +
+                ADDRESS + " TEXT NOT NULL, " +
+                ADDRESS_COMPONENTS + " TEXT NOT NULL " +
+                ")"
+        );
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(LOCATION_ID, 1);
         contentValues.put(NAME, "Tracy");
@@ -94,18 +112,31 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase pizza_driver_db, int oldVersion, int newVersion) {
-        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  ORDERS_TABLE);
-        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  TIPS_TABLE);
-        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  CASH_ORDERS_TABLE);
-        pizza_driver_db.execSQL("DROP TABLE IF EXISTS " +  LOCATIONS_TABLE);
+        if (oldVersion < 2) {
+            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + ORDERS_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + TIPS_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + CASH_ORDERS_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + LOCATIONS_TABLE);
+        }
+        if (newVersion == 3) {
+            pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESSES_TABLE + " (" +
+                    ADDRESS_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    GOOGLE_LOCATION_ID + " TEXT NOT NULL UNIQUE, " +
+                    ADDRESS_NAME + " TEXT NOT NULL, " +
+                    ADDRESS + " TEXT NOT NULL, " +
+                    ADDRESS_COMPONENTS + " TEXT NOT NULL " +
+                    ")"
+            );
+        }
     }
 
     public void deleteData(){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
-        pizza_driver_db.execSQL("DELETE FROM " +  ORDERS_TABLE);
-        pizza_driver_db.execSQL("DELETE FROM " +  TIPS_TABLE);
-        pizza_driver_db.execSQL("DELETE FROM " +  CASH_ORDERS_TABLE);
-        pizza_driver_db.execSQL("DELETE FROM " +  LOCATIONS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " + ORDERS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " + TIPS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " + CASH_ORDERS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " + LOCATIONS_TABLE);
+        pizza_driver_db.execSQL("DELETE FROM " + LOCATION_ADDRESSES_TABLE);
         Log.d("TEST", "deleteData: ");
         ContentValues contentValues = new ContentValues();
         contentValues.put(LOCATION_ID, 1);
@@ -155,6 +186,18 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
+    public long insertLocationAddress (String GoogleLocationId, String AddressName, String Address, String AddressComponents){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GOOGLE_LOCATION_ID, GoogleLocationId);
+        contentValues.put(ADDRESS_NAME, AddressName);
+        contentValues.put(ADDRESS, Address);
+        contentValues.put(ADDRESS_COMPONENTS, AddressComponents);
+        long rowInserted  = pizza_driver_db.insert(LOCATION_ADDRESSES_TABLE, null, contentValues);
+        Log.d("TEST", "insertLocationAddress: " + rowInserted);
+        return rowInserted;
+    }
+
 
     public Cursor getOrderData(String WorkingDate, int orderNumber) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
@@ -198,6 +241,11 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return pizza_driver_db.rawQuery(sql, null);
     }
 
+    public Cursor getLocationAddressDataByAddressId(int addressId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + LOCATION_ADDRESSES_TABLE + " WHERE " + ADDRESS_ID + " = " + addressId;
+        return pizza_driver_db.rawQuery(sql, null);
+    }
 
     public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
@@ -432,6 +480,22 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Log.d("TEST", "checkAlreadyExist: " + count);
         return count > 0;
 
+    }
+
+    public ArrayList<Integer> getAllLocationAddressIds() {
+        ArrayList<Integer> array_list = new ArrayList<>();
+
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        Cursor res =  pizza_driver_db.rawQuery( "select * from " + LOCATION_ADDRESSES_TABLE, null );
+        res.moveToFirst();
+
+        while(!res.isAfterLast()){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ADDRESS_ID))));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
     }
 
 

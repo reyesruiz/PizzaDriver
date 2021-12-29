@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/LocationListFragment"
-        android:name="com.digitalruiz.pizzadriver.location_list"
+        android:name="com.digitalruiz.pizzadriver.LocationListFragment"
         android:label="Location List Fragment"
         tools:layout="@layout/fragment_location_list">
 
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/LocationDetailFragment"
-        android:name="com.digitalruiz.pizzadriver.location_details"
+        android:name="com.digitalruiz.pizzadriver.LocationDetailsFragment"
         android:label="Location Details Fragment"
         tools:layout="@layout/fragment_location_details">
 
