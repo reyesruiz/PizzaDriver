@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
 
 import java.text.DateFormat;
@@ -73,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 Intent date_picker = new Intent(MainActivity.this, DatePicker.class);
                 date_picker.putExtra("SelectedDate", workingDate);
                 MainActivity.this.startActivity(date_picker);
+                return true;
+            case R.id.add_location:
+                Intent find_place = new Intent(MainActivity.this, MainLocationsActivity.class);
+                find_place.putExtra("SelectedDate", workingDate);
+                MainActivity.this.startActivity(find_place);
                 return true;
         }
         return false;

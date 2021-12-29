@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/LocationListFragment">
+
+    <fragment
+        android:id="@+id/LocationListFragment"
+        android:name="com.digitalruiz.pizzadriver.LocationListFragment"
+        android:label="Location List Fragment"
+        tools:layout="@layout/fragment_location_list">
+
+        <action
+            android:id="@+id/action_LocationListFragment_to_DetailsFragment"
+            app:destination="@id/LocationDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/LocationDetailFragment"
+        android:name="com.digitalruiz.pizzadriver.LocationDetailsFragment"
+        android:label="Location Details Fragment"
+        tools:layout="@layout/fragment_location_details">
+
+        <action
+            android:id="@+id/action_DetailsFragment_to_LocationListFragment"
+            app:destination="@id/LocationListFragment" />
+    </fragment>
+</navigation>

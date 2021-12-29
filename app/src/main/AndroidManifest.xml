@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
         <activity
+            android:name=".MainLocationsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DatePicker"
             android:exported="false" />
         <activity android:name=".settings" />

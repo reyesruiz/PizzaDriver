@@ -51,6 +51,10 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
+      - name: Access PLACES_API_KEY
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: echo API_KEY=\"$API_KEY\" > ./local.properties
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
