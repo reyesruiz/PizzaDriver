@@ -8,6 +8,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavHostController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,12 +108,12 @@ public class LocationListFragment extends Fragment {
             addressNameChip.setEnsureMinTouchTargetSize(false);
             addressNameChip.setText(AddressName);
             addressNameChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            //addressNameChip.setOnClickListener(v -> {
-            //    Intent addOrderIntent = new Intent(getActivity(), AddOrder.class);
-            //    addOrderIntent.putExtra("orderNumber", orderNumber);
-            //    addOrderIntent.putExtra("SelectedDate", workingDate);
-            //    startActivity(addOrderIntent);
-            //});
+            Bundle bundle;
+            bundle = new Bundle();
+            bundle.putInt("ADDRESS_ID", AddressId);
+
+            addressNameChip.setOnClickListener(v -> NavHostFragment.findNavController(LocationListFragment.this)
+                    .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle));
             //addressNameChip.setOnLongClickListener(v -> {
              //   showPopup(v, orderNumber, orderId);
               //  return true;
