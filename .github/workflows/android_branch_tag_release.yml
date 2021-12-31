@@ -4,22 +4,12 @@ on:
     branches:
       - main
       - 2.0.x
-    inputs:
-      debug_enabled:
-        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
-        required: false
-        default: false
 
 jobs:
   branch-tag-release:
     runs-on: ubuntu-latest
 
     steps:
-      # Enable tmate debugging of manually-triggered workflows if the input option was provided
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
-
       - name: Checkout the code
         uses: actions/checkout@v2
         with:
@@ -48,7 +38,7 @@ jobs:
       - name: Access PLACES_API_KEY
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: echo API_KEY=\"$API_KEY\" > ./local.properties
+        run: echo places_api_key=\"$API_KEY\" > ./local.properties
 
       - name: Build all artifacts
         id: buildAllApks
