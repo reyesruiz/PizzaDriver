@@ -52,11 +52,11 @@ jobs:
           script: echo "Generated AVD snapshot for caching."
 
       - name: Access PLACES_API_KEY
-          uses: christian-draeger/write-properties@1.0.1
-          with:
-            path: 'local.properties'
-            property: 'places_api_key'
-            value: \"${{ secrets.API_KEY }}\"
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'local.properties'
+          property: 'places_api_key'
+          value: \"${{ secrets.API_KEY }}\"
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
