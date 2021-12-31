@@ -54,7 +54,7 @@ jobs:
       - name: Access PLACES_API_KEY
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: echo places_api_key=\"$API_KEY\" > ./local.properties
+        run: echo places_api_key=$API_KEY > ./local.properties
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
