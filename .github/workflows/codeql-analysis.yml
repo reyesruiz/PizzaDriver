@@ -61,9 +61,11 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
 
     - name: Access PLACES_API_KEY
-      env:
-        API_KEY: ${{ secrets.API_KEY }}
-      run: echo places_api_key=\"$API_KEY\" > ./local.properties
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'local.properties'
+          property: 'places_api_key'
+          value: \"${{ secrets.API_KEY }}\"
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
