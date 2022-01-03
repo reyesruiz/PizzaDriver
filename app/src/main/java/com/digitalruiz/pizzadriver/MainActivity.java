@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
     String workingDate;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             addOrderIntent.putExtra("SelectedDate", workingDate);
             MainActivity.this.startActivity(addOrderIntent);
         });
-
 
     }
 

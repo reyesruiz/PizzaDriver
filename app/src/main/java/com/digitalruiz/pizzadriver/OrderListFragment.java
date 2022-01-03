@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -248,9 +249,6 @@ public class OrderListFragment extends Fragment {
 
         button_first.setOnClickListener(v -> NavHostFragment.findNavController(OrderListFragment.this)
                 .navigate(R.id.action_OrderListFragment_to_SummaryFragment));
-
-
-
 
     }
 

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_OrderListFragment_to_SummaryFragment"
             app:destination="@id/SummaryFragment" />
+        <action
+            android:id="@+id/action_OrderListFragment_to_fragmentAddOrderNumber"
+            app:destination="@id/fragmentAddOrderNumber" />
     </fragment>
     <fragment
         android:id="@+id/SummaryFragment"
@@ -23,5 +26,18 @@
         <action
             android:id="@+id/action_SummaryFragment_to_OrderListFragment"
             app:destination="@id/OrderListFragment" />
+        <action
+            android:id="@+id/action_SummaryFragment_to_fragmentAddOrderNumber"
+            app:destination="@id/fragmentAddOrderNumber" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentAddOrderNumber"
+        android:name="com.digitalruiz.pizzadriver.FragmentAddOrderNumber"
+        android:label="fragment_add_order_number"
+        tools:layout="@layout/fragment_add_order_number" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.digitalruiz.pizzadriver.MainActivity"
+        android:label="main_coordinator_layout"
+        tools:layout="@layout/main_coordinator_layout" />
 </navigation>
