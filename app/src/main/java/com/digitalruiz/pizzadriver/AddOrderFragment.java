@@ -1,42 +1,46 @@
 package com.digitalruiz.pizzadriver;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.icu.math.BigDecimal;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link AddOrderFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 
-public class AddOrder extends AppCompatActivity {
-
-
+public class AddOrderFragment extends Fragment {
     public TextView TipText;
     public EditText tipEditText;
     public CheckBox cashCheckedBox;
@@ -67,48 +71,91 @@ public class AddOrder extends AppCompatActivity {
     int TipId;
     int CashOrderId;
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "SelectedDate";
+    private static final String ARG_PARAM2 = "orderNumber";
 
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private int mParam2;
 
+    public AddOrderFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment AddOrderFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static AddOrderFragment newInstance(String param1, String param2) {
+        AddOrderFragment fragment = new AddOrderFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_order);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getInt(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_add_order, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        workingDate = mParam1;
+        orderNumber = mParam2;
+
+        Bundle b = new Bundle();
+        b.putString("SelectedDate", workingDate);
 
 
-        Intent intent = getIntent();
-        orderNumber = Objects.requireNonNull(intent.getExtras()).getInt("orderNumber");
-        workingDate = Objects.requireNonNull(intent.getExtras()).getString("SelectedDate");
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
+        SaveButton = view.findViewById(R.id.saveButton);
 
+        final Chip orderNumberChip = view.findViewById(R.id.orderNumberChip);
 
-        pizzaDriverDB = new SQLiteDBHelper(this);
-        SaveButton = findViewById(R.id.saveButton);
+        final ChipGroup orderTypeChipGroup = view.findViewById(R.id.orderType);
 
-        final Chip orderNumberChip = this.findViewById(R.id.orderNumberChip);
+        final Chip creditAutoChip = view.findViewById(R.id.creditAutoType);
+        final Chip creditManualChip = view.findViewById(R.id.creditManualType);
+        final Chip cashChip = view.findViewById(R.id.cashType);
+        final Chip grubhubChip = view.findViewById(R.id.grubhubType);
+        final Chip levelUpChip = view.findViewById(R.id.levelUpType);
+        final Chip otherChip = view.findViewById(R.id.otherType);
 
-        final ChipGroup orderTypeChipGroup = findViewById(R.id.orderType);
+        final ChipGroup orderLocationChipGroup = view.findViewById(R.id.OrderLocation);
 
-        final Chip creditAutoChip = this.findViewById(R.id.creditAutoType);
-        final Chip creditManualChip = this.findViewById(R.id.creditManualType);
-        final Chip cashChip = this.findViewById(R.id.cashType);
-        final Chip grubhubChip = this.findViewById(R.id.grubhubType);
-        final Chip levelUpChip = this.findViewById(R.id.levelUpType);
-        final Chip otherChip = this.findViewById(R.id.otherType);
+        final Chip tracyChip = view.findViewById(R.id.tracyChip);
+        final Chip mountainHouseChip = view.findViewById(R.id.mountainHouseChip);
 
-        final ChipGroup orderLocationChipGroup = findViewById(R.id.OrderLocation);
+        TipText = view.findViewById(R.id.tipStatic);
+        orderTotalText = view.findViewById(R.id.orderTotalStatic);
+        cashReceivedText = view.findViewById(R.id.cashReceivedStatic);
 
-        final Chip tracyChip = this.findViewById(R.id.tracyChip);
-        final Chip mountainHouseChip = this.findViewById(R.id.mountainHouseChip);
+        tipEditText = view.findViewById(R.id.tip);
+        orderTotalEditText = view.findViewById(R.id.orderTotal);
+        cashReceivedEditText = view.findViewById(R.id.cashReceived);
 
-        TipText = findViewById(R.id.tipStatic);
-        orderTotalText = findViewById(R.id.orderTotalStatic);
-        cashReceivedText = findViewById(R.id.cashReceivedStatic);
-
-        tipEditText = findViewById(R.id.tip);
-        orderTotalEditText = findViewById(R.id.orderTotal);
-        cashReceivedEditText = findViewById(R.id.cashReceived);
-
-        cashCheckedBox = this.findViewById(R.id.cashCheckedBox);
+        cashCheckedBox = view.findViewById(R.id.cashCheckedBox);
 
         orderNumberChip.setText(orderNumber.toString());
 
@@ -142,7 +189,7 @@ public class AddOrder extends AppCompatActivity {
                         //Nothing
                         break;
                 }
-                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId));
+                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId, b));
 
             }
             Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
@@ -278,8 +325,6 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
-
-
         SaveButton.setOnClickListener(v -> {
             Log.v("Test", "Selected " + orderTypeChipGroup.getCheckedChipId());
             int OrderTypeSelectedChipID = orderTypeChipGroup.getCheckedChipId();
@@ -291,7 +336,7 @@ public class AddOrder extends AppCompatActivity {
                 error = true;
             }
             else {
-                Chip OrderTypeSelectedChip = findViewById(OrderTypeSelectedChipID);
+                Chip OrderTypeSelectedChip = view.findViewById(OrderTypeSelectedChipID);
                 orderType = OrderTypeSelectedChip.getText().toString();
             }
 
@@ -300,7 +345,7 @@ public class AddOrder extends AppCompatActivity {
                 error = true;
             }
             else {
-                Chip OrderLocationSelectedChip = findViewById(OrderLocationSelectedChipID);
+                Chip OrderLocationSelectedChip = view.findViewById(OrderLocationSelectedChipID);
                 OrderLocation = OrderLocationSelectedChip.getText().toString();
                 //TODO set this programatically
                 if (OrderLocation.equals("Tracy")){
@@ -311,7 +356,7 @@ public class AddOrder extends AppCompatActivity {
                 }
             }
             if (error){
-                Toast toast = Toast.makeText(getApplicationContext(), "Please select all options", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getContext(), "Please select all options", Toast.LENGTH_LONG);
                 toast.show();
             }
             else {
@@ -343,9 +388,6 @@ public class AddOrder extends AppCompatActivity {
                 }
 
 
-                Intent BackToMain = new Intent(AddOrder.this, MainActivity.class);
-                BackToMain.putExtra("SelectedDate", workingDate);
-
                 if (OrderId >= 1) {
                     int OrderUpdateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID);
                     if (OrderUpdateResult == 1){
@@ -368,12 +410,13 @@ public class AddOrder extends AppCompatActivity {
                                 }
                             }
                         }
-                        Toast updateToast = Toast.makeText(getApplicationContext(), "Update Success", Toast.LENGTH_SHORT);
+                        Toast updateToast = Toast.makeText(getContext(), "Update Success", Toast.LENGTH_SHORT);
                         updateToast.show();
-                        startActivity(BackToMain);
+                        NavHostFragment.findNavController(AddOrderFragment.this)
+                                .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
                     }
                     else {
-                        Toast updateToast = Toast.makeText(getApplicationContext(), "Unable to update data", Toast.LENGTH_LONG);
+                        Toast updateToast = Toast.makeText(getContext(), "Unable to update data", Toast.LENGTH_LONG);
                         updateToast.show();
                     }
 
@@ -403,17 +446,18 @@ public class AddOrder extends AppCompatActivity {
                             data_inserted = false;
                         }
 
-                        startActivity(BackToMain);
+                        NavHostFragment.findNavController(AddOrderFragment.this)
+                                .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
 
                     } else {
                         data_inserted = false;
                     }
                     if (data_inserted){
-                        Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT);
                         toast.show();
                     }
                     else {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Unable to insert data", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getContext(), "Unable to insert data", Toast.LENGTH_LONG);
                         toast.show();
                     }
                 }
@@ -659,7 +703,7 @@ public class AddOrder extends AppCompatActivity {
     }
 
 
-    private void showPopup(View view, int OrderNumber, int OrderId) {
+    private void showPopup(View view, int OrderNumber, int OrderId, Bundle b) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.order_number_options, popup.getMenu());
@@ -683,8 +727,8 @@ public class AddOrder extends AppCompatActivity {
                 if (changed){
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
-                    Intent addOrderIntent = new Intent(AddOrder.this, MainActivity.class);
-                    startActivity(addOrderIntent);
+                    NavHostFragment.findNavController(AddOrderFragment.this)
+                            .navigate(R.id.action_addOrderFragment_to_OrderListFragment, b);
                 }
                 else {
                     Toast updateToast = Toast.makeText(view.getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
@@ -726,8 +770,8 @@ public class AddOrder extends AppCompatActivity {
             if (deleted) {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
                 deletedToast.show();
-                Intent addOrderIntent = new Intent(AddOrder.this, MainActivity.class);
-                startActivity(addOrderIntent);
+                NavHostFragment.findNavController(AddOrderFragment.this)
+                        .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
             }
             else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
@@ -824,6 +868,4 @@ public class AddOrder extends AppCompatActivity {
         cashReceivedText.setVisibility(TextView.VISIBLE);
         cashReceivedEditText.setVisibility(EditText.VISIBLE);
     }
-
 }
-

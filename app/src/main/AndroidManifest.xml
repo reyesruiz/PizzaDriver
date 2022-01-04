@@ -17,8 +17,6 @@
             android:name=".DatePicker"
             android:exported="false" />
         <activity android:name=".settings" />
-        <activity android:name=".addOrderNumber" />
-        <activity android:name=".AddOrder" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

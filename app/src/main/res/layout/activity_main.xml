@@ -8,8 +8,6 @@
 
     <include layout="@layout/main_coordinator_layout" />
 
-
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add"
         android:layout_width="wrap_content"
@@ -19,6 +17,5 @@
         app:tint="@color/white_50"
         app:srcCompat="@drawable/ic_baseline_add_24"
         android:contentDescription="@string/add_description" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
