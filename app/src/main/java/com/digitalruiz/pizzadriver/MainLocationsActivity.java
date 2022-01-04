@@ -52,14 +52,10 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
         Places.initialize(getApplicationContext(), apiKey);
         placesClient = Places.createClient(this);
 
-        Intent intent = getIntent();
-        if(intent != null){
-            workingDate = intent.getStringExtra("SelectedDate");
-            if (workingDate == null){
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
+        Bundle b = getIntent().getExtras();
+
+        if (b != null){
+            workingDate = b.getString("SelectedDate");
         }
         else {
             Date date = Calendar.getInstance().getTime();
@@ -99,8 +95,8 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                     bundle.putInt("ADDRESS_ID", AddressId);
                     Log.d(TAG, "Bzz: " + bundle);
 
-                    //NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                  //          .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
+                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                            .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
 
                 }
                 else {
