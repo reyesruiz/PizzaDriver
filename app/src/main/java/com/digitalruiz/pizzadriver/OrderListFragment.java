@@ -55,20 +55,20 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Intent intent = getActivity().getIntent();
-        if(intent != null){
-            workingDate = intent.getStringExtra("SelectedDate");
-            if (workingDate == null){
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
-        }
-        else {
+        if (savedInstanceState == null){
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
         }
+        else {
+            workingDate = getArguments().getString("SelectedDate");
+        }
+
+        Bundle bundleAddOrderNumber;
+        bundleAddOrderNumber = new Bundle();
+        bundleAddOrderNumber.putString("SelectedDate", workingDate);
+
+
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
@@ -197,10 +197,12 @@ public class OrderListFragment extends Fragment {
             orderNumberChip.setText(orderNumber.toString());
             orderNumberChip.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             orderNumberChip.setOnClickListener(v -> {
-                Intent addOrderIntent = new Intent(getActivity(), AddOrder.class);
-                addOrderIntent.putExtra("orderNumber", orderNumber);
-                addOrderIntent.putExtra("SelectedDate", workingDate);
-                startActivity(addOrderIntent);
+                Bundle bundleAddOrder;
+                bundleAddOrder = new Bundle();
+                bundleAddOrder.putString("SelectedDate", workingDate);
+                bundleAddOrder.putInt("orderNumber", orderNumber);
+                NavHostFragment.findNavController(OrderListFragment.this)
+                        .navigate(R.id.action_OrderListFragment_to_addOrderFragment, bundleAddOrder);
             });
             orderNumberChip.setOnLongClickListener(v -> {
                 showPopup(v, orderNumber, orderId);

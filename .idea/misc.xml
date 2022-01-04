@@ -19,11 +19,13 @@
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/content_location_list.xml" value="0.33061594202898553" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/content_order_list.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/date_picker.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_add_order.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_add_order_number.xml" value="0.30480072463768115" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_auto_complete_support.xml" value="0.15677083333333333" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_location_details.xml" value="0.33061594202898553" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_location_list.xml" value="0.33061594202898553" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_order_list.xml" value="0.20471014492753623" />
+        <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_select_date.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/fragment_summary.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/main_coordinator_layout.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/reyes/AndroidStudioProjects/PizzaDriver/app/src/main/res/layout/main_locations_coordinator_layout.xml" value="0.33061594202898553" />

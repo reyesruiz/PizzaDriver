@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -112,8 +113,11 @@ public class LocationListFragment extends Fragment {
             bundle = new Bundle();
             bundle.putInt("ADDRESS_ID", AddressId);
 
-            addressNameChip.setOnClickListener(v -> NavHostFragment.findNavController(LocationListFragment.this)
-                    .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle));
+            FloatingActionButton add = view.findViewById(R.id.add);
+
+
+           // addressNameChip.setOnClickListener(v -> NavHostFragment.findNavController(LocationListFragment.this)
+           //         .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle));
             //addressNameChip.setOnLongClickListener(v -> {
              //   showPopup(v, orderNumber, orderId);
               //  return true;

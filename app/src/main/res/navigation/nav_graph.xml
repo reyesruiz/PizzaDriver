@@ -14,8 +14,14 @@
             android:id="@+id/action_OrderListFragment_to_SummaryFragment"
             app:destination="@id/SummaryFragment" />
         <action
-            android:id="@+id/action_OrderListFragment_to_fragmentAddOrderNumber"
-            app:destination="@id/fragmentAddOrderNumber" />
+            android:id="@+id/action_OrderListFragment_to_addOrderNumber"
+            app:destination="@id/addOrderNumber" />
+        <action
+            android:id="@+id/action_OrderListFragment_to_selectDateFragment"
+            app:destination="@id/selectDateFragment" />
+        <action
+            android:id="@+id/action_OrderListFragment_to_addOrderFragment"
+            app:destination="@id/addOrderFragment" />
     </fragment>
     <fragment
         android:id="@+id/SummaryFragment"
@@ -27,14 +33,42 @@
             android:id="@+id/action_SummaryFragment_to_OrderListFragment"
             app:destination="@id/OrderListFragment" />
         <action
-            android:id="@+id/action_SummaryFragment_to_fragmentAddOrderNumber"
-            app:destination="@id/fragmentAddOrderNumber" />
+            android:id="@+id/action_SummaryFragment_to_addOrderNumber"
+            app:destination="@id/addOrderNumber" />
+        <action
+            android:id="@+id/action_SummaryFragment_to_selectDateFragment"
+            app:destination="@id/selectDateFragment" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentAddOrderNumber"
-        android:name="com.digitalruiz.pizzadriver.FragmentAddOrderNumber"
+        android:id="@+id/addOrderNumber"
+        android:name="com.digitalruiz.pizzadriver.AddOrderNumberFragment"
         android:label="fragment_add_order_number"
-        tools:layout="@layout/fragment_add_order_number" />
+        tools:layout="@layout/fragment_add_order_number" >
+        <action
+            android:id="@+id/action_addOrderNumber_to_addOrderFragment"
+            app:destination="@id/addOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addOrderFragment"
+        android:name="com.digitalruiz.pizzadriver.AddOrderFragment"
+        android:label="fragment_add_order"
+        tools:layout="@layout/fragment_add_order" >
+        <action
+            android:id="@+id/action_addOrderFragment_to_OrderListFragment"
+            app:destination="@id/OrderListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectDateFragment"
+        android:name="com.digitalruiz.pizzadriver.SelectDateFragment"
+        android:label="fragment_select_date"
+        tools:layout="@layout/fragment_select_date" >
+        <action
+            android:id="@+id/action_selectDateFragment_to_OrderListFragment"
+            app:destination="@id/OrderListFragment" />
+        <action
+            android:id="@+id/action_selectDateFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.digitalruiz.pizzadriver.MainActivity"

@@ -99,8 +99,8 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                     bundle.putInt("ADDRESS_ID", AddressId);
                     Log.d(TAG, "Bzz: " + bundle);
 
-                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
+                    //NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                  //          .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
 
                 }
                 else {
