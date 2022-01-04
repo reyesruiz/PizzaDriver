@@ -56,13 +56,20 @@ public class OrderListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState == null){
-            Date date = Calendar.getInstance().getTime();
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            workingDate = formatter.format(date);
+            Bundle b = getActivity().getIntent().getExtras();
+            if (b != null){
+                workingDate = b.getString("SelectedDate");
+            }
+            else {
+                Date date = Calendar.getInstance().getTime();
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                workingDate = formatter.format(date);
+            }
         }
         else {
             workingDate = getArguments().getString("SelectedDate");
         }
+        Log.d("TAG", "onViewCreateds: " + savedInstanceState);
 
         Bundle bundleAddOrderNumber;
         bundleAddOrderNumber = new Bundle();

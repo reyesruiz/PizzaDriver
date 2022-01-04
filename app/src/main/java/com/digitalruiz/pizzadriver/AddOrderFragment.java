@@ -124,6 +124,9 @@ public class AddOrderFragment extends Fragment {
         workingDate = mParam1;
         orderNumber = mParam2;
 
+        Bundle b = new Bundle();
+        b.putString("SelectedDate", workingDate);
+
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         SaveButton = view.findViewById(R.id.saveButton);
@@ -186,7 +189,7 @@ public class AddOrderFragment extends Fragment {
                         //Nothing
                         break;
                 }
-                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId, savedInstanceState));
+                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId, b));
 
             }
             Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
@@ -410,7 +413,7 @@ public class AddOrderFragment extends Fragment {
                         Toast updateToast = Toast.makeText(getContext(), "Update Success", Toast.LENGTH_SHORT);
                         updateToast.show();
                         NavHostFragment.findNavController(AddOrderFragment.this)
-                                .navigate(R.id.action_addOrderFragment_to_OrderListFragment, savedInstanceState);
+                                .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
                     }
                     else {
                         Toast updateToast = Toast.makeText(getContext(), "Unable to update data", Toast.LENGTH_LONG);
@@ -444,7 +447,7 @@ public class AddOrderFragment extends Fragment {
                         }
 
                         NavHostFragment.findNavController(AddOrderFragment.this)
-                                .navigate(R.id.action_addOrderFragment_to_OrderListFragment, savedInstanceState);
+                                .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
 
                     } else {
                         data_inserted = false;
@@ -700,7 +703,7 @@ public class AddOrderFragment extends Fragment {
     }
 
 
-    private void showPopup(View view, int OrderNumber, int OrderId, Bundle savedInstanceState) {
+    private void showPopup(View view, int OrderNumber, int OrderId, Bundle b) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.order_number_options, popup.getMenu());
@@ -725,7 +728,7 @@ public class AddOrderFragment extends Fragment {
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
                     NavHostFragment.findNavController(AddOrderFragment.this)
-                            .navigate(R.id.action_addOrderFragment_to_OrderListFragment, savedInstanceState);
+                            .navigate(R.id.action_addOrderFragment_to_OrderListFragment, b);
                 }
                 else {
                     Toast updateToast = Toast.makeText(view.getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
@@ -768,7 +771,7 @@ public class AddOrderFragment extends Fragment {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
                 deletedToast.show();
                 NavHostFragment.findNavController(AddOrderFragment.this)
-                        .navigate(R.id.action_addOrderFragment_to_OrderListFragment, savedInstanceState);
+                        .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
             }
             else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);

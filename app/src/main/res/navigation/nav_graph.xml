@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_addOrderFragment_to_OrderListFragment"
             app:destination="@id/OrderListFragment" />
+        <action
+            android:id="@+id/action_addOrderFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/selectDateFragment"
