@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         #API 30 not working it shows error log that it is not found.
-        api-level: [26,27,28,29,30,31]
+        api-level: [29,30,31]
         target: [default, google_apis]
     steps:
       - name: Checkout the code
