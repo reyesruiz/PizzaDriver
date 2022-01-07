@@ -141,6 +141,18 @@ public class LocationListFragment extends Fragment {
             WrapperTable.addView(Row);
         }
 
+        view.findViewById(R.id.buttonBackToOrdersList).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle;
+                bundle = new Bundle();
+                Log.d("TAG", "onClick: " + workingDate);
+                bundle.putString("SelectedDate", workingDate);
+                NavHostFragment.findNavController(LocationListFragment.this)
+                        .navigate(R.id.action_LocationListFragment_to_mainActivity, bundle);
+            }
+        });
+
 
     }
 
