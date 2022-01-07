@@ -6,18 +6,26 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHostController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -113,6 +121,11 @@ public class LocationListFragment extends Fragment {
             bundle = new Bundle();
             bundle.putInt("ADDRESS_ID", AddressId);
 
+            addressNameChip.setOnLongClickListener(v -> {
+                showPopup(v, AddressId);
+                return true;
+            });
+
             FloatingActionButton add = view.findViewById(R.id.add);
 
 
@@ -129,5 +142,32 @@ public class LocationListFragment extends Fragment {
         }
 
 
+    }
+
+    private void showPopup(View view, int AddressId) {
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.location_options, popup.getMenu());
+        popup.show();
+
+        MenuItem delete = popup.getMenu().findItem(R.id.location_delete);
+        delete.setOnMenuItemClickListener(v ->{
+            //TODO
+            Log.d("TEST", "showPopup: deleted");
+
+            boolean deleted = pizzaDriverDB.deleteLocationId(AddressId);
+            if (deleted) {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Location ID " + AddressId, Toast.LENGTH_SHORT);
+                deletedToast.show();
+            }
+            else {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Location ID " + AddressId + " , something wrong", Toast.LENGTH_LONG);
+                deletedToast.show();
+            }
+
+            getActivity().finish();
+            startActivity(getActivity().getIntent());
+            return deleted;
+        });
     }
 }
