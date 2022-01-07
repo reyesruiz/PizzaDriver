@@ -14,8 +14,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -129,18 +135,19 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.add_location:
-                if (!Places.isInitialized()) {
-                    Places.initialize(getApplicationContext(), apiKey);
-                }
-
+                //Tracy and Mountain house
+                RectangularBounds bounds = RectangularBounds.newInstance(
+                        new LatLng(37.638889, -121.619722),
+                        new LatLng(37.858754, -121.286388));
                 // Set the fields to specify which types of place data to return.
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS);
 
                 // Start the autocomplete intent.
                 Intent auto_complete_intent = new Autocomplete.IntentBuilder(
-                        AutocompleteActivityMode.FULLSCREEN, fields)
+                        AutocompleteActivityMode.FULLSCREEN, fields).setLocationBias(bounds).setTypeFilter(TypeFilter.ADDRESS)
                         .build(this);
 
+                //TODO work on on this deprecated call
                 startActivityForResult(auto_complete_intent, AUTOCOMPLETE_REQUEST_CODE);
                 return true;
         }

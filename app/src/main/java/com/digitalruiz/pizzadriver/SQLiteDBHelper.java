@@ -356,6 +356,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return row_deleted == 1;
     }
 
+    public boolean deleteLocationId (Integer AddressId) {
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        int row_deleted = pizza_driver_db.delete(LOCATION_ADDRESSES_TABLE,
+                ADDRESS_ID + " = ? ",
+                new String[] { Integer.toString(AddressId) });
+        Log.v("Test", "row deleted " + row_deleted);
+        return row_deleted == 1;
+    }
+
 
 
     public ArrayList<Integer> getAllOrders(String workingDate) {
