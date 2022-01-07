@@ -12,6 +12,7 @@ jobs:
       matrix:
         #API 30 not working it shows error log that it is not found.
         api-level: [26,27,28,29,30,31]
+        target: [default, google_apis]
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -57,10 +58,12 @@ jobs:
         run: echo places_api_key=$API_KEY > ./local.properties
 
       - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.22.0
         with:
           api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           arch: x86_64
+          profile: Nexus 6 
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
