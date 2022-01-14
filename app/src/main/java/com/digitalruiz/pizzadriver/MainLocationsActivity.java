@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainLocationsActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -89,26 +91,27 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                 pizzaDriverDB = new SQLiteDBHelper(this);
                 pizzaDriverDB.getWritableDatabase();
 
-                long insert_result_location_address = pizzaDriverDB.insertLocationAddress(place.getId(), place.getName(), place.getAddress(), place.getAddressComponents().toString());
-                Log.d(TAG, "onActivityResult: " + insert_result_location_address);
-                if (insert_result_location_address > 0){
 
-                    int AddressId;
-                    AddressId = ((int) insert_result_location_address);
-
-                    Bundle bundle;
-                    bundle = new Bundle();
+                int AddressId = pizzaDriverDB.getAddressIdByLocationId(place.getId());
+                Bundle bundle;
+                bundle = new Bundle();
+                if (AddressId > 0){
+                    Toast foundInDB = Toast.makeText(getApplicationContext(), "Found Address in DB", Toast.LENGTH_SHORT);
+                    foundInDB.show();
                     bundle.putInt("ADDRESS_ID", AddressId);
                     Log.d(TAG, "Bzz: " + bundle);
-
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
                             .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
-
                 }
                 else {
-                    //TODO check if exists in database otherwise show error.
+                    bundle.putString("placeId", place.getId());
+                    bundle.putString("placeName", place.getName());
+                    bundle.putString("placeAddress", place.getAddress());
+                    bundle.putString("placeAddressComponents", place.getAddressComponents().toString());
+                    Toast notFoundInDB = Toast.makeText(getApplicationContext(), "Not Found Address in DB", Toast.LENGTH_SHORT);
+                    notFoundInDB.show();
+                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment()).navigate(R.id.action_LocationListFragment_to_addLocationAddressFragment, bundle);
                 }
-
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
@@ -121,6 +124,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu)
