@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_DetailsFragment_to_LocationListFragment"
             app:destination="@id/LocationListFragment" />
+        <action
+            android:id="@+id/action_LocationDetailFragment_to_locationAddNoteFragment"
+            app:destination="@id/locationAddNoteFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -44,4 +47,9 @@
             android:id="@+id/action_addLocationAddressFragment_to_LocationDetailFragment"
             app:destination="@id/LocationDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/locationAddNoteFragment"
+        android:name="com.digitalruiz.pizzadriver.LocationAddNoteFragment"
+        android:label="fragment_location_add_note"
+        tools:layout="@layout/fragment_location_add_note" />
 </navigation>

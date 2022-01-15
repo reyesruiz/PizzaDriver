@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class LocationDetailsFragment extends Fragment {
@@ -39,6 +41,9 @@ public class LocationDetailsFragment extends Fragment {
 
         AddressText = view.findViewById(R.id.AddressTextView);
 
+        Button backToListButton = view.findViewById(R.id.backButton);
+        Button addNoteButton = view.findViewById(R.id.AddNoteButton);
+
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         Cursor location_address_result = pizzaDriverDB.getLocationAddressDataByAddressId(AddressId);
         location_address_result.moveToFirst();
@@ -48,9 +53,19 @@ public class LocationDetailsFragment extends Fragment {
 
         AddressText.setText(Address);
 
+        backToListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_DetailsFragment_to_LocationListFragment);
+            }
+        });
 
-
-
+        addNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_to_locationAddNoteFragment, bundle);
+            }
+        });
 
     }
 }
