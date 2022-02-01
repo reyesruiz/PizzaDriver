@@ -2,10 +2,12 @@ package com.digitalruiz.pizzadriver;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -21,6 +23,8 @@ import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +73,32 @@ public class LocationDetailsFragment extends Fragment {
         Address = location_address_result.getString(location_address_result.getColumnIndex("Address"));
 
         AddressText.setText(Address);
+
+        TableLayout WrapperTable = view.findViewById(R.id.wrapperTableNotes);
+        TableRow HeadLine = new TableRow(getContext());
+        HeadLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
+        HeadLine.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_1, requireContext().getTheme()));
+        HeadLine.setPadding(10, 10, 0, 10);
+        HeadLine.setDividerPadding(10);
+
+        TextView DateAddedStatic = new TextView(getContext());
+        DateAddedStatic.setText("DateAdded");
+        DateAddedStatic.setTypeface(DateAddedStatic.getTypeface(), Typeface.BOLD);
+        DateAddedStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        DateAddedStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, requireContext().getTheme()));
+        HeadLine.addView(DateAddedStatic);
+
+        TextView NoteStatic = new TextView(getContext());
+        NoteStatic.setText("Note");
+        NoteStatic.setTypeface(NoteStatic.getTypeface(), Typeface.BOLD);
+        NoteStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        NoteStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, requireContext().getTheme()));
+        HeadLine.addView(NoteStatic);
+
+        WrapperTable.addView(HeadLine);
+        ArrayList<Integer> NoteIds = new ArrayList<>();
+        NoteIds = pizzaDriverDB.getNoteIds(AddressId, SubdivisionId);
+
 
         ArrayList<Integer> SubDivisionsIds = new ArrayList<>();
         ArrayList<String> SubDivisions = new ArrayList<>();

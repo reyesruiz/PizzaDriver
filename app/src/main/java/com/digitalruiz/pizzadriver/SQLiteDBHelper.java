@@ -439,6 +439,30 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public ArrayList<Integer> getNoteIds(int AddressId, int SubId) {
+        ArrayList<Integer> array_list = new ArrayList<>();
+        //hp = new HashMap();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql;
+        if (SubId == 0){
+            sql = "SELECT " + NOTE_ID + " FROM " + LOCATION_ADDRESS_NOTES_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressId + "'" + " AND " + SUBDIVISION_ID + " is null";
+        }
+        else {
+            sql = "SELECT " + NOTE_ID + " FROM " + LOCATION_ADDRESS_NOTES_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressId + "'" + " AND " + SUBDIVISION_ID + " = " + "'" + SubId + "'";
+        }
+
+        Cursor res =  pizza_driver_db.rawQuery( sql, null );
+
+        res.moveToFirst();
+
+        while(!res.isAfterLast()){
+            array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(NOTE_ID))));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
+
     public boolean deleteCashOrder (Integer cashOrderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(CASH_ORDERS_TABLE,
