@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '16'
+          java-version: '17'
 
       - name: Gradle cache
         uses: actions/cache@v2

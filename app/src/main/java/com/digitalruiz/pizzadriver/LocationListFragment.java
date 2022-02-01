@@ -121,20 +121,20 @@ public class LocationListFragment extends Fragment {
             bundle = new Bundle();
             bundle.putInt("ADDRESS_ID", AddressId);
 
+            addressNameChip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavHostFragment.findNavController(LocationListFragment.this)
+                            .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
+                }
+            });
+
             addressNameChip.setOnLongClickListener(v -> {
                 showPopup(v, AddressId);
                 return true;
             });
 
-            FloatingActionButton add = view.findViewById(R.id.add);
 
-
-           // addressNameChip.setOnClickListener(v -> NavHostFragment.findNavController(LocationListFragment.this)
-           //         .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle));
-            //addressNameChip.setOnLongClickListener(v -> {
-             //   showPopup(v, orderNumber, orderId);
-              //  return true;
-            //});
 
             Row.addView(addressNameChip);
 
