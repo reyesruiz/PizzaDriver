@@ -3,11 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/show_map"
+        android:contentDescription="Map"
+        android:icon="@drawable/ic_outline_map_24"
+        android:title="@string/add_location"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/add_location"
         android:contentDescription="@string/add_location"
         android:icon="@drawable/ic_outline_add_location_24"
         android:title="@string/add_location"
         app:showAsAction="ifRoom" />
+
 
 
 </menu>

@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -17,6 +17,30 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Apartment, Unit, Space?" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerSubdivion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/buttonAddSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Apt, Space, etc?" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

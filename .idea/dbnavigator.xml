@@ -83,7 +83,7 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="30062629-dbd2-4bf9-86b6-9f4c7cde596d" active="true">
+      <connection id="30062629-dbd2-4bf9-86b6-9f4c7cde596d" active="true" signed="true">
         <database>
           <name value="Connection" />
           <description value="" />
@@ -170,7 +170,7 @@
           <object-name-filters />
         </object-filters>
       </connection>
-      <connection id="c5f9d598-1088-4553-bc2a-a6a3b4359bff" active="true">
+      <connection id="c5f9d598-1088-4553-bc2a-a6a3b4359bff" active="true" signed="true">
         <database>
           <name value="Connection 1" />
           <description value="" />
@@ -257,7 +257,7 @@
           <object-name-filters />
         </object-filters>
       </connection>
-      <connection id="c5744515-fec8-4633-bcff-4978de94f106" active="true">
+      <connection id="c5744515-fec8-4633-bcff-4978de94f106" active="true" signed="true">
         <database>
           <name value="Nexus5" />
           <description value="" />
@@ -344,7 +344,7 @@
           <object-name-filters />
         </object-filters>
       </connection>
-      <connection id="4b6a6ff3-c0f5-4ece-8237-0d058c760342" active="true">
+      <connection id="4b6a6ff3-c0f5-4ece-8237-0d058c760342" active="true" signed="true">
         <database>
           <name value="Connection 2" />
           <description value="" />

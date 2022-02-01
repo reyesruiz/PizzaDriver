@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.android.libraries.places.api.model.AddressComponents;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "pizza_driver";
 
     //OrdersTable
@@ -46,6 +48,11 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String ADDRESS_NAME = "AddressName";
     public static final String ADDRESS = "Address";
     public static final String ADDRESS_COMPONENTS = "AddressComponents";
+
+    //LocationAddressSubDivision
+    public static final String LOCATION_ADDRESS_SUBDIVISION_TABLE = "LocationAddressSubDivision";
+    public static final String SUBDIVISION_ID = "SubdivisionID";
+    public static final String SUBDIVISION = "SUBDIVISION";
 
 
     public SQLiteDBHelper(Context context) {
@@ -95,6 +102,14 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 ")"
         );
 
+        pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " (" +
+                SUBDIVISION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                ADDRESS_ID + " INTEGER NOT NULL, " +
+                SUBDIVISION + " TEXT NOT NULL, " +
+                "UNIQUE (" + ADDRESS_ID + "," + SUBDIVISION + ")" +
+                ")"
+        );
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(LOCATION_ID, 1);
         contentValues.put(NAME, "Tracy");
@@ -125,6 +140,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     ADDRESS_NAME + " TEXT NOT NULL, " +
                     ADDRESS + " TEXT NOT NULL, " +
                     ADDRESS_COMPONENTS + " TEXT NOT NULL " +
+                    ")"
+            );
+        }
+        if (newVersion == 4) {
+            pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " (" +
+                    SUBDIVISION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    ADDRESS_ID + " INTEGER NOT NULL, " +
+                    SUBDIVISION + " TEXT NOT NULL, " +
+                    "UNIQUE (" + ADDRESS_ID + "," + SUBDIVISION + ")" +
                     ")"
             );
         }
@@ -186,7 +210,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
-    public long insertLocationAddress (String GoogleLocationId, String AddressName, String Address, String AddressComponents){
+    public long insertLocationAddress (String GoogleLocationId, String AddressName, String Address, String
+        AddressComponents){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(GOOGLE_LOCATION_ID, GoogleLocationId);
@@ -195,6 +220,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(ADDRESS_COMPONENTS, AddressComponents);
         long rowInserted  = pizza_driver_db.insert(LOCATION_ADDRESSES_TABLE, null, contentValues);
         Log.d("TEST", "insertLocationAddress: " + rowInserted);
+        return rowInserted;
+    }
+
+    public long insertSubDivisionAddress(int AddressId, String Subdivision ) {
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ADDRESS_ID, AddressId);
+        contentValues.put(SUBDIVISION, Subdivision);
+        long rowInserted = pizza_driver_db.insert(LOCATION_ADDRESS_SUBDIVISION_TABLE, null, contentValues);
         return rowInserted;
     }
 
@@ -261,6 +295,32 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             return 0;
         }
     }
+
+    public ArrayList<String> getSubDivisionsByAddressID(int AddressID){
+        ArrayList<String> array_list = new ArrayList<>();
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT " + SUBDIVISION + " FROM " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressID + "'";
+        Cursor res = pizza_driver_db.rawQuery(sql, null);
+        res.moveToFirst();
+        while(!res.isAfterLast()){
+            array_list.add((res.getString(res.getColumnIndex(SUBDIVISION))));
+            res.moveToNext();
+        }
+        res.close();
+
+        return array_list;
+
+    }
+
+    public String getSubDivisionBySubId(int SubdivisionID){
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT " + SUBDIVISION + " FROM " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " WHERE " + SUBDIVISION_ID + " = " + "'" + SubdivisionID + "'";
+        Cursor res = pizza_driver_db.rawQuery(sql, null);
+        res.moveToFirst();
+        String SubNum = res.getString(res.getColumnIndex(SUBDIVISION));
+        return SubNum;
+    }
+
 
     public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID){
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();

@@ -137,6 +137,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
+        String currentFragment = (String) NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment()).getCurrentDestination().getLabel();
         switch (menuItem.getItemId()) {
             case R.id.add_location:
                 //Tracy and Mountain house
@@ -154,6 +155,16 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                 //TODO work on on this deprecated call
                 startActivityForResult(auto_complete_intent, AUTOCOMPLETE_REQUEST_CODE);
                 return true;
+            case R.id.show_map:
+                if (currentFragment.equals("Location List Fragment")) {
+                    Log.d("TAG", "onClick: " + currentFragment);
+                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                            .navigate(R.id.action_LocationListFragment_to_locationsMapFragment);
+                }
+                else {
+                    Log.d("TAG", "onClick: " + "Something Wrong");
+                }
+
         }
         return false;
     }

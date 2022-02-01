@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -90,6 +92,10 @@ public class addLocationAddressFragment extends Fragment {
         TextView AddressText = view.findViewById(R.id.AddressTextViewAdd);
         AddressText.setText(placeAddress);
 
+        Spinner subDivisionTypeSpinner = view.findViewById(R.id.apt_spinner);
+        EditText subDivision = view.findViewById(R.id.editTextSubdivision);
+
+
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,11 +114,22 @@ public class addLocationAddressFragment extends Fragment {
                 long insert_result_location_address = pizzaDriverDB.insertLocationAddress(placeId, placeName, placeAddress, placeAddressComponents);
 
                 if (insert_result_location_address > 0){
-                    int AddressId;
-                    AddressId = ((int) insert_result_location_address);
+                    int AddressId = (int) insert_result_location_address;
+                    int SubdivisionId = 0;
+                    if (subDivision.length() > 0){
+                        String subDivisionText = subDivision.getText().toString();
+                        long insert_subdivision_result = pizzaDriverDB.insertSubDivisionAddress(AddressId, subDivisionText);
+                        if (insert_subdivision_result > 0) {
+                            SubdivisionId = (int) insert_subdivision_result;
+                        }
+                        else {
+                            //TODO Toast failed
+                        }
+                    }
                     Bundle bundle;
                     bundle = new Bundle();
                     bundle.putInt("ADDRESS_ID", AddressId);
+                    bundle.putInt("SUBDIVISION_ID", SubdivisionId);
                     Log.d("TAG", "Bzz: " + bundle);
                     NavHostFragment.findNavController(addLocationAddressFragment.this)
                             .navigate(R.id.action_addLocationAddressFragment_to_LocationDetailFragment, bundle);

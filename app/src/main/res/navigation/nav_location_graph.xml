@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_LocationListFragment_to_addLocationAddressFragment"
             app:destination="@id/addLocationAddressFragment" />
+        <action
+            android:id="@+id/action_LocationListFragment_to_locationsMapFragment"
+            app:destination="@id/locationsMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/LocationDetailFragment"
@@ -32,6 +35,9 @@
         <action
             android:id="@+id/action_LocationDetailFragment_to_locationAddNoteFragment"
             app:destination="@id/locationAddNoteFragment" />
+        <action
+            android:id="@+id/action_LocationDetailFragment_self"
+            app:destination="@id/LocationDetailFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -52,4 +58,9 @@
         android:name="com.digitalruiz.pizzadriver.LocationAddNoteFragment"
         android:label="fragment_location_add_note"
         tools:layout="@layout/fragment_location_add_note" />
+    <fragment
+        android:id="@+id/locationsMapFragment"
+        android:name="com.digitalruiz.pizzadriver.LocationsMapFragment"
+        android:label="fragment_locations_map"
+        tools:layout="@layout/fragment_locations_map" />
 </navigation>
