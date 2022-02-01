@@ -42,12 +42,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [MAPS_API_KEY_FOR_MANIFEST: localProperties['places_api_key']]
             buildConfigField("String", "API_KEY", "\"" + localProperties['places_api_key'] + "\"")
             debuggable true
 
         }
 
         debug {
+            manifestPlaceholders = [MAPS_API_KEY_FOR_MANIFEST: localProperties['places_api_key']]
             buildConfigField("String", "API_KEY", "\"" + localProperties['places_api_key'] + "\"")
         }
     }
