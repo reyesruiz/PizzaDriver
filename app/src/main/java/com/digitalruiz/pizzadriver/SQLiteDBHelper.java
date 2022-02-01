@@ -317,6 +317,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return pizza_driver_db.rawQuery(sql, null);
     }
 
+    public Cursor getNoteData(int noteId){
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + LOCATION_ADDRESS_NOTES_TABLE + " WHERE " + NOTE_ID + " = " + noteId;
+        return pizza_driver_db.rawQuery(sql, null, null);
+    }
+
     public int getAddressIdByLocationId(String googleLocationId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT " + ADDRESS_ID + " FROM " + LOCATION_ADDRESSES_TABLE + " WHERE " + GOOGLE_LOCATION_ID + " = " + "'" + googleLocationId + "'";

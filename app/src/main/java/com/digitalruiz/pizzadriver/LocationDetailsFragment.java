@@ -99,6 +99,37 @@ public class LocationDetailsFragment extends Fragment {
         ArrayList<Integer> NoteIds = new ArrayList<>();
         NoteIds = pizzaDriverDB.getNoteIds(AddressId, SubdivisionId);
 
+        int counter = 0;
+        for (final int noteId: NoteIds){
+            counter = counter + 1;
+            Cursor result = pizzaDriverDB.getNoteData(noteId);
+            Log.d(TAG, "onViewCreatedCount: " + result.getCount());
+            result.moveToFirst();
+            String DateAdded = result.getString(result.getColumnIndex("DateAdded"));
+            String Note = result.getString(result.getColumnIndex("Note"));
+            TextView DateAddedText = new TextView(getContext());
+            DateAddedText.setText(DateAdded);
+            DateAddedText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+            TextView NoteText = new TextView(getContext());
+            NoteText.setText(Note);
+            NoteText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+            TableRow Row = new TableRow(getContext());
+            Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            Row.setPadding(0, 0, 0, 0);
+            if (counter % 2 == 0){
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
+            }
+            else {
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, getContext().getTheme()));
+
+            }
+            Row.addView(DateAddedText);
+            Row.addView(NoteText);
+
+            WrapperTable.addView(Row);
+        }
 
         ArrayList<Integer> SubDivisionsIds = new ArrayList<>();
         ArrayList<String> SubDivisions = new ArrayList<>();
@@ -131,34 +162,35 @@ public class LocationDetailsFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     String selected = SubDivisionSpinner.getSelectedItem().toString();
-                    if (selected.equals("")){
+                    if (selected.equals("")) {
                         bundle.putInt("SUBDIVISION_ID", 0);
                     }
                     String SubNum;
-                    if (SubdivisionId > 0){
+                    if (SubdivisionId > 0) {
                         SubNum = pizzaDriverDB.getSubDivisionBySubId(SubdivisionId);
-                    }
-                    else {
+                    } else {
                         SubNum = "";
                     }
-                    if (selected.equals(SubNum)){
+                    if (selected.equals(SubNum)) {
                         //nothing
-                    }
-                    else {
-                        Iterator iter2 = finalSubDivisionsIds.iterator();
-                        while (iter2.hasNext()) {
-                            String subDiv;
-                            int subId;
-                            subId = Integer.parseInt(iter2.next().toString());
-                            subDiv = pizzaDriverDB.getSubDivisionBySubId(subId);
-                            if (subDiv.equals(selected)){
-                                bundle.putInt("SUBDIVISION_ID", subId);
-                                NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_self, bundle);
+                    } else {
+                        if (selected.equals("")) {
+                            bundle.putInt("SUBDIVISION_ID", 0);
+                            NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_self, bundle);
+                        } else {
+                            Iterator iter2 = finalSubDivisionsIds.iterator();
+                            while (iter2.hasNext()) {
+                                String subDiv;
+                                int subId;
+                                subId = Integer.parseInt(iter2.next().toString());
+                                subDiv = pizzaDriverDB.getSubDivisionBySubId(subId);
+                                if (subDiv.equals(selected)) {
+                                    bundle.putInt("SUBDIVISION_ID", subId);
+                                    NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_self, bundle);
+                                }
                             }
                         }
                     }
-
-
                 }
 
                 @Override
