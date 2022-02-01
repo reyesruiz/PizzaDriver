@@ -26,12 +26,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/locationNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Add note" />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
@@ -44,7 +38,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tiping type" />
+            android:text="Tiping Type" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/noteTipStatus"
@@ -56,13 +50,6 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/noTipChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No Tip" />
-
-            <com.google.android.material.chip.Chip
                 android:id="@+id/roundUpChip"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
@@ -70,13 +57,40 @@
                 android:text="Round Up" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/runDownTip"
+                android:id="@+id/noTipChip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Tip" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/runDownTipChip"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Round Down" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cashTipChip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cash Tip" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/goodTipsChip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Good Tips" />
+
         </com.google.android.material.chip.ChipGroup>
 
+        <EditText
+            android:id="@+id/locationNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add note" />
 
         <Button
             android:id="@+id/saveNoteButton"

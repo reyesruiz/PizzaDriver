@@ -246,6 +246,19 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
+    public long insertLocationNote (int AddressId, int SubdivisionId, String Note, String DateAdded){
+        SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ADDRESS_ID, AddressId);
+        if (SubdivisionId > 0){
+            contentValues.put(SUBDIVISION_ID, SubdivisionId);
+        }
+        contentValues.put(NOTE, Note);
+        contentValues.put(DATE_ADDED, DateAdded);
+        long rowInserted  = pizza_driver_db.insert(LOCATION_ADDRESS_NOTES_TABLE, null, contentValues);
+        return rowInserted;
+    }
+
     public long insertSubDivisionAddress(int AddressId, String Subdivision ) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
