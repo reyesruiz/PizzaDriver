@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,10 +70,19 @@ public class LocationDetailsFragment extends Fragment {
 
         AddressText.setText(Address);
 
+        ArrayList<Integer> SubDivisionsIds = new ArrayList<>();
         ArrayList<String> SubDivisions = new ArrayList<>();
-        SubDivisions = pizzaDriverDB.getSubDivisionsByAddressID(AddressId);
+        SubDivisionsIds = pizzaDriverDB.getSubDivisionsByAddressID(AddressId);
 
-        if (SubDivisions.size() > 0){
+
+        if (SubDivisionsIds.size() > 0){
+            SubDivisions.add("");
+            Iterator iter = SubDivisionsIds.iterator();
+            while (iter.hasNext()) {
+                String subDiv;
+                subDiv = pizzaDriverDB.getSubDivisionBySubId(Integer.parseInt(iter.next().toString()));
+                SubDivisions.add(subDiv);
+            }
             ArrayAdapter<String> adapterList = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, SubDivisions);
             adapterList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             int i;
@@ -80,13 +90,54 @@ public class LocationDetailsFragment extends Fragment {
             if (SubdivisionId > 0){
                 String SubNum = pizzaDriverDB.getSubDivisionBySubId(SubdivisionId);
                 for(i=0; i < adapterList.getCount(); i++) {
-                    if(SubNum.trim().equals(adapterList.getItem(i).toString())){
+                    if(SubNum.trim().equals(adapterList.getItem(i))){
                         SubDivisionSpinner.setSelection(i);
                         break;
                     }
                 }
             }
+            ArrayList<Integer> finalSubDivisionsIds = SubDivisionsIds;
+            SubDivisionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String selected = SubDivisionSpinner.getSelectedItem().toString();
+                    if (selected.equals("")){
+                        bundle.putInt("SUBDIVISION_ID", 0);
+                    }
+                    String SubNum;
+                    if (SubdivisionId > 0){
+                        SubNum = pizzaDriverDB.getSubDivisionBySubId(SubdivisionId);
+                    }
+                    else {
+                        SubNum = "";
+                    }
+                    if (selected.equals(SubNum)){
+                        //nothing
+                    }
+                    else {
+                        Iterator iter2 = finalSubDivisionsIds.iterator();
+                        while (iter2.hasNext()) {
+                            String subDiv;
+                            int subId;
+                            subId = Integer.parseInt(iter2.next().toString());
+                            subDiv = pizzaDriverDB.getSubDivisionBySubId(subId);
+                            if (subDiv.equals(selected)){
+                                bundle.putInt("SUBDIVISION_ID", subId);
+                                NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_self, bundle);
+                            }
+                        }
+                    }
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
         }
+
 
 
         backToListButton.setOnClickListener(new View.OnClickListener() {
@@ -135,15 +186,5 @@ public class LocationDetailsFragment extends Fragment {
             }
         });
 
-    }
-
-    public static void selectSpinnerItemByValue(Spinner spnr, String value) {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
-        for (int position = 0; position < adapter.getCount(); position++) {
-            if(adapter.getItem(position).toString() == value) {
-                spnr.setSelection(position);
-                return;
-            }
-        }
     }
 }

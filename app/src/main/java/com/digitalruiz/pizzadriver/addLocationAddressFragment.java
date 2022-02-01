@@ -92,7 +92,6 @@ public class addLocationAddressFragment extends Fragment {
         TextView AddressText = view.findViewById(R.id.AddressTextViewAdd);
         AddressText.setText(placeAddress);
 
-        Spinner subDivisionTypeSpinner = view.findViewById(R.id.apt_spinner);
         EditText subDivision = view.findViewById(R.id.editTextSubdivision);
 
 
