@@ -14,12 +14,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -128,6 +131,13 @@ public class LocationDetailsFragment extends Fragment {
             Row.addView(DateAddedText);
             Row.addView(NoteText);
 
+            Row.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    showPopup(view, noteId);
+                    return false;
+                }
+            });
             WrapperTable.addView(Row);
         }
 
@@ -249,4 +259,31 @@ public class LocationDetailsFragment extends Fragment {
         });
 
     }
+
+    private void showPopup(View view, int noteId) {
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.note_options, popup.getMenu());
+        popup.show();
+
+        MenuItem delete = popup.getMenu().findItem(R.id.note_delete);
+        delete.setOnMenuItemClickListener(v -> {
+            //TODO
+            Log.d("TEST", "showPopup: deleted");
+            boolean deleted = pizzaDriverDB.deleteNote(noteId);
+            if (deleted) {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Note", Toast.LENGTH_SHORT);
+                deletedToast.show();
+            }
+            else {
+                Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Note, something wrong", Toast.LENGTH_LONG);
+                deletedToast.show();
+            }
+            //TODO TO self fragment
+            getActivity().finish();
+            startActivity(getActivity().getIntent());
+            return deleted;
+        });
+    }
+
 }
