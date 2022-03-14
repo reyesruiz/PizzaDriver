@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
-          path: app/build/outputs/bundle/debug/app-debug.aab
+          path: app/build/outputs/bundle/debug/${{steps.bundle_name.outputs.file_name}}
 
       - name: Upload lint report
         uses: actions/upload-artifact@master
