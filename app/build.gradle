@@ -18,6 +18,8 @@ android {
     def mVersionName = "v${major}.${minor}.${patch} Build: ${build}"
     def mApplicationId = "com.digitalruiz.pizzadriver"
     def version_name = "v$major.$minor.$patch.$build"
+    setProperty("archivesBaseName","${mApplicationId}-${version_name}")
+
 
 
 
