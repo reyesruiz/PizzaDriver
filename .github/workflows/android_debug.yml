@@ -74,15 +74,25 @@ jobs:
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
 
+      - name: apk_name
+        id: apk_name
+        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json)"
+
+      - name: bundle_name
+        id: bundle_name
+        run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json|sed 's/.apk/.aab/')"
+
       - name: Upload our APK
         uses: actions/upload-artifact@master
         with:
-          path: app/build/outputs/apk/debug/*.apk
+          name: ${{steps.apk_name.outputs.file_name}}
+          path: app/build/outputs/apk/debug/${{steps.apk_name.outputs.file_name}}
 
       - name: Upload our Bundle
         uses: actions/upload-artifact@master
         with:
-          path: app/build/outputs/bundle/debug/*.aab
+          name: ${{steps.bundle_name.outputs.file_name}}
+          path: app/build/outputs/bundle/debug/${{steps.bundle_name.outputs.file_name}}
 
       - name: Upload lint report
         uses: actions/upload-artifact@master
