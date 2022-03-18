@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "pizza_driver";
 
     //OrdersTable
@@ -27,7 +27,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     //Locations Table
     public static final String LOCATIONS_TABLE = "Locations";
     public static final String NAME = "Name";
-    public static final String RATE = "Rate";
+    public static final String BACKUP_LOCATIONS_TABLE = "BackupLocations";
+    //public static final String RATE = "Rate";
 
     //Tips Table
     public static final String TIPS_TABLE = "Tips";
@@ -64,6 +65,16 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    //Date
+    public static final String BUSINESS_DAY_TABLE = "BusinessDay";
+    public static final String BUSINESS_DAY_ID = "BusinessDayId";
+    public static final String BUSINESS_DAY_DATE = "Date";
+
+    //Rate
+    public static final String RATE_TABLE = "Rate";
+    public static final String RATE_ID = "RateId";
+    public static final String RATE = "Rate";
+
     @Override
     public void onCreate(SQLiteDatabase pizza_driver_db) {
         pizza_driver_db.execSQL("CREATE TABLE " + ORDERS_TABLE + " (" +
@@ -94,8 +105,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +
                 LOCATION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                NAME + " TEXT NOT NULL, " +
-                RATE + " REAL NOT NULL " + ")"
+                NAME + " TEXT NOT NULL " +
+                 ")"
         );
 
         pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESSES_TABLE + " (" +
@@ -124,6 +135,24 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 ")"
         );
 
+        pizza_driver_db.execSQL("CREATE TABLE " + BUSINESS_DAY_TABLE + " (" +
+                BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                BUSINESS_DAY_DATE + " STRING NOT NULL, " +
+                "UNIQUE (" + BUSINESS_DAY_ID + "," + BUSINESS_DAY_DATE + ")" +
+                ")"
+        );
+
+        pizza_driver_db.execSQL("CREATE TABLE " + RATE_TABLE + " (" +
+                RATE_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                BUSINESS_DAY_ID + " STRING NOT NULL, " +
+                LOCATION_ID + " STRING NOT NULL, " +
+                RATE + " STRING NOT NULL, " +
+                "UNIQUE (" + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + ")" +
+                ")"
+        );
+
+
+/*
         ContentValues contentValues = new ContentValues();
         contentValues.put(LOCATION_ID, 1);
         contentValues.put(NAME, "Tracy");
@@ -135,7 +164,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(NAME, "Mountain House");
         contentValues.put(RATE, "2.50");
         pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
-
+*/
 
     }
 
@@ -174,6 +203,38 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     DATE_ADDED + " TEXT NOT NULL" +
                     ")"
             );
+        }
+
+        if (newVersion == 5) {
+            pizza_driver_db.execSQL("CREATE TABLE " + BUSINESS_DAY_TABLE + " (" +
+                    BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    BUSINESS_DAY_DATE + " STRING NOT NULL, " +
+                    "UNIQUE (" + BUSINESS_DAY_ID + "," + BUSINESS_DAY_DATE + ")" +
+                    ")"
+            );
+
+            pizza_driver_db.execSQL("CREATE TABLE " + RATE_TABLE + " (" +
+                    RATE_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    BUSINESS_DAY_ID + " STRING NOT NULL, " +
+                    LOCATION_ID + " STRING NOT NULL, " +
+                    RATE + " STRING NOT NULL, " +
+                    "UNIQUE (" + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + ")" +
+                    ")"
+            );
+
+            
+            pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_LOCATIONS_TABLE+"("+LOCATION_ID+","+NAME+")");
+            pizza_driver_db.execSQL("INSERT INTO " + BACKUP_LOCATIONS_TABLE + " SELECT " + LOCATION_ID+","+ NAME + " FROM " + LOCATIONS_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE " + LOCATIONS_TABLE);
+            pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +
+                    LOCATION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    NAME + " TEXT NOT NULL " +
+                    ")");
+            pizza_driver_db.execSQL("INSERT INTO " + LOCATIONS_TABLE + " SELECT " + LOCATION_ID +","+NAME + " FROM " + BACKUP_LOCATIONS_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE " + BACKUP_LOCATIONS_TABLE);
+
+
+
         }
     }
 
