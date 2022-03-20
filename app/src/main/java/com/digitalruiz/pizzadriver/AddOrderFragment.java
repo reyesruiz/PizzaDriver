@@ -187,7 +187,7 @@ public class AddOrderFragment extends Fragment {
                         //Nothing
                         break;
                 }
-                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId, b));
+                orderNumberChip.setOnClickListener(v -> showPopup(v, orderNumber, OrderId));
 
             }
             Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
@@ -411,7 +411,7 @@ public class AddOrderFragment extends Fragment {
                         Toast updateToast = Toast.makeText(getContext(), "Update Success", Toast.LENGTH_SHORT);
                         updateToast.show();
                         NavHostFragment.findNavController(AddOrderFragment.this)
-                                .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
+                                .navigate(R.id.action_addOrderFragment_to_mainActivity);
                     }
                     else {
                         Toast updateToast = Toast.makeText(getContext(), "Unable to update data", Toast.LENGTH_LONG);
@@ -445,7 +445,7 @@ public class AddOrderFragment extends Fragment {
                         }
 
                         NavHostFragment.findNavController(AddOrderFragment.this)
-                                .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
+                                .navigate(R.id.action_addOrderFragment_to_mainActivity);
 
                     } else {
                         data_inserted = false;
@@ -726,7 +726,7 @@ public class AddOrderFragment extends Fragment {
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
                     NavHostFragment.findNavController(AddOrderFragment.this)
-                            .navigate(R.id.action_addOrderFragment_to_OrderListFragment, b);
+                            .navigate(R.id.action_addOrderFragment_to_OrderListFragment);
                 }
                 else {
                     Toast updateToast = Toast.makeText(view.getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
@@ -769,7 +769,7 @@ public class AddOrderFragment extends Fragment {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
                 deletedToast.show();
                 NavHostFragment.findNavController(AddOrderFragment.this)
-                        .navigate(R.id.action_addOrderFragment_to_mainActivity, b);
+                        .navigate(R.id.action_addOrderFragment_to_mainActivity);
             }
             else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);

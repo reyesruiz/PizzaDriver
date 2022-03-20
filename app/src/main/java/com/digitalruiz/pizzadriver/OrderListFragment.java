@@ -54,7 +54,8 @@ public class OrderListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("TAG", "onCreate: Second " + workingDate);
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
         if (BusinessDayId > 0){
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
@@ -70,6 +71,10 @@ public class OrderListFragment extends Fragment {
             else {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+                //Tracy
+                pizzaDriverDB.insertRate(BusinessDayId, 1, "2.00");
+                //Mountain House
+                pizzaDriverDB.insertRate(BusinessDayId, 2, "3.00");
             }
         }
         Log.d("TAG", "onViewCreateds: " + savedInstanceState);
@@ -80,7 +85,6 @@ public class OrderListFragment extends Fragment {
 
 
 
-        pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> all_orders_ids;
         ArrayList<Integer> orders_ids;

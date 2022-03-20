@@ -127,6 +127,10 @@ public class SelectDateFragment extends Fragment {
                 else {
                     BusinessDayId = pizzaDriverDB.insertDate(selectedDate);
                     pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+                    //Tracy
+                    pizzaDriverDB.insertRate(BusinessDayId, 1, "2.00");
+                    //Mountain House
+                    pizzaDriverDB.insertRate(BusinessDayId, 2, "3.00");
                 }
                 NavHostFragment.findNavController(SelectDateFragment.this)
                         .navigate(R.id.action_selectDateFragment_to_mainActivity);

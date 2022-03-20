@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
+            Log.d("TAG", "onCreate: First " + workingDate);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
             if (BusinessDayId > 0){
 
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             else {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+                //Tracy
+                pizzaDriverDB.insertRate(BusinessDayId, 1, "2.00");
+                //Mountain House
+                pizzaDriverDB.insertRate(BusinessDayId, 2, "3.00");
             }
         }
 
