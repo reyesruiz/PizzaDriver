@@ -55,19 +55,22 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (savedInstanceState == null){
-            Bundle b = getActivity().getIntent().getExtras();
-            if (b != null){
-                workingDate = b.getString("SelectedDate");
-            }
-            else {
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
-            workingDate = getArguments().getString("SelectedDate");
+            Date date = Calendar.getInstance().getTime();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            workingDate = formatter.format(date);
+            BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
+            if (BusinessDayId > 0){
+
+            }
+            else {
+                BusinessDayId = pizzaDriverDB.insertDate(workingDate);
+                pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+            }
         }
         Log.d("TAG", "onViewCreateds: " + savedInstanceState);
 

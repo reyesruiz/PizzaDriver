@@ -73,12 +73,10 @@ public class AddOrderFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "SelectedDate";
-    private static final String ARG_PARAM2 = "orderNumber";
+    private static final String ARG_PARAM1 = "orderNumber";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private int mParam2;
+    private int mParam1;
 
     public AddOrderFragment() {
         // Required empty public constructor
@@ -89,15 +87,13 @@ public class AddOrderFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AddOrderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddOrderFragment newInstance(String param1, String param2) {
+    public static AddOrderFragment newInstance(int param1) {
         AddOrderFragment fragment = new AddOrderFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -106,8 +102,7 @@ public class AddOrderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getInt(ARG_PARAM2);
+            mParam1 = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -121,14 +116,17 @@ public class AddOrderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        workingDate = mParam1;
-        orderNumber = mParam2;
-
-        Bundle b = new Bundle();
-        b.putString("SelectedDate", workingDate);
-
+        orderNumber = mParam1;
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
+        }
+        else {
+            Log.d(TAG, "onViewCreated: Something went wrong, code should not reach here");
+        }
+
         SaveButton = view.findViewById(R.id.saveButton);
 
         final Chip orderNumberChip = view.findViewById(R.id.orderNumberChip);
@@ -703,7 +701,7 @@ public class AddOrderFragment extends Fragment {
     }
 
 
-    private void showPopup(View view, int OrderNumber, int OrderId, Bundle b) {
+    private void showPopup(View view, int OrderNumber, int OrderId) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.order_number_options, popup.getMenu());

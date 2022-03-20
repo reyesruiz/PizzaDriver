@@ -38,19 +38,22 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Intent intent = getActivity().getIntent();
-        if(intent != null){
-            workingDate = intent.getStringExtra("SelectedDate");
-            if (workingDate == null){
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
+            BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
+            if (BusinessDayId > 0){
+
+            }
+            else {
+                BusinessDayId = pizzaDriverDB.insertDate(workingDate);
+                pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+            }
         }
 
         TextView TipsCreditText = view.findViewById(R.id.tipsCredit);

@@ -44,6 +44,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
     private static String TAG = "TEST";
     String apiKey = BuildConfig.API_KEY;
     PlacesClient placesClient;
+    SQLiteDBHelper pizzaDriverDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +60,15 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
 
         Places.initialize(getApplicationContext(), apiKey);
         placesClient = Places.createClient(this);
-
-        Bundle b = getIntent().getExtras();
-
-        if (b != null){
-            workingDate = b.getString("SelectedDate");
+        pizzaDriverDB = new SQLiteDBHelper(getApplicationContext());
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
-            Date date = Calendar.getInstance().getTime();
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            workingDate = formatter.format(date);
+            Log.d("TAG", "onViewCreated: Something went wrong, code should not reach here");
         }
+
         Log.d("TEST", "onViewCreated: " + workingDate);
         toolbar.setSubtitle(workingDate);
         toolbar.setNavigationOnClickListener(v -> {

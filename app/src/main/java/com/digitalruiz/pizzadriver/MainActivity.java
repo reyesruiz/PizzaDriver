@@ -26,25 +26,34 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     String workingDate;
     public FloatingActionButton addOrder;
     Toolbar toolbar;
+    SQLiteDBHelper pizzaDriverDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(0,0);
         setContentView(R.layout.activity_main);
+        pizzaDriverDB = new SQLiteDBHelper(getApplicationContext());
         toolbar = findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.top_app_bar);
         toolbar.setOnMenuItemClickListener(this);
         Log.d("TAG", "onCreate: " + savedInstanceState);
-        Bundle b = getIntent().getExtras();
-
-        if (b != null){
-            workingDate = b.getString("SelectedDate");
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
+            BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
+            if (BusinessDayId > 0){
+
+            }
+            else {
+                BusinessDayId = pizzaDriverDB.insertDate(workingDate);
+                pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+            }
         }
 
         addOrder = findViewById(R.id.add);
@@ -62,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         Bundle bundleAddOrderNumber;
         bundleAddOrderNumber = new Bundle();
-        bundleAddOrderNumber.putString("SelectedDate", workingDate);
 
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,18 +100,16 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         String currentFragment = (String) NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment()).getCurrentDestination().getLabel();
         switch (menuItem.getItemId()) {
             case R.id.settings:
-                Bundle bundle = new Bundle();
-                bundle.putString("SelectedDate",workingDate);
                 if (currentFragment.equals("Order List Fragment")) {
                     Log.d("TAG", "onClick: " + currentFragment);
                     Log.d("TAG", "onMenuItemClick: " + workingDate);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_OrderListFragment_to_selectDateFragment, bundle);
+                            .navigate(R.id.action_OrderListFragment_to_selectDateFragment);
                 }
                 else if (currentFragment.equals("Summary Fragment")){
                     Log.d("TAG", "onClick: " + currentFragment);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_SummaryFragment_to_selectDateFragment, bundle);
+                            .navigate(R.id.action_SummaryFragment_to_selectDateFragment);
                 }
                 else {
                     Log.d("TAG", "onClick: " + "Something Wrong");
