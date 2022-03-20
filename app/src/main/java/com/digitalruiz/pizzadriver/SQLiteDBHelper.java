@@ -114,6 +114,14 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                  ")"
         );
 
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, "Tracy");
+        pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
+
+        contentValues.clear();
+        contentValues.put(NAME, "Mountain House");
+        pizza_driver_db.insert(LOCATIONS_TABLE, null, contentValues);
+
         pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESSES_TABLE + " (" +
                 ADDRESS_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 GOOGLE_LOCATION_ID + " TEXT NOT NULL UNIQUE, " +
@@ -293,6 +301,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Log.d("TEST", "insertCash: " + rowInserted);
         return rowInserted;
     }
+
 
     public long insertLocationAddress (String GoogleLocationId, String AddressName, String Address, String
         AddressComponents){
