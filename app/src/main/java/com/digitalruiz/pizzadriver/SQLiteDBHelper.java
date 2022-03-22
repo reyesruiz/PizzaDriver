@@ -9,7 +9,12 @@ import android.util.Log;
 
 import com.google.android.libraries.places.api.model.AddressComponents;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
@@ -150,8 +155,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         pizza_driver_db.execSQL("CREATE TABLE " + BUSINESS_DAY_TABLE + " (" +
                 BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                BUSINESS_DAY_DATE + " STRING NOT NULL, " +
-                "UNIQUE (" + BUSINESS_DAY_ID + "," + BUSINESS_DAY_DATE + ")" +
+                BUSINESS_DAY_DATE + " STRING NOT NULL UNIQUE " +
                 ")"
         );
 
@@ -227,6 +231,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     ")"
             );
 
+            pizza_driver_db.execSQL("CREATE TABLE " + ACTIVE_BUSINESS_DAY_TABLE + " (" +
+                    ACTIVE_BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    BUSINESS_DAY_ID + " INTEGER " +
+                    ")"
+            );
+
             
             pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_LOCATIONS_TABLE+"("+LOCATION_ID+","+NAME+")");
             pizza_driver_db.execSQL("INSERT INTO " + BACKUP_LOCATIONS_TABLE + " SELECT " + LOCATION_ID+","+ NAME + " FROM " + LOCATIONS_TABLE);
@@ -239,18 +249,74 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             pizza_driver_db.execSQL("DROP TABLE " + BACKUP_LOCATIONS_TABLE);
 
             ArrayList<String> uniq_dates;
-            uniq_dates = getUniqueWorkingDates();
+            uniq_dates = new ArrayList<>();
+            Cursor res =  pizza_driver_db.rawQuery( "select distinct " + DATE + " from " + ORDERS_TABLE, null );
+            res.moveToFirst();
+            while(!res.isAfterLast()){
+                uniq_dates.add(res.getString(res.getColumnIndex(DATE)));
+                res.moveToNext();
+            }
+            res.close();
             ArrayList <Long> uniq_dates_list;
             uniq_dates_list = new ArrayList<>();
             for (final String uniq_date: uniq_dates){
-                long row = insertDate(uniq_date);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(BUSINESS_DAY_DATE, uniq_date);
+                long row = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
                 uniq_dates_list.add(row);
+                contentValues.clear();
             }
             for (final Long BusinessDayId:  uniq_dates_list){
-                //Tracy
-                insertRate(BusinessDayId, 1, "1.75");
-                //Mountain House
-                insertRate(BusinessDayId, 2, "2.50");
+                Cursor resDate =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
+                resDate.moveToFirst();
+                String workingDate = resDate.getString(resDate.getColumnIndex(BUSINESS_DAY_DATE));
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date date;
+                try {
+                    date = formatter.parse(workingDate);
+                } catch (ParseException e) {
+                    date = new Date();
+                    e.printStackTrace();
+                }
+                String DateToCheck = "2022-03-08";
+                Date dateToCheck;
+                try {
+                    dateToCheck = formatter.parse(DateToCheck);
+                } catch (ParseException e) {
+                    dateToCheck = new Date();
+                    e.printStackTrace();
+                }
+                // getTime is to get epoch
+                if (date.getTime() > dateToCheck.getTime()){
+                    //Tracy
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
+                    contentValues.put(LOCATION_ID, 1);
+                    contentValues.put(RATE, "2.00");
+                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+                    contentValues.clear();
+                    //Mountain House
+                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
+                    contentValues.put(LOCATION_ID, 2);
+                    contentValues.put(RATE, "3.00");
+                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+
+                }
+                else {
+                    //Tracy
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
+                    contentValues.put(LOCATION_ID, 1);
+                    contentValues.put(RATE, "1.75");
+                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+                    contentValues.clear();
+                    //Mountain House
+                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
+                    contentValues.put(LOCATION_ID, 2);
+                    contentValues.put(RATE, "2.50");
+                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+                }
             }
         }
     }
@@ -636,18 +702,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    private ArrayList<String> getUniqueWorkingDates() {
-        ArrayList<String> array_list = new ArrayList<>();
-        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select distinct" + DATE + " from " + ORDERS_TABLE, null );
-        res.moveToFirst();
-        while(!res.isAfterLast()){
-            array_list.add(res.getString(res.getColumnIndex(DATE)));
-            res.moveToNext();
-        }
-        res.close();
-        return array_list;
-    }
 
     public ArrayList<Integer> getAllTips(ArrayList<Integer> ordersIds) {
         ArrayList<Integer> array_list = new ArrayList<>();
@@ -758,8 +812,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     public long getBusinessDay(String BusinessDayDate){
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_ID + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_DATE + " = " + BusinessDayDate, null);
-        res.moveToFirst();
+        Cursor res =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_ID + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_DATE + " = '" + BusinessDayDate + "'", null);
         if (res.getCount() > 0) {
             res.moveToFirst();
             long BusinessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
