@@ -79,12 +79,6 @@ public class OrderListFragment extends Fragment {
         }
         Log.d("TAG", "onViewCreateds: " + savedInstanceState);
 
-        Bundle bundleAddOrderNumber;
-        bundleAddOrderNumber = new Bundle();
-        bundleAddOrderNumber.putString("SelectedDate", workingDate);
-
-
-
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> all_orders_ids;
         ArrayList<Integer> orders_ids;
@@ -213,7 +207,6 @@ public class OrderListFragment extends Fragment {
             orderNumberChip.setOnClickListener(v -> {
                 Bundle bundleAddOrder;
                 bundleAddOrder = new Bundle();
-                bundleAddOrder.putString("SelectedDate", workingDate);
                 bundleAddOrder.putInt("orderNumber", orderNumber);
                 NavHostFragment.findNavController(OrderListFragment.this)
                         .navigate(R.id.action_OrderListFragment_to_addOrderFragment, bundleAddOrder);

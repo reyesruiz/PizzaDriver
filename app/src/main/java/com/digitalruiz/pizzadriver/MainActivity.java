@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 return true;
             case R.id.add_location:
                 Intent find_place = new Intent(MainActivity.this, MainLocationsActivity.class);
-                find_place.putExtra("SelectedDate", workingDate);
                 MainActivity.this.startActivity(find_place);
                 return true;
         }
