@@ -57,22 +57,24 @@ public class LocationListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Intent intent = getActivity().getIntent();
-        if(intent != null){
-            workingDate = intent.getStringExtra("SelectedDate");
-            if (workingDate == null){
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
-        }
+            BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
+            if (BusinessDayId > 0){
 
-        pizzaDriverDB = new SQLiteDBHelper(getContext());
+            }
+            else {
+                BusinessDayId = pizzaDriverDB.insertDate(workingDate);
+                pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+            }
+        }
 
         ArrayList<Integer> all_location_address_ids;
         all_location_address_ids = pizzaDriverDB.getAllLocationAddressIds();
@@ -144,12 +146,8 @@ public class LocationListFragment extends Fragment {
         view.findViewById(R.id.buttonBackToOrdersList).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle;
-                bundle = new Bundle();
-                Log.d("TAG", "onClick: " + workingDate);
-                bundle.putString("SelectedDate", workingDate);
                 NavHostFragment.findNavController(LocationListFragment.this)
-                        .navigate(R.id.action_LocationListFragment_to_mainActivity, bundle);
+                        .navigate(R.id.action_LocationListFragment_to_mainActivity);
             }
         });
 

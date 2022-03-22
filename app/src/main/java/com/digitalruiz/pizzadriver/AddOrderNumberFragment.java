@@ -24,14 +24,12 @@ import android.widget.Toolbar;
  * create an instance of this fragment.
  */
 public class AddOrderNumberFragment extends Fragment {
-
+    SQLiteDBHelper pizzaDriverDB;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "SelectedDate";
 
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
 
 
     public AddOrderNumberFragment() {
@@ -42,27 +40,18 @@ public class AddOrderNumberFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
 
      * @return A new instance of fragment AddOrderNumber.
      */
     // TODO: Rename and change types and number of parameters
     public static AddOrderNumberFragment newInstance( String param1) {
         AddOrderNumberFragment fragment = new AddOrderNumberFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
-
-
     }
 
     @Override
@@ -76,8 +65,16 @@ public class AddOrderNumberFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        String SelectedDate = new String();
+        if (BusinessDayId > 0){
+            SelectedDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
+        }
+        else {
+            Log.d("TAG", "onViewCreated: Something went wrong, code should not reach here");
+        }
 
-        String SelectedDate = mParam1;
 
         final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         final EditText orderNumberText = view.findViewById(R.id.orderNumber);
@@ -94,7 +91,6 @@ public class AddOrderNumberFragment extends Fragment {
                 Log.d("TAG", "onViewCreated: " + orderNumber);
                 Bundle addOrderBundle = new Bundle();
                 addOrderBundle.putInt("orderNumber", orderNumber);
-                addOrderBundle.putString("SelectedDate", mParam1);
                 NavHostFragment.findNavController(AddOrderNumberFragment.this)
                         .navigate(R.id.action_addOrderNumber_to_addOrderFragment, addOrderBundle);
             }

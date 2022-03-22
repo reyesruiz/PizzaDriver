@@ -54,30 +54,31 @@ public class OrderListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (savedInstanceState == null){
-            Bundle b = getActivity().getIntent().getExtras();
-            if (b != null){
-                workingDate = b.getString("SelectedDate");
-            }
-            else {
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
+        Log.d("TAG", "onCreate: Second " + workingDate);
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
-            workingDate = getArguments().getString("SelectedDate");
+            Date date = Calendar.getInstance().getTime();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            workingDate = formatter.format(date);
+            BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
+            if (BusinessDayId > 0){
+
+            }
+            else {
+                BusinessDayId = pizzaDriverDB.insertDate(workingDate);
+                pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+                //Tracy
+                pizzaDriverDB.insertRate(BusinessDayId, 1, "2.00");
+                //Mountain House
+                pizzaDriverDB.insertRate(BusinessDayId, 2, "3.00");
+            }
         }
         Log.d("TAG", "onViewCreateds: " + savedInstanceState);
 
-        Bundle bundleAddOrderNumber;
-        bundleAddOrderNumber = new Bundle();
-        bundleAddOrderNumber.putString("SelectedDate", workingDate);
-
-
-
-        pizzaDriverDB = new SQLiteDBHelper(getContext());
         Button button_first = view.findViewById(R.id.buttonSummary);
         ArrayList<Integer> all_orders_ids;
         ArrayList<Integer> orders_ids;
@@ -206,7 +207,6 @@ public class OrderListFragment extends Fragment {
             orderNumberChip.setOnClickListener(v -> {
                 Bundle bundleAddOrder;
                 bundleAddOrder = new Bundle();
-                bundleAddOrder.putString("SelectedDate", workingDate);
                 bundleAddOrder.putInt("orderNumber", orderNumber);
                 NavHostFragment.findNavController(OrderListFragment.this)
                         .navigate(R.id.action_OrderListFragment_to_addOrderFragment, bundleAddOrder);

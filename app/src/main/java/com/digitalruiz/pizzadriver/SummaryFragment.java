@@ -37,20 +37,23 @@ public class SummaryFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Intent intent = getActivity().getIntent();
-        if(intent != null){
-            workingDate = intent.getStringExtra("SelectedDate");
-            if (workingDate == null){
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                workingDate = formatter.format(date);
-            }
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
+        long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
+        if (BusinessDayId > 0){
+            workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         }
         else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
+            BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
+            if (BusinessDayId > 0){
+
+            }
+            else {
+                BusinessDayId = pizzaDriverDB.insertDate(workingDate);
+                pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+            }
         }
 
         TextView TipsCreditText = view.findViewById(R.id.tipsCredit);
@@ -82,8 +85,6 @@ public class SummaryFragment extends Fragment {
         TextView tracy = view.findViewById(R.id.tracy);
         TextView mountainHouse = view.findViewById(R.id.mountainHouse);
 
-
-        pizzaDriverDB = new SQLiteDBHelper(getContext());
 
         BigDecimal CreditTotal;
         BigDecimal CashTotal = new BigDecimal("0.00");
@@ -138,7 +139,7 @@ public class SummaryFragment extends Fragment {
         ArrayList<Integer> ordersTracy = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "1");
         Cursor tracy_location_result = pizzaDriverDB.getLocationData(1);
         tracy_location_result.moveToFirst();
-        String rateString = tracy_location_result.getString(tracy_location_result.getColumnIndex("Rate"));
+        String rateString = pizzaDriverDB.getRate(BusinessDayId, 1);
         BigDecimal Rate = new BigDecimal(rateString);
         BigDecimal tracyCount = new BigDecimal(ordersTracy.size());
         Log.d("TEST", "Count: " + tracyCount);
@@ -149,7 +150,7 @@ public class SummaryFragment extends Fragment {
         ArrayList<Integer> ordersMH = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "2");
         Cursor mh_location_result = pizzaDriverDB.getLocationData(2);
         mh_location_result.moveToFirst();
-        rateString = mh_location_result.getString(mh_location_result.getColumnIndex("Rate"));
+        rateString = pizzaDriverDB.getRate(BusinessDayId, 2);
         Rate = new BigDecimal(rateString);
         BigDecimal mhCount = new BigDecimal(ordersMH.size());
         MountainHouseTotal = mhCount.multiply(Rate);

@@ -33,13 +33,14 @@ public class SelectDateFragment extends Fragment {
     String selectedDate;
     String workingDate;
     private Button mPickDateButton;
+    SQLiteDBHelper pizzaDriverDB;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+
 
     public SelectDateFragment() {
         // Required empty public constructor
@@ -55,18 +56,12 @@ public class SelectDateFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static SelectDateFragment newInstance(String param1, String param2) {
         SelectDateFragment fragment = new SelectDateFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);;
-        }
     }
 
     @Override
@@ -79,7 +74,9 @@ public class SelectDateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        workingDate = mParam1;
+        pizzaDriverDB = new SQLiteDBHelper(getContext());
+        long BusinessId = pizzaDriverDB.getActiveBusinessDay();
+        workingDate = pizzaDriverDB.getBusinessDayById(BusinessId);
 
         // Create a calendar instance inside the system
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -123,10 +120,20 @@ public class SelectDateFragment extends Fragment {
                 selectedDate = formatter.format(cal.getTimeInMillis());
                 Log.d("TAG", "onPositiveButtonClick: " + selectedDate);
                 Log.d("TEST", "onPositiveButtonClick: " + selection);
-                Bundle bundle = new Bundle();
-                bundle.putString("SelectedDate", selectedDate);
+                long BusinessDayId = pizzaDriverDB.getBusinessDay(selectedDate);
+                if (BusinessDayId > 0){
+                    pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+                }
+                else {
+                    BusinessDayId = pizzaDriverDB.insertDate(selectedDate);
+                    pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
+                    //Tracy
+                    pizzaDriverDB.insertRate(BusinessDayId, 1, "2.00");
+                    //Mountain House
+                    pizzaDriverDB.insertRate(BusinessDayId, 2, "3.00");
+                }
                 NavHostFragment.findNavController(SelectDateFragment.this)
-                        .navigate(R.id.action_selectDateFragment_to_mainActivity, bundle);
+                        .navigate(R.id.action_selectDateFragment_to_mainActivity);
 
             }
         });
