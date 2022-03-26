@@ -1,34 +1,26 @@
 package com.digitalruiz.pizzadriver;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavHostController;
-import androidx.navigation.fragment.NavHostFragment;
-
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -59,18 +51,16 @@ public class LocationListFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        if (BusinessDayId > 0){
+        if (BusinessDayId > 0) {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0){
+            if (BusinessDayId > 0) {
 
-            }
-            else {
+            } else {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
             }
@@ -98,7 +88,7 @@ public class LocationListFragment extends Fragment {
         WrapperTable.addView(HeadLine);
 
         int counter = 0;
-        for (final Integer AddressId: all_location_address_ids ){
+        for (final Integer AddressId : all_location_address_ids) {
             counter = counter + 1;
             Cursor location_address_result = pizzaDriverDB.getLocationAddressDataByAddressId(AddressId);
             location_address_result.moveToFirst();
@@ -107,10 +97,9 @@ public class LocationListFragment extends Fragment {
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
-            if (counter % 2 == 0){
+            if (counter % 2 == 0) {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
-            }
-            else {
+            } else {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, getContext().getTheme()));
 
             }
@@ -137,7 +126,6 @@ public class LocationListFragment extends Fragment {
             });
 
 
-
             Row.addView(addressNameChip);
 
             WrapperTable.addView(Row);
@@ -161,7 +149,7 @@ public class LocationListFragment extends Fragment {
         popup.show();
 
         MenuItem delete = popup.getMenu().findItem(R.id.location_delete);
-        delete.setOnMenuItemClickListener(v ->{
+        delete.setOnMenuItemClickListener(v -> {
             //TODO
             Log.d("TEST", "showPopup: deleted");
 
@@ -169,8 +157,7 @@ public class LocationListFragment extends Fragment {
             if (deleted) {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Location ID " + AddressId, Toast.LENGTH_SHORT);
                 deletedToast.show();
-            }
-            else {
+            } else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Location ID " + AddressId + " , something wrong", Toast.LENGTH_LONG);
                 deletedToast.show();
             }

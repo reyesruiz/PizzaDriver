@@ -1,47 +1,36 @@
 package com.digitalruiz.pizzadriver;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 
 public class MainLocationsActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final String TAG = "TEST";
     String workingDate;
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-    private static String TAG = "TEST";
     String apiKey = BuildConfig.API_KEY;
     PlacesClient placesClient;
     SQLiteDBHelper pizzaDriverDB;
@@ -49,7 +38,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
 
         setContentView(R.layout.activity_main_locations);
 
@@ -62,10 +51,9 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
         placesClient = Places.createClient(this);
         pizzaDriverDB = new SQLiteDBHelper(getApplicationContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        if (BusinessDayId > 0){
+        if (BusinessDayId > 0) {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Log.d("TAG", "onViewCreated: Something went wrong, code should not reach here");
         }
 
@@ -94,15 +82,14 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                 int AddressId = pizzaDriverDB.getAddressIdByLocationId(place.getId());
                 Bundle bundle;
                 bundle = new Bundle();
-                if (AddressId > 0){
+                if (AddressId > 0) {
                     Toast foundInDB = Toast.makeText(getApplicationContext(), "Found Address in DB", Toast.LENGTH_SHORT);
                     foundInDB.show();
                     bundle.putInt("ADDRESS_ID", AddressId);
                     Log.d(TAG, "Bzz: " + bundle);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
                             .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
-                }
-                else {
+                } else {
                     bundle.putString("placeId", place.getId());
                     bundle.putString("placeName", place.getName());
                     bundle.putString("placeAddress", place.getAddress());
@@ -126,8 +113,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
 
 
     @Override
-    public boolean onPrepareOptionsMenu(final Menu menu)
-    {
+    public boolean onPrepareOptionsMenu(final Menu menu) {
         menu.clear();
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.top_app_bar_locations, menu);
@@ -159,8 +145,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
                     Log.d("TAG", "onClick: " + currentFragment);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
                             .navigate(R.id.action_LocationListFragment_to_locationsMapFragment);
-                }
-                else {
+                } else {
                     Log.d("TAG", "onClick: " + "Something Wrong");
                 }
 

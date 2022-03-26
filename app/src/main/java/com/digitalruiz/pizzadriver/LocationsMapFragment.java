@@ -1,18 +1,16 @@
 package com.digitalruiz.pizzadriver;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,16 +21,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class LocationsMapFragment extends Fragment implements OnMapReadyCallback {
 
-    private MapView mMapView;
-
     private static final String MAPVIEW_BUNDLE_KEY = BuildConfig.API_KEY;
-
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private MapView mMapView;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -140,7 +134,7 @@ public class LocationsMapFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(37.7267762,-121.429317)).title("Marker"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(37.7267762, -121.429317)).title("Marker"));
 
     }
 }

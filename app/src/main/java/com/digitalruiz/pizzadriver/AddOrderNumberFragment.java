@@ -2,21 +2,17 @@ package com.digitalruiz.pizzadriver;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,11 +36,10 @@ public class AddOrderNumberFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
      * @return A new instance of fragment AddOrderNumber.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddOrderNumberFragment newInstance( String param1) {
+    public static AddOrderNumberFragment newInstance(String param1) {
         AddOrderNumberFragment fragment = new AddOrderNumberFragment();
         return fragment;
     }
@@ -67,11 +62,10 @@ public class AddOrderNumberFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        String SelectedDate = new String();
-        if (BusinessDayId > 0){
+        String SelectedDate = "";
+        if (BusinessDayId > 0) {
             SelectedDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Log.d("TAG", "onViewCreated: Something went wrong, code should not reach here");
         }
 
@@ -86,8 +80,8 @@ public class AddOrderNumberFragment extends Fragment {
 
 
         orderNumberText.setOnEditorActionListener((v, actionId, event) -> {
-            if(actionId == EditorInfo.IME_ACTION_DONE){
-                int orderNumber =  Integer.parseInt(orderNumberText.getText().toString());
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                int orderNumber = Integer.parseInt(orderNumberText.getText().toString());
                 Log.d("TAG", "onViewCreated: " + orderNumber);
                 Bundle addOrderBundle = new Bundle();
                 addOrderBundle.putInt("orderNumber", orderNumber);
@@ -97,6 +91,6 @@ public class AddOrderNumberFragment extends Fragment {
             return false;
         });
 
-    };
+    }
 
 }

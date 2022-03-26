@@ -1,15 +1,8 @@
 package com.digitalruiz.pizzadriver;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.icu.math.BigDecimal;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -27,6 +20,11 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -41,6 +39,10 @@ import java.util.regex.Pattern;
  */
 
 public class AddOrderFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "orderNumber";
+    final String TAG = "TEST";
     public TextView TipText;
     public EditText tipEditText;
     public CheckBox cashCheckedBox;
@@ -48,8 +50,6 @@ public class AddOrderFragment extends Fragment {
     public EditText orderTotalEditText;
     public TextView cashReceivedText;
     public EditText cashReceivedEditText;
-
-    final String TAG = "TEST";
     String orderType;
     String OrderLocation;
     Integer orderNumber;
@@ -57,24 +57,15 @@ public class AddOrderFragment extends Fragment {
     Integer TipCashBool;
     BigDecimal OrderTotal;
     BigDecimal CashReceived;
-
     SQLiteDBHelper pizzaDriverDB;
-
     Button SaveButton;
-
     TextWatcher tipTextWatcher = null;
     TextWatcher orderTotalTextWatcher = null;
     TextWatcher cashReceivedTextWatcher = null;
-
     String workingDate;
     int OrderId;
     int TipId;
     int CashOrderId;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "orderNumber";
-
     // TODO: Rename and change types of parameters
     private int mParam1;
 
@@ -120,10 +111,9 @@ public class AddOrderFragment extends Fragment {
 
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        if (BusinessDayId > 0){
+        if (BusinessDayId > 0) {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Log.d(TAG, "onViewCreated: Something went wrong, code should not reach here");
         }
 
@@ -159,7 +149,7 @@ public class AddOrderFragment extends Fragment {
 
         Log.v("test", "bla" + "");
 
-        if ((!tracyChip.isChecked()) && (!mountainHouseChip.isChecked())){
+        if ((!tracyChip.isChecked()) && (!mountainHouseChip.isChecked())) {
             tracyChip.setChecked(true);
         }
         setInvisible();
@@ -172,7 +162,7 @@ public class AddOrderFragment extends Fragment {
             OrderId = order_result.getInt(order_result.getColumnIndex("OrderId"));
             int LocationId = order_result.getInt(order_result.getColumnIndex("LocationId"));
             Cursor location_result = pizzaDriverDB.getLocationData(LocationId);
-            if (location_result.getCount() <= 1){
+            if (location_result.getCount() <= 1) {
                 location_result.moveToFirst();
                 String Location = location_result.getString(location_result.getColumnIndex("Name"));
 
@@ -191,7 +181,7 @@ public class AddOrderFragment extends Fragment {
 
             }
             Cursor tip_result = pizzaDriverDB.getTipData(OrderId);
-            if (tip_result.getCount() >= 1){
+            if (tip_result.getCount() >= 1) {
                 //TODO Right now only moving to first, will need to implement multiple tips per order.
                 tip_result.moveToFirst();
                 TipId = tip_result.getInt(tip_result.getColumnIndex("TipId"));
@@ -230,7 +220,7 @@ public class AddOrderFragment extends Fragment {
                 }
 
                 Tip = new BigDecimal(Amount);
-                Tip = Tip.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
+                Tip = Tip.divide(BigDecimal.valueOf(1), 2, BigDecimal.ROUND_UNNECESSARY);
                 tipEditText.setText(Tip.toString());
                 tipEditText.setOnFocusChangeListener((v, hasFocus) -> {
                     Log.d("TEST", "onFocusChange: ");
@@ -240,7 +230,7 @@ public class AddOrderFragment extends Fragment {
                 TipCashBool = CashBool;
                 cashCheckedBox.setChecked(TipCashBool == 1);
 
-                if (Type.equals("Cash")){
+                if (Type.equals("Cash")) {
                     Cursor cash_order_result = pizzaDriverDB.getCashOrderData(TipId);
                     cash_order_result.moveToFirst();
                     CashOrderId = cash_order_result.getInt(cash_order_result.getColumnIndex("CashOrderId"));
@@ -248,7 +238,7 @@ public class AddOrderFragment extends Fragment {
                     String Received = cash_order_result.getString(cash_order_result.getColumnIndex("Received"));
 
                     OrderTotal = new BigDecimal(Total);
-                    OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
+                    OrderTotal = OrderTotal.divide(BigDecimal.valueOf(1), 2, BigDecimal.ROUND_UNNECESSARY);
                     orderTotalEditText.setText(OrderTotal.toString());
                     orderTotalEditText.setOnFocusChangeListener((v, hasFocus) -> {
                         Log.d("TEST", "onFocusChange: ");
@@ -256,7 +246,7 @@ public class AddOrderFragment extends Fragment {
                     });
 
                     CashReceived = new BigDecimal(Received);
-                    CashReceived = CashReceived.divide(BigDecimal.valueOf(1),2, BigDecimal.ROUND_UNNECESSARY);
+                    CashReceived = CashReceived.divide(BigDecimal.valueOf(1), 2, BigDecimal.ROUND_UNNECESSARY);
                     cashReceivedEditText.setText(CashReceived.toString());
                     cashReceivedEditText.setOnFocusChangeListener((v, hasFocus) -> {
                         Log.d("TEST", "onFocusChange: ");
@@ -269,56 +259,50 @@ public class AddOrderFragment extends Fragment {
         }
 
         creditAutoChip.setOnClickListener(v -> {
-            if (creditAutoChip.isChecked()){
+            if (creditAutoChip.isChecked()) {
                 creditAuto();
-            }
-            else {
+            } else {
                 setInvisible();
 
             }
         });
 
         creditManualChip.setOnClickListener(v -> {
-            if (creditManualChip.isChecked()){
+            if (creditManualChip.isChecked()) {
                 creditManual();
-            }
-            else {
+            } else {
                 setInvisible();
             }
         });
 
         cashChip.setOnClickListener(v -> {
-            if (cashChip.isChecked()){
+            if (cashChip.isChecked()) {
                 cash();
-            }
-            else {
+            } else {
                 setInvisible();
             }
         });
 
         grubhubChip.setOnClickListener(v -> {
-            if (grubhubChip.isChecked()){
+            if (grubhubChip.isChecked()) {
                 grubhub();
-            }
-            else {
+            } else {
                 setInvisible();
             }
         });
 
         levelUpChip.setOnClickListener(v -> {
-            if (levelUpChip.isChecked()){
+            if (levelUpChip.isChecked()) {
                 levelup();
-            }
-            else {
+            } else {
                 setInvisible();
             }
         });
 
         otherChip.setOnClickListener(v -> {
-            if (otherChip.isChecked()){
+            if (otherChip.isChecked()) {
                 other();
-            }
-            else {
+            } else {
                 setInvisible();
             }
         });
@@ -332,77 +316,67 @@ public class AddOrderFragment extends Fragment {
 
             if (OrderTypeSelectedChipID == -1) {
                 error = true;
-            }
-            else {
+            } else {
                 Chip OrderTypeSelectedChip = view.findViewById(OrderTypeSelectedChipID);
                 orderType = OrderTypeSelectedChip.getText().toString();
             }
 
             int OrderLocationSelectedChipID = orderLocationChipGroup.getCheckedChipId();
-            if (OrderLocationSelectedChipID == -1){
+            if (OrderLocationSelectedChipID == -1) {
                 error = true;
-            }
-            else {
+            } else {
                 Chip OrderLocationSelectedChip = view.findViewById(OrderLocationSelectedChipID);
                 OrderLocation = OrderLocationSelectedChip.getText().toString();
                 //TODO set this programatically
-                if (OrderLocation.equals("Tracy")){
+                if (OrderLocation.equals("Tracy")) {
                     LocationID = 1;
-                }
-                else if(OrderLocation.equals("Mountain House")){
+                } else if (OrderLocation.equals("Mountain House")) {
                     LocationID = 2;
                 }
             }
-            if (error){
+            if (error) {
                 Toast toast = Toast.makeText(getContext(), "Please select all options", Toast.LENGTH_LONG);
                 toast.show();
-            }
-            else {
+            } else {
                 if (cashCheckedBox.isChecked()) {
                     TipCashBool = 1;
-                }
-                else {
+                } else {
                     TipCashBool = 0;
                 }
-                if (TextUtils.isEmpty(tipEditText.getText().toString())){
+                if (TextUtils.isEmpty(tipEditText.getText().toString())) {
                     Tip = new BigDecimal("0.00");
-                }
-                else {
+                } else {
                     Tip = new BigDecimal(tipEditText.getText().toString());
                 }
 
 
-                if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
+                if (TextUtils.isEmpty(orderTotalEditText.getText().toString())) {
                     OrderTotal = new BigDecimal("0.00");
-                }
-                else {
+                } else {
                     OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
                 }
-                if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
+                if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())) {
                     CashReceived = new BigDecimal("0.00");
-                }
-                else {
+                } else {
                     CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
                 }
 
 
                 if (OrderId >= 1) {
                     int OrderUpdateResult = pizzaDriverDB.updateOrder(OrderId, workingDate, orderNumber, LocationID);
-                    if (OrderUpdateResult == 1){
-                        if (TipId >=1) {
+                    if (OrderUpdateResult == 1) {
+                        if (TipId >= 1) {
                             int TipUpdateResult = pizzaDriverDB.updateTip(TipId, Tip.toString(), orderType, TipCashBool, OrderId);
-                            if (TipUpdateResult == 1){
-                                if (orderType.equals("Cash")){
-                                    if (CashOrderId >= 1){
+                            if (TipUpdateResult == 1) {
+                                if (orderType.equals("Cash")) {
+                                    if (CashOrderId >= 1) {
                                         int CashOrderUpdateResult = pizzaDriverDB.updateCashOrder(CashOrderId, OrderTotal.toString(), CashReceived.toString(), TipId);
-                                    }
-                                    else {
+                                    } else {
                                         long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), TipId);
                                     }
 
-                                }
-                                else {
-                                    if (CashOrderId >=1 ){
+                                } else {
+                                    if (CashOrderId >= 1) {
                                         boolean deleted = pizzaDriverDB.deleteCashOrder(CashOrderId);
                                     }
                                 }
@@ -412,35 +386,31 @@ public class AddOrderFragment extends Fragment {
                         updateToast.show();
                         NavHostFragment.findNavController(AddOrderFragment.this)
                                 .navigate(R.id.action_addOrderFragment_to_mainActivity);
-                    }
-                    else {
+                    } else {
                         Toast updateToast = Toast.makeText(getContext(), "Unable to update data", Toast.LENGTH_LONG);
                         updateToast.show();
                     }
 
-                }
-                else {
+                } else {
                     long insert_result_order = pizzaDriverDB.insertOrder(workingDate, orderNumber, LocationID);
                     Log.d(TAG, "insert order: " + insert_result_order);
                     boolean data_inserted = true;
                     if (insert_result_order != -1) {
                         long insert_result_tip = pizzaDriverDB.insertTip(Tip.toString(), orderType, TipCashBool, insert_result_order);
                         Log.d(TAG, "insert tip: " + insert_result_tip);
-                        if (insert_result_tip != -1){
-                            if (orderType.equals("Cash")){
+                        if (insert_result_tip != -1) {
+                            if (orderType.equals("Cash")) {
                                 long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
                                 Log.d(TAG, "insert cash: " + insert_result_cash);
-                                if (insert_result_cash != -1){
+                                if (insert_result_cash != -1) {
                                     //nothing all good
-                                }
-                                else {
+                                } else {
                                     data_inserted = false;
                                 }
                             }
                             //nothing
 
-                        }
-                        else {
+                        } else {
                             data_inserted = false;
                         }
 
@@ -450,11 +420,10 @@ public class AddOrderFragment extends Fragment {
                     } else {
                         data_inserted = false;
                     }
-                    if (data_inserted){
+                    if (data_inserted) {
                         Toast toast = Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT);
                         toast.show();
-                    }
-                    else {
+                    } else {
                         Toast toast = Toast.makeText(getContext(), "Unable to insert data", Toast.LENGTH_LONG);
                         toast.show();
                     }
@@ -469,7 +438,7 @@ public class AddOrderFragment extends Fragment {
     }
 
     private void tipChangedText() {
-        if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")){
+        if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")) {
             tipEditText.setText("0.00");
         }
         tipEditText.setSelection(tipEditText.getText().toString().length());
@@ -491,22 +460,21 @@ public class AddOrderFragment extends Fragment {
                 int l = s.toString().length();
                 int diff;
                 diff = l - start;
-                Log.d("CHANGED", "onTextChanged: " + s.toString());
+                Log.d("CHANGED", "onTextChanged: " + s);
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
                 Log.d("CHANGED", "onTextChanged: " + l);
-                Log.d("CHANGED","OnTextChanged: " + diff);
+                Log.d("CHANGED", "OnTextChanged: " + diff);
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
-                if (b){
+                if (b) {
                     Log.d("MATCHED", "MATCHED: " + true);
                     s = "0" + s;
                     Log.d("MATCHED", "MATCHED: " + s);
                     r = new BigDecimal(s.toString());
-                }
-                else {
+                } else {
                     r = new BigDecimal(s.toString());
                     if (before == 0) {
                         if (diff < 4) {
@@ -517,14 +485,12 @@ public class AddOrderFragment extends Fragment {
                     } else {
                         if (diff < 2) {
                             r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
-                        }
-                        else if (diff == 2) {
+                        } else if (diff == 2) {
                             StringBuilder sb = new StringBuilder(s);
                             sb.deleteCharAt(start - 1);
                             r = new BigDecimal(sb.toString());
                             r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
-                        }
-                        else {
+                        } else {
                             r = r.setScale(2);
                         }
                     }
@@ -546,12 +512,13 @@ public class AddOrderFragment extends Fragment {
 
 
     private void orderTotalChangedText() {
-        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")){
+        if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")) {
             orderTotalEditText.setText("0.00");
         }
         orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
         orderTotalTextWatcher = new TextWatcher() {
             BigDecimal r;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d("CHANGED", "beforeTextChanged: " + s.toString());
@@ -565,22 +532,21 @@ public class AddOrderFragment extends Fragment {
                 int l = s.toString().length();
                 int diff;
                 diff = l - start;
-                Log.d("CHANGED", "onTextChanged: " + s.toString());
+                Log.d("CHANGED", "onTextChanged: " + s);
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
                 Log.d("CHANGED", "onTextChanged: " + l);
-                Log.d("CHANGED","OnTextChanged: " + diff);
+                Log.d("CHANGED", "OnTextChanged: " + diff);
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
-                if (b){
+                if (b) {
                     Log.d("MATCHED", "MATCHED: " + true);
                     s = "0" + s;
                     Log.d("MATCHED", "MATCHED: " + s);
                     r = new BigDecimal(s.toString());
-                }
-                else {
+                } else {
                     r = new BigDecimal(s.toString());
                     if (before == 0) {
                         if (diff < 4) {
@@ -591,14 +557,12 @@ public class AddOrderFragment extends Fragment {
                     } else {
                         if (diff < 2) {
                             r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
-                        }
-                        else if (diff == 2) {
+                        } else if (diff == 2) {
                             StringBuilder sb = new StringBuilder(s);
                             sb.deleteCharAt(start - 1);
                             r = new BigDecimal(sb.toString());
                             r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
-                        }
-                        else {
+                        } else {
                             r = r.setScale(2);
                         }
                     }
@@ -619,12 +583,13 @@ public class AddOrderFragment extends Fragment {
     }
 
     private void cashReceivedChangedText() {
-        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")){
+        if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")) {
             cashReceivedEditText.setText("0.00");
         }
         cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
         cashReceivedTextWatcher = new TextWatcher() {
             BigDecimal r;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d("CHANGED", "beforeTextChanged: " + s.toString());
@@ -638,22 +603,21 @@ public class AddOrderFragment extends Fragment {
                 int l = s.toString().length();
                 int diff;
                 diff = l - start;
-                Log.d("CHANGED", "onTextChanged: " + s.toString());
+                Log.d("CHANGED", "onTextChanged: " + s);
                 Log.d("CHANGED", "onTextChanged: " + start);
                 Log.d("CHANGED", "onTextChanged: " + before);
                 Log.d("CHANGED", "onTextChanged: " + count);
                 Log.d("CHANGED", "onTextChanged: " + l);
-                Log.d("CHANGED","OnTextChanged: " + diff);
+                Log.d("CHANGED", "OnTextChanged: " + diff);
                 Pattern p = Pattern.compile("^\\.\\d*$");
                 Matcher m = p.matcher(s.toString());
                 boolean b = m.matches();
-                if (b){
+                if (b) {
                     Log.d("MATCHED", "MATCHED: " + true);
                     s = "0" + s;
                     Log.d("MATCHED", "MATCHED: " + s);
                     r = new BigDecimal(s.toString());
-                }
-                else {
+                } else {
                     r = new BigDecimal(s.toString());
                     if (before == 0) {
                         if (diff < 4) {
@@ -664,14 +628,12 @@ public class AddOrderFragment extends Fragment {
                     } else {
                         if (diff < 2) {
                             r = r.divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_UNNECESSARY);
-                        }
-                        else if (diff == 2) {
+                        } else if (diff == 2) {
                             StringBuilder sb = new StringBuilder(s);
                             sb.deleteCharAt(start - 1);
                             r = new BigDecimal(sb.toString());
                             r = r.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_UNNECESSARY);
-                        }
-                        else {
+                        } else {
                             r = r.setScale(2);
                         }
                     }
@@ -708,7 +670,7 @@ public class AddOrderFragment extends Fragment {
         popup.show();
 
         MenuItem change = popup.getMenu().findItem(R.id.order_change_number);
-        change.setOnMenuItemClickListener(v ->{
+        change.setOnMenuItemClickListener(v -> {
             final String[] m_Text = {""};
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle("New order number");
@@ -722,13 +684,12 @@ public class AddOrderFragment extends Fragment {
                 Log.d(TAG, "showPopup: " + workingDate);
                 boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, NewOrderNumber, OrderId);
 
-                if (changed){
+                if (changed) {
                     Toast updateToast = Toast.makeText(view.getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
                     NavHostFragment.findNavController(AddOrderFragment.this)
                             .navigate(R.id.action_addOrderFragment_to_OrderListFragment);
-                }
-                else {
+                } else {
                     Toast updateToast = Toast.makeText(view.getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
                     updateToast.show();
                     dialog.cancel();
@@ -742,24 +703,24 @@ public class AddOrderFragment extends Fragment {
             return true;
         });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
-        delete.setOnMenuItemClickListener(v ->{
+        delete.setOnMenuItemClickListener(v -> {
             //TODO
             Log.d(TAG, "showPopup: deleted");
             ArrayList<Integer> tipsInOrder;
             tipsInOrder = pizzaDriverDB.getAllTipsPerOrderId(OrderId);
             ArrayList<Integer> cashOrders = new ArrayList<>();
-            for (final Integer tipId: tipsInOrder ){
-                ArrayList<Integer> ids =  pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
+            for (final Integer tipId : tipsInOrder) {
+                ArrayList<Integer> ids = pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
                 cashOrders.addAll(ids);
             }
             // Now Delete all information pertaining to the OrderNumber
-            if (cashOrders.size() > 0){
-                for (final Integer cashOrderId: cashOrders ){
+            if (cashOrders.size() > 0) {
+                for (final Integer cashOrderId : cashOrders) {
                     boolean deleted = pizzaDriverDB.deleteCashOrder(cashOrderId);
                 }
             }
-            if (tipsInOrder.size() > 0){
-                for (final Integer tipId: tipsInOrder ){
+            if (tipsInOrder.size() > 0) {
+                for (final Integer tipId : tipsInOrder) {
                     boolean deleted = pizzaDriverDB.deleteTip(tipId);
                 }
             }
@@ -770,8 +731,7 @@ public class AddOrderFragment extends Fragment {
                 deletedToast.show();
                 NavHostFragment.findNavController(AddOrderFragment.this)
                         .navigate(R.id.action_addOrderFragment_to_mainActivity);
-            }
-            else {
+            } else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
                 deletedToast.show();
             }
@@ -819,20 +779,17 @@ public class AddOrderFragment extends Fragment {
 
         if (TextUtils.isEmpty(tipEditText.getText().toString())) {
             Tip = new BigDecimal("0.00");
-        }
-        else {
+        } else {
             Tip = new BigDecimal(tipEditText.getText().toString());
         }
-        if (TextUtils.isEmpty(orderTotalEditText.getText().toString())){
+        if (TextUtils.isEmpty(orderTotalEditText.getText().toString())) {
             OrderTotal = new BigDecimal("0.00");
-        }
-        else {
+        } else {
             OrderTotal = new BigDecimal(orderTotalEditText.getText().toString());
         }
-        if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())){
+        if (TextUtils.isEmpty(cashReceivedEditText.getText().toString())) {
             CashReceived = new BigDecimal("0.00");
-        }
-        else {
+        } else {
             CashReceived = new BigDecimal(cashReceivedEditText.getText().toString());
         }
 

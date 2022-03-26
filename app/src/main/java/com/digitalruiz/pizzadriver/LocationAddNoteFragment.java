@@ -2,11 +2,6 @@ package com.digitalruiz.pizzadriver;
 
 import android.database.Cursor;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -108,7 +107,7 @@ public class LocationAddNoteFragment extends Fragment {
         AddressText.setText(Address);
 
         String Subdivision;
-        if (SubId > 0){
+        if (SubId > 0) {
             Subdivision = pizzaDriverDB.getSubDivisionBySubId(SubId);
             AddressSubText.setText(Subdivision);
         }
@@ -121,10 +120,9 @@ public class LocationAddNoteFragment extends Fragment {
                 String Note;
                 Log.v("Test", "Selected " + tipNoteStatusChipGroup.getCheckedChipId());
                 int tipNoteTypeSelected = tipNoteStatusChipGroup.getCheckedChipId();
-                if (tipNoteTypeSelected == -1){
+                if (tipNoteTypeSelected == -1) {
                     Note = NoteText.getText().toString();
-                }
-                else {
+                } else {
                     Chip selected_chip = tipNoteStatusChipGroup.findViewById(tipNoteTypeSelected);
                     String selected_value = selected_chip.getText().toString();
                     Log.d("TAG", "onClick: " + selected_value);
@@ -136,12 +134,11 @@ public class LocationAddNoteFragment extends Fragment {
                 DateAdded = formatter.format(date);
 
                 long result = pizzaDriverDB.insertLocationNote(AddressId, SubId, Note, DateAdded);
-                if (result > 0){
+                if (result > 0) {
                     //Success
                     Log.d("TAG", "onClick: " + bundle);
                     NavHostFragment.findNavController(LocationAddNoteFragment.this).navigate(R.id.action_locationAddNoteFragment_to_LocationDetailFragment, bundle);
-                }
-                else {
+                } else {
                     //Something wrong
                 }
 
@@ -149,5 +146,6 @@ public class LocationAddNoteFragment extends Fragment {
         });
 
 
-    };
+    }
+
 }

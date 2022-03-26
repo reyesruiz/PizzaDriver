@@ -6,32 +6,28 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
-    String workingDate;
     public FloatingActionButton addOrder;
+    String workingDate;
     Toolbar toolbar;
     SQLiteDBHelper pizzaDriverDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
         setContentView(R.layout.activity_main);
         pizzaDriverDB = new SQLiteDBHelper(getApplicationContext());
         toolbar = findViewById(R.id.toolbar);
@@ -39,19 +35,17 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         toolbar.setOnMenuItemClickListener(this);
         Log.d("TAG", "onCreate: " + savedInstanceState);
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        if (BusinessDayId > 0){
+        if (BusinessDayId > 0) {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
             Log.d("TAG", "onCreate: First " + workingDate);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0){
+            if (BusinessDayId > 0) {
 
-            }
-            else {
+            } else {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
                 //Tracy
@@ -86,14 +80,12 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 if (currentFragment.equals("Order List Fragment")) {
                     Log.d("TAG", "onClick: " + currentFragment);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                          .navigate(R.id.action_OrderListFragment_to_addOrderNumber, bundleAddOrderNumber);
-                }
-                else if (currentFragment.equals("Summary Fragment")){
+                            .navigate(R.id.action_OrderListFragment_to_addOrderNumber, bundleAddOrderNumber);
+                } else if (currentFragment.equals("Summary Fragment")) {
                     Log.d("TAG", "onClick: " + currentFragment);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
                             .navigate(R.id.action_SummaryFragment_to_addOrderNumber, bundleAddOrderNumber);
-                }
-                else {
+                } else {
                     Log.d("TAG", "onClick: " + "Something Wrong");
                 }
             }
@@ -110,13 +102,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                     Log.d("TAG", "onMenuItemClick: " + workingDate);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
                             .navigate(R.id.action_OrderListFragment_to_selectDateFragment);
-                }
-                else if (currentFragment.equals("Summary Fragment")){
+                } else if (currentFragment.equals("Summary Fragment")) {
                     Log.d("TAG", "onClick: " + currentFragment);
                     NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
                             .navigate(R.id.action_SummaryFragment_to_selectDateFragment);
-                }
-                else {
+                } else {
                     Log.d("TAG", "onClick: " + "Something Wrong");
                 }
                 return true;
@@ -134,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         toolbar.setVisibility(View.VISIBLE);
         Log.d("TAG", "BACK: " + "HERE");
     }
-
 
 
 }
