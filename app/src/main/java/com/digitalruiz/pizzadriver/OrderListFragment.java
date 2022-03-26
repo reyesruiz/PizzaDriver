@@ -1,7 +1,9 @@
 package com.digitalruiz.pizzadriver;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -220,7 +222,17 @@ public class OrderListFragment extends Fragment {
             CashText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView TipText = new TextView(getContext());
-            TipText.setText(Tip);
+            TipText.setText("$" + Tip + " ");
+            if (BigDecimal.valueOf(Double.valueOf(Tip)).compareTo(BigDecimal.ZERO) > 0){
+                TipText.setTextColor(Color.rgb(0,110,55));
+                //TipText.setTextColor(Color.GREEN);
+            }
+            else if (BigDecimal.valueOf(Double.valueOf(Tip)).compareTo(BigDecimal.ZERO) < 0){
+                TipText.setTextColor(Color.RED);
+            }
+            else {
+                TipText.setTextColor(Color.BLACK);
+            }
             TipText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView LocationText = new TextView(getContext());

@@ -173,16 +173,14 @@ public class SummaryFragment extends Fragment {
         CashOrdersTotalText.setText("$" + CashOrdersTotal.toString());
 
         NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
+        netCashText.setText("$" + NetCash.toString());
         if (NetCash.compareTo(BigDecimal.ZERO) > 0){
-            netCashText.setText("$" + NetCash.toString());
-            netCashText.setTextColor(Color.parseColor("#154734"));
+            netCashText.setTextColor(Color.rgb(0,110,55));
         }
         else if (NetCash.compareTo(BigDecimal.ZERO) < 0){
-            netCashText.setText("$" + NetCash.toString());
             netCashText.setTextColor(Color.RED);
         }
         else {
-            netCashText.setText("$" + NetCash.toString());
             netCashText.setTextColor(Color.BLACK);
         }
 
