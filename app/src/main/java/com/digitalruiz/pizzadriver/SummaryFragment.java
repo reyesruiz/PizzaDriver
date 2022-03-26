@@ -118,7 +118,7 @@ public class SummaryFragment extends Fragment {
             BigDecimal TipCredit = new BigDecimal(tip_result.getString(tip_result.getColumnIndex("Amount")));
             CreditTotal = CreditTotal.add(TipCredit);
         }
-        TipsCreditText.setText(CreditTotal.toString());
+        TipsCreditText.setText("$" + CreditTotal.toString());
 
 
         ArrayList<Integer> tipsCash = pizzaDriverDB.getAllCash(allTips);
@@ -129,11 +129,11 @@ public class SummaryFragment extends Fragment {
             BigDecimal TipCash = new BigDecimal(result.getString(result.getColumnIndex("Amount")));
             CashTotal = CashTotal.add(TipCash);
         }
-        TipsCashText.setText(CashTotal.toString());
+        TipsCashText.setText("$" + CashTotal.toString());
 
         TipsTotal = CreditTotal.add(CashTotal);
 
-        TipsTotalText.setText(TipsTotal.toString());
+        TipsTotalText.setText("$" + TipsTotal.toString());
 
         //Tracy
         ArrayList<Integer> ordersTracy = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "1");
@@ -144,7 +144,8 @@ public class SummaryFragment extends Fragment {
         BigDecimal tracyCount = new BigDecimal(ordersTracy.size());
         Log.d("TEST", "Count: " + tracyCount);
         TracyTotal = tracyCount.multiply(Rate);
-        TracyTotalText.setText(TracyTotal.toString());
+        String TracyTotalString = tracyCount.toString() + " x $" + Rate.toString() + " = $" + TracyTotal;
+        TracyTotalText.setText(TracyTotalString);
 
         //Mountain House
         ArrayList<Integer> ordersMH = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "2");
@@ -154,13 +155,14 @@ public class SummaryFragment extends Fragment {
         Rate = new BigDecimal(rateString);
         BigDecimal mhCount = new BigDecimal(ordersMH.size());
         MountainHouseTotal = mhCount.multiply(Rate);
-        MountainHouseText.setText(MountainHouseTotal.toString());
+        String MountainHouseTotalString = mhCount.toString() + " x $" + Rate.toString() + " = $" + MountainHouseTotal;
+        MountainHouseText.setText(MountainHouseTotalString);
 
         ReimbursementTotal = TracyTotal.add(MountainHouseTotal);
-        ReimbursementTotalText.setText(ReimbursementTotal.toString());
+        ReimbursementTotalText.setText("$" + ReimbursementTotal.toString());
 
         CompensationTotal = TipsTotal.add(ReimbursementTotal);
-        CompensationTotalText.setText(CompensationTotal.toString());
+        CompensationTotalText.setText("$" + CompensationTotal.toString());
 
         ArrayList<Integer> cashOrdersIds = pizzaDriverDB.getAllCashOrders(tipsCash);
         for (final int cashOrderId: cashOrdersIds){
@@ -171,10 +173,10 @@ public class SummaryFragment extends Fragment {
             CashOrdersTotal = CashOrdersTotal.add(OrderTotal);
         }
 
-        CashOrdersTotalText.setText(CashOrdersTotal.toString());
+        CashOrdersTotalText.setText("$" + CashOrdersTotal.toString());
 
         NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
-        netCashText.setText(NetCash.toString());
+        netCashText.setText("$" + NetCash.toString());
 
         Cursor creditAuto = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips,"Credit Auto", "0");
         OrdersCreditAuto = creditAuto.getCount();
