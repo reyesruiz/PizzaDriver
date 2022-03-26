@@ -1,6 +1,7 @@
 package com.digitalruiz.pizzadriver;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.util.Log;
@@ -172,7 +173,18 @@ public class SummaryFragment extends Fragment {
         CashOrdersTotalText.setText("$" + CashOrdersTotal.toString());
 
         NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
-        netCashText.setText("$" + NetCash.toString());
+        if (NetCash.compareTo(BigDecimal.ZERO) > 0){
+            netCashText.setText("$" + NetCash.toString());
+            netCashText.setTextColor(Color.parseColor("#154734"));
+        }
+        else if (NetCash.compareTo(BigDecimal.ZERO) < 0){
+            netCashText.setText("$" + NetCash.toString());
+            netCashText.setTextColor(Color.RED);
+        }
+        else {
+            netCashText.setText("$" + NetCash.toString());
+            netCashText.setTextColor(Color.BLACK);
+        }
 
         Cursor creditAuto = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Credit Auto", "0");
         OrdersCreditAuto = creditAuto.getCount();
