@@ -1,16 +1,8 @@
 package com.digitalruiz.pizzadriver;
 
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +15,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -103,7 +99,7 @@ public class LocationDetailsFragment extends Fragment {
         NoteIds = pizzaDriverDB.getNoteIds(AddressId, SubdivisionId);
 
         int counter = 0;
-        for (final int noteId: NoteIds){
+        for (final int noteId : NoteIds) {
             counter = counter + 1;
             Cursor result = pizzaDriverDB.getNoteData(noteId);
             Log.d(TAG, "onViewCreatedCount: " + result.getCount());
@@ -121,10 +117,9 @@ public class LocationDetailsFragment extends Fragment {
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
-            if (counter % 2 == 0){
+            if (counter % 2 == 0) {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
-            }
-            else {
+            } else {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, getContext().getTheme()));
 
             }
@@ -146,7 +141,7 @@ public class LocationDetailsFragment extends Fragment {
         SubDivisionsIds = pizzaDriverDB.getSubDivisionsByAddressID(AddressId);
 
 
-        if (SubDivisionsIds.size() > 0){
+        if (SubDivisionsIds.size() > 0) {
             SubDivisions.add("");
             Iterator iter = SubDivisionsIds.iterator();
             while (iter.hasNext()) {
@@ -158,10 +153,10 @@ public class LocationDetailsFragment extends Fragment {
             adapterList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             int i;
             SubDivisionSpinner.setAdapter(adapterList);
-            if (SubdivisionId > 0){
+            if (SubdivisionId > 0) {
                 String SubNum = pizzaDriverDB.getSubDivisionBySubId(SubdivisionId);
-                for(i=0; i < adapterList.getCount(); i++) {
-                    if(SubNum.trim().equals(adapterList.getItem(i))){
+                for (i = 0; i < adapterList.getCount(); i++) {
+                    if (SubNum.trim().equals(adapterList.getItem(i))) {
                         SubDivisionSpinner.setSelection(i);
                         break;
                     }
@@ -211,7 +206,6 @@ public class LocationDetailsFragment extends Fragment {
         }
 
 
-
         backToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,14 +233,13 @@ public class LocationDetailsFragment extends Fragment {
                     m_Text[0] = input.getText().toString();
                     String NewSub = m_Text[0];
                     long result = pizzaDriverDB.insertSubDivisionAddress(AddressId, NewSub);
-                    if (result > 0){
+                    if (result > 0) {
                         Toast updateToast = Toast.makeText(getContext(), "Inserted apt,space,unit number " + NewSub + " to database", Toast.LENGTH_SHORT);
                         updateToast.show();
                         int sub = (int) result;
                         bundle.putInt("SUBDIVISION_ID", sub);
                         NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_self, bundle);
-                    }
-                    else {
+                    } else {
                         Toast updateToast = Toast.makeText(getContext(), "Unable to insert apt,space,unit number " + NewSub + " to database", Toast.LENGTH_SHORT);
                         updateToast.show();
                     }
@@ -274,8 +267,7 @@ public class LocationDetailsFragment extends Fragment {
             if (deleted) {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Note", Toast.LENGTH_SHORT);
                 deletedToast.show();
-            }
-            else {
+            } else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Note, something wrong", Toast.LENGTH_LONG);
                 deletedToast.show();
             }

@@ -12,7 +12,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="32dp"
         android:text="Select Date"
-        android:textSize="18sp"
-        />
+        android:textSize="18sp" />
 
 </FrameLayout>

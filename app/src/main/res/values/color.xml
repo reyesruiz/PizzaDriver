@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 ~ Copyright (C) 2019 The Android Open Source Project
 ~
 ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,41 +41,30 @@
 
     <!--Color palette-->
 
-    <color name="purple_200">#bb86fc</color> <!--Color primary (dark)-->
-    <color name="purple_500">#6200ee</color> <!--Color primary (light)-->
-    <color name="purple_600">#4b01d0</color> <!--Color primary variant (dark)-->
-    <color name="purple_700">#3700b3</color> <!--Color primary variant (light)-->
+    <!--Color primary (dark)-->
+    <!--Color primary (light)-->
+    <!--Color primary variant (dark)-->
+    <!--Color primary variant (light)-->
 
-    <color name="green_200">#03dac6</color> <!--Color secondary-->
-    <color name="green_500">#018786</color> <!--Color secondary variant-->
+    <!--Color secondary-->
+    <!--Color secondary variant-->
 
-    <color name="red_200">#cf6679</color> <!--Color error (dark)-->
+    <!--Color error (dark)-->
     <color name="red_600">#b00020</color> <!--Color error (light)-->
 
     <!--Color surface (light), color on error (light), -->
     <!--color on surface (dark), color on surface (dark)-->
     <color name="white_50">#ffffff</color>
 
-    <color name="black_800">#121212</color> <!--Color surface (dark)-->
+    <!--Color surface (dark)-->
     <!--Color on secondary (light), color on background (light),-->
     <!--color on surface (light)-->
     <color name="black_900">#000000</color>
 
     <!--MM Palette-->
-    <color name="mm_red">#b22b2e</color>
-    <color name="mm_red_shade_1">#C53032</color>
-    <color name="mm_red_shade_2">#D75B5D</color>
-    <color name="mm_red_hover">#9D2426</color>
     <color name="mm_pine_green">#004438</color>
     <color name="mm_pine_green_shade_1">#006653</color>
     <color name="mm_pine_green_shade_2">#00A385</color>
-    <color name="mm_wild_yellow">#f5d93e</color>
-    <color name="mm_wild_yellow_shade_1">#F7E164</color>
     <color name="mm_wild_yellow_shade_2">#F9E88B</color>
-    <color name="mm_wild_yellow_shade_3">#FAEC9E</color>
-    <color name="mm_rock_grey">#58595b</color>
-    <color name="mm_rock_grey_shade_1">#646568</color>
-    <color name="mm_rock_grey_shade_2">#787A7D</color>
-    <color name="mm_rock_grey_shade_3">#F5F5F5</color>
 
 </resources>

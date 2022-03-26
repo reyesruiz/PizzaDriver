@@ -48,7 +48,7 @@
         android:id="@+id/addLocationAddressFragment"
         android:name="com.digitalruiz.pizzadriver.addLocationAddressFragment"
         android:label="fragment_add_location_address"
-        tools:layout="@layout/fragment_add_location_address" >
+        tools:layout="@layout/fragment_add_location_address">
         <action
             android:id="@+id/action_addLocationAddressFragment_to_LocationDetailFragment"
             app:destination="@id/LocationDetailFragment" />
@@ -57,7 +57,7 @@
         android:id="@+id/locationAddNoteFragment"
         android:name="com.digitalruiz.pizzadriver.LocationAddNoteFragment"
         android:label="fragment_location_add_note"
-        tools:layout="@layout/fragment_location_add_note" >
+        tools:layout="@layout/fragment_location_add_note">
         <action
             android:id="@+id/action_locationAddNoteFragment_to_LocationDetailFragment"
             app:destination="@id/LocationDetailFragment" />

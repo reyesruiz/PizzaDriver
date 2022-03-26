@@ -1,18 +1,15 @@
 package com.digitalruiz.pizzadriver;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -32,8 +29,8 @@ public class SelectDateFragment extends Fragment {
 
     String selectedDate;
     String workingDate;
-    private Button mPickDateButton;
     SQLiteDBHelper pizzaDriverDB;
+    private Button mPickDateButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -121,10 +118,9 @@ public class SelectDateFragment extends Fragment {
                 Log.d("TAG", "onPositiveButtonClick: " + selectedDate);
                 Log.d("TEST", "onPositiveButtonClick: " + selection);
                 long BusinessDayId = pizzaDriverDB.getBusinessDay(selectedDate);
-                if (BusinessDayId > 0){
+                if (BusinessDayId > 0) {
                     pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
-                }
-                else {
+                } else {
                     BusinessDayId = pizzaDriverDB.insertDate(selectedDate);
                     pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
                     //Tracy

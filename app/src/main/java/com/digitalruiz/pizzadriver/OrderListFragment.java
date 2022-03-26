@@ -1,8 +1,9 @@
 package com.digitalruiz.pizzadriver;
 
-import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -26,7 +27,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,8 +46,7 @@ public class OrderListFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
 
-    )
-    {
+    ) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_order_list, container, false);
     }
@@ -57,18 +56,16 @@ public class OrderListFragment extends Fragment {
         Log.d("TAG", "onCreate: Second " + workingDate);
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        if (BusinessDayId > 0){
+        if (BusinessDayId > 0) {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0){
+            if (BusinessDayId > 0) {
 
-            }
-            else {
+            } else {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
                 //Tracy
@@ -87,31 +84,27 @@ public class OrderListFragment extends Fragment {
         all_orders_ids = pizzaDriverDB.getAllOrders(workingDate);
         ArrayList<Integer> allTips = pizzaDriverDB.getAllTips(all_orders_ids);
 
-        if (getArguments() == null){
+        if (getArguments() == null) {
             //In case no arguments get passed
             orders_ids = all_orders_ids;
-        }
-        else {
+        } else {
             //Need to rework this
 
             if ((Objects.equals(requireArguments().getString("Type"), "*")) && (Objects.equals(requireArguments().getString("CashBool"), "*")) && (Objects.equals(requireArguments().getString("LocationId"), "*"))) {
                 orders_ids = all_orders_ids;
-            }
-            else if (Objects.equals(requireArguments().getString("LocationId"), "*")){
+            } else if (Objects.equals(requireArguments().getString("LocationId"), "*")) {
                 Log.d("TEST", "TYPE: " + getArguments().getString("Type"));
                 Cursor tips_result = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, getArguments().getString("Type"), getArguments().getString("CashBool"));
-                while (tips_result.moveToNext()){
+                while (tips_result.moveToNext()) {
                     int order_id = tips_result.getInt(tips_result.getColumnIndex("OrderId"));
-                    if (orders_ids.contains(order_id)){
+                    if (orders_ids.contains(order_id)) {
                         //nothing
-                    }
-                    else{
+                    } else {
                         orders_ids.add(order_id);
                     }
                 }
 
-            }
-            else {
+            } else {
                 orders_ids = pizzaDriverDB.getAllOrdersPerLocationId(all_orders_ids, getArguments().getString("LocationId"));
             }
 
@@ -167,7 +160,7 @@ public class OrderListFragment extends Fragment {
 
         WrapperTable.addView(HeadLine);
         int counter = 0;
-        for (final Integer orderId: orders_ids ){
+        for (final Integer orderId : orders_ids) {
             counter = counter + 1;
             Log.v("Test", "Order id is " + orderId);
 
@@ -193,10 +186,9 @@ public class OrderListFragment extends Fragment {
             TableRow Row = new TableRow(getContext());
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
-            if (counter % 2 == 0){
+            if (counter % 2 == 0) {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
-            }
-            else {
+            } else {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, getContext().getTheme()));
 
             }
@@ -217,22 +209,30 @@ public class OrderListFragment extends Fragment {
             });
 
 
-
-
             TextView OrderTypeText = new TextView(getContext());
             OrderTypeText.setText(OrderType);
             OrderTypeText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
 
             TextView CashText = new TextView((getContext()));
-            if (Cash == 1){
+            if (Cash == 1) {
                 CashText.setText(R.string.cash);
             }
 
             CashText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView TipText = new TextView(getContext());
-            TipText.setText(Tip);
+            TipText.setText("$" + Tip + " ");
+            if (BigDecimal.valueOf(Double.valueOf(Tip)).compareTo(BigDecimal.ZERO) > 0){
+                TipText.setTextColor(Color.rgb(0,110,55));
+                //TipText.setTextColor(Color.GREEN);
+            }
+            else if (BigDecimal.valueOf(Double.valueOf(Tip)).compareTo(BigDecimal.ZERO) < 0){
+                TipText.setTextColor(Color.RED);
+            }
+            else {
+                TipText.setTextColor(Color.BLACK);
+            }
             TipText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TextView LocationText = new TextView(getContext());
@@ -254,8 +254,6 @@ public class OrderListFragment extends Fragment {
         }
 
 
-
-
         button_first.setOnClickListener(v -> NavHostFragment.findNavController(OrderListFragment.this)
                 .navigate(R.id.action_OrderListFragment_to_SummaryFragment));
 
@@ -268,7 +266,7 @@ public class OrderListFragment extends Fragment {
         popup.show();
 
         MenuItem change = popup.getMenu().findItem(R.id.order_change_number);
-        change.setOnMenuItemClickListener(v ->{
+        change.setOnMenuItemClickListener(v -> {
             final String[] m_Text = {""};
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("New order number");
@@ -279,13 +277,12 @@ public class OrderListFragment extends Fragment {
                 m_Text[0] = input.getText().toString();
                 int NewOrderNumber = Integer.parseInt(m_Text[0]);
                 boolean changed = pizzaDriverDB.updateOrderNumber(workingDate, NewOrderNumber, OrderId);
-                if (changed){
+                if (changed) {
                     Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
                     getActivity().finish();
                     startActivity(getActivity().getIntent());
-                }
-                else {
+                } else {
                     Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
                     updateToast.show();
                     dialog.cancel();
@@ -299,24 +296,24 @@ public class OrderListFragment extends Fragment {
             return true;
         });
         MenuItem delete = popup.getMenu().findItem(R.id.order_delete);
-        delete.setOnMenuItemClickListener(v ->{
+        delete.setOnMenuItemClickListener(v -> {
             //TODO
             Log.d("TEST", "showPopup: deleted");
             ArrayList<Integer> tipsInOrder;
             tipsInOrder = pizzaDriverDB.getAllTipsPerOrderId(OrderId);
             ArrayList<Integer> cashOrders = new ArrayList<>();
-            for (final Integer tipId: tipsInOrder ){
-                ArrayList<Integer> ids =  pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
+            for (final Integer tipId : tipsInOrder) {
+                ArrayList<Integer> ids = pizzaDriverDB.getAllCashOrdersPerTipId(tipId);
                 cashOrders.addAll(ids);
             }
             // Now Delete all information pertaining to the OrderNumber
-            if (cashOrders.size() > 0){
-                for (final Integer cashOrderId: cashOrders ){
+            if (cashOrders.size() > 0) {
+                for (final Integer cashOrderId : cashOrders) {
                     boolean deleted = pizzaDriverDB.deleteCashOrder(cashOrderId);
                 }
             }
-            if (tipsInOrder.size() > 0){
-                for (final Integer tipId: tipsInOrder ){
+            if (tipsInOrder.size() > 0) {
+                for (final Integer tipId : tipsInOrder) {
                     boolean deleted = pizzaDriverDB.deleteTip(tipId);
                 }
             }
@@ -324,8 +321,7 @@ public class OrderListFragment extends Fragment {
             if (deleted) {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Deleted Order Number " + OrderNumber, Toast.LENGTH_SHORT);
                 deletedToast.show();
-            }
-            else {
+            } else {
                 Toast deletedToast = Toast.makeText(view.getContext(), "Unable to delete Order Number " + OrderNumber + " , something wrong", Toast.LENGTH_LONG);
                 deletedToast.show();
             }

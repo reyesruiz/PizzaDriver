@@ -1,7 +1,7 @@
 package com.digitalruiz.pizzadriver;
 
-import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.icu.math.BigDecimal;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 public class SummaryFragment extends Fragment {
 
@@ -39,18 +38,16 @@ public class SummaryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         pizzaDriverDB = new SQLiteDBHelper(getContext());
         long BusinessDayId = pizzaDriverDB.getActiveBusinessDay();
-        if (BusinessDayId > 0){
+        if (BusinessDayId > 0) {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
-        }
-        else {
+        } else {
             Date date = Calendar.getInstance().getTime();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             workingDate = formatter.format(date);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0){
+            if (BusinessDayId > 0) {
 
-            }
-            else {
+            } else {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
             }
@@ -110,7 +107,7 @@ public class SummaryFragment extends Fragment {
         ArrayList<Integer> tipsCredit = pizzaDriverDB.getAllCredit(allTips);
         Log.d("TEST", "onViewCreated: " + tipsCredit);
         CreditTotal = new BigDecimal("0.00");
-        for (final int tipId: tipsCredit ){
+        for (final int tipId : tipsCredit) {
             Log.d("TEST", "onViewCreated: " + tipId);
             Cursor tip_result = pizzaDriverDB.getTipDataByTipId(tipId);
             Log.d("TEST", "onViewCreated: " + tip_result.getCount());
@@ -118,22 +115,22 @@ public class SummaryFragment extends Fragment {
             BigDecimal TipCredit = new BigDecimal(tip_result.getString(tip_result.getColumnIndex("Amount")));
             CreditTotal = CreditTotal.add(TipCredit);
         }
-        TipsCreditText.setText(CreditTotal.toString());
+        TipsCreditText.setText("$" + CreditTotal.toString());
 
 
         ArrayList<Integer> tipsCash = pizzaDriverDB.getAllCash(allTips);
         Log.d("TEST", "onViewCreated: " + tipsCash);
-        for (final int tipId: tipsCash ){
+        for (final int tipId : tipsCash) {
             Cursor result = pizzaDriverDB.getTipDataByTipId(tipId);
             result.moveToFirst();
             BigDecimal TipCash = new BigDecimal(result.getString(result.getColumnIndex("Amount")));
             CashTotal = CashTotal.add(TipCash);
         }
-        TipsCashText.setText(CashTotal.toString());
+        TipsCashText.setText("$" + CashTotal.toString());
 
         TipsTotal = CreditTotal.add(CashTotal);
 
-        TipsTotalText.setText(TipsTotal.toString());
+        TipsTotalText.setText("$" + TipsTotal.toString());
 
         //Tracy
         ArrayList<Integer> ordersTracy = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "1");
@@ -144,7 +141,8 @@ public class SummaryFragment extends Fragment {
         BigDecimal tracyCount = new BigDecimal(ordersTracy.size());
         Log.d("TEST", "Count: " + tracyCount);
         TracyTotal = tracyCount.multiply(Rate);
-        TracyTotalText.setText(TracyTotal.toString());
+        String TracyTotalString = tracyCount + " x $" + Rate + " = $" + TracyTotal;
+        TracyTotalText.setText(TracyTotalString);
 
         //Mountain House
         ArrayList<Integer> ordersMH = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "2");
@@ -154,16 +152,17 @@ public class SummaryFragment extends Fragment {
         Rate = new BigDecimal(rateString);
         BigDecimal mhCount = new BigDecimal(ordersMH.size());
         MountainHouseTotal = mhCount.multiply(Rate);
-        MountainHouseText.setText(MountainHouseTotal.toString());
+        String MountainHouseTotalString = mhCount + " x $" + Rate + " = $" + MountainHouseTotal;
+        MountainHouseText.setText(MountainHouseTotalString);
 
         ReimbursementTotal = TracyTotal.add(MountainHouseTotal);
-        ReimbursementTotalText.setText(ReimbursementTotal.toString());
+        ReimbursementTotalText.setText("$" + ReimbursementTotal.toString());
 
         CompensationTotal = TipsTotal.add(ReimbursementTotal);
-        CompensationTotalText.setText(CompensationTotal.toString());
+        CompensationTotalText.setText("$" + CompensationTotal.toString());
 
         ArrayList<Integer> cashOrdersIds = pizzaDriverDB.getAllCashOrders(tipsCash);
-        for (final int cashOrderId: cashOrdersIds){
+        for (final int cashOrderId : cashOrdersIds) {
             Log.d("TEST", "cashOrderId: " + cashOrderId);
             Cursor cash_order_result = pizzaDriverDB.getCashOrderDataByCashOrderId(cashOrderId);
             cash_order_result.moveToFirst();
@@ -171,12 +170,21 @@ public class SummaryFragment extends Fragment {
             CashOrdersTotal = CashOrdersTotal.add(OrderTotal);
         }
 
-        CashOrdersTotalText.setText(CashOrdersTotal.toString());
+        CashOrdersTotalText.setText("$" + CashOrdersTotal.toString());
 
         NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
-        netCashText.setText(NetCash.toString());
+        netCashText.setText("$" + NetCash.toString());
+        if (NetCash.compareTo(BigDecimal.ZERO) > 0){
+            netCashText.setTextColor(Color.rgb(0,110,55));
+        }
+        else if (NetCash.compareTo(BigDecimal.ZERO) < 0){
+            netCashText.setTextColor(Color.RED);
+        }
+        else {
+            netCashText.setTextColor(Color.BLACK);
+        }
 
-        Cursor creditAuto = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips,"Credit Auto", "0");
+        Cursor creditAuto = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Credit Auto", "0");
         OrdersCreditAuto = creditAuto.getCount();
         Cursor creditManual = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Credit Manual", "0");
         OrdersCreditManual = creditManual.getCount();
@@ -191,8 +199,6 @@ public class SummaryFragment extends Fragment {
         Cursor other = pizzaDriverDB.getTipDataPerTypeAndCashBool(allTips, "Grubhub", "*");
         OrdersOther = other.getCount();
         OrdersTotal = allTips.size();
-
-
 
 
         ordersCreditAutoText.setText(Integer.toString(OrdersCreditAuto));

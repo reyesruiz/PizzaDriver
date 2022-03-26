@@ -14,7 +14,6 @@
         android:hint="@string/enter_order_number"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
-        android:inputType="number"
-        />
+        android:inputType="number" />
 
 </FrameLayout>

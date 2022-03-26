@@ -1,20 +1,17 @@
 package com.digitalruiz.pizzadriver;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavHostController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -112,16 +109,15 @@ public class addLocationAddressFragment extends Fragment {
                 Log.d("TAG", "onClick: " + placeId);
                 long insert_result_location_address = pizzaDriverDB.insertLocationAddress(placeId, placeName, placeAddress, placeAddressComponents);
 
-                if (insert_result_location_address > 0){
+                if (insert_result_location_address > 0) {
                     int AddressId = (int) insert_result_location_address;
                     int SubdivisionId = 0;
-                    if (subDivision.length() > 0){
+                    if (subDivision.length() > 0) {
                         String subDivisionText = subDivision.getText().toString();
                         long insert_subdivision_result = pizzaDriverDB.insertSubDivisionAddress(AddressId, subDivisionText);
                         if (insert_subdivision_result > 0) {
                             SubdivisionId = (int) insert_subdivision_result;
-                        }
-                        else {
+                        } else {
                             //TODO Toast failed
                         }
                     }
@@ -133,13 +129,13 @@ public class addLocationAddressFragment extends Fragment {
                     NavHostFragment.findNavController(addLocationAddressFragment.this)
                             .navigate(R.id.action_addLocationAddressFragment_to_LocationDetailFragment, bundle);
 
-                }
-                else {
+                } else {
                     //TODO check if exists in database otherwise show error.
                 }
             }
         });
 
 
-    };
+    }
+
 }

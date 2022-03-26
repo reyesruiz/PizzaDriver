@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.android.libraries.places.api.model.AddressComponents;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,9 +16,7 @@ import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "pizza_driver";
-
     //OrdersTable
     public static final String ORDERS_TABLE = "Orders";
     public static final String ORDER_ID = "OrderId";
@@ -28,25 +24,21 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String ORDER_NUMBER = "OrderNumber";
     public static final String TIP_ID = "TipId";
     public static final String LOCATION_ID = "LocationId";
-
     //Locations Table
     public static final String LOCATIONS_TABLE = "Locations";
     public static final String NAME = "Name";
     public static final String BACKUP_LOCATIONS_TABLE = "BackupLocations";
-    //public static final String RATE = "Rate";
-
     //Tips Table
     public static final String TIPS_TABLE = "Tips";
+    //public static final String RATE = "Rate";
     public static final String AMOUNT = "Amount";
     public static final String TYPE = "Type";
     public static final String CASH = "Cash";
     public static final String CASH_ORDER_ID = "CashOrderId";
-
     //CashOrders
     public static final String CASH_ORDERS_TABLE = "CashOrders";
     public static final String TOTAL = "Total";
     public static final String RECEIVED = "Received";
-
     //Location Addresses
     public static final String LOCATION_ADDRESSES_TABLE = "LocationAddresses";
     public static final String ADDRESS_ID = "AddressID";
@@ -54,36 +46,30 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String ADDRESS_NAME = "AddressName";
     public static final String ADDRESS = "Address";
     public static final String ADDRESS_COMPONENTS = "AddressComponents";
-
     //LocationAddressSubDivision
     public static final String LOCATION_ADDRESS_SUBDIVISION_TABLE = "LocationAddressSubDivision";
     public static final String SUBDIVISION_ID = "SubdivisionID";
     public static final String SUBDIVISION = "SUBDIVISION";
-
     //Notes
     public static final String LOCATION_ADDRESS_NOTES_TABLE = "LocationAddressNotes";
     public static final String NOTE_ID = "NoteId";
     public static final String NOTE = "Note";
     public static final String DATE_ADDED = "DateAdded";
-
-    public SQLiteDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
     //Date
     public static final String BUSINESS_DAY_TABLE = "BusinessDay";
     public static final String BUSINESS_DAY_ID = "BusinessDayId";
     public static final String BUSINESS_DAY_DATE = "Date";
-
     //Rate
     public static final String RATE_TABLE = "Rate";
     public static final String RATE_ID = "RateId";
     public static final String RATE = "Rate";
-
     //Active Business Day Table
     public static final String ACTIVE_BUSINESS_DAY_TABLE = "ActiveBusinessDay";
     public static final String ACTIVE_BUSINESS_DAY_ID = "ActiveBusinessDayId";
-
+    private static final int DATABASE_VERSION = 5;
+    public SQLiteDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase pizza_driver_db) {
@@ -116,7 +102,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +
                 LOCATION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 NAME + " TEXT NOT NULL " +
-                 ")"
+                ")"
         );
 
         ContentValues contentValues = new ContentValues();
@@ -237,37 +223,37 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     ")"
             );
 
-            
-            pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_LOCATIONS_TABLE+"("+LOCATION_ID+","+NAME+")");
-            pizza_driver_db.execSQL("INSERT INTO " + BACKUP_LOCATIONS_TABLE + " SELECT " + LOCATION_ID+","+ NAME + " FROM " + LOCATIONS_TABLE);
+
+            pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_LOCATIONS_TABLE + "(" + LOCATION_ID + "," + NAME + ")");
+            pizza_driver_db.execSQL("INSERT INTO " + BACKUP_LOCATIONS_TABLE + " SELECT " + LOCATION_ID + "," + NAME + " FROM " + LOCATIONS_TABLE);
             pizza_driver_db.execSQL("DROP TABLE " + LOCATIONS_TABLE);
             pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +
                     LOCATION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                     NAME + " TEXT NOT NULL " +
                     ")");
-            pizza_driver_db.execSQL("INSERT INTO " + LOCATIONS_TABLE + " SELECT " + LOCATION_ID +","+NAME + " FROM " + BACKUP_LOCATIONS_TABLE);
+            pizza_driver_db.execSQL("INSERT INTO " + LOCATIONS_TABLE + " SELECT " + LOCATION_ID + "," + NAME + " FROM " + BACKUP_LOCATIONS_TABLE);
             pizza_driver_db.execSQL("DROP TABLE " + BACKUP_LOCATIONS_TABLE);
 
             ArrayList<String> uniq_dates;
             uniq_dates = new ArrayList<>();
-            Cursor res =  pizza_driver_db.rawQuery( "select distinct " + DATE + " from " + ORDERS_TABLE, null );
+            Cursor res = pizza_driver_db.rawQuery("select distinct " + DATE + " from " + ORDERS_TABLE, null);
             res.moveToFirst();
-            while(!res.isAfterLast()){
+            while (!res.isAfterLast()) {
                 uniq_dates.add(res.getString(res.getColumnIndex(DATE)));
                 res.moveToNext();
             }
             res.close();
-            ArrayList <Long> uniq_dates_list;
+            ArrayList<Long> uniq_dates_list;
             uniq_dates_list = new ArrayList<>();
-            for (final String uniq_date: uniq_dates){
+            for (final String uniq_date : uniq_dates) {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(BUSINESS_DAY_DATE, uniq_date);
                 long row = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
                 uniq_dates_list.add(row);
                 contentValues.clear();
             }
-            for (final Long BusinessDayId:  uniq_dates_list){
-                Cursor resDate =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
+            for (final Long BusinessDayId : uniq_dates_list) {
+                Cursor resDate = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
                 resDate.moveToFirst();
                 String workingDate = resDate.getString(resDate.getColumnIndex(BUSINESS_DAY_DATE));
                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -288,7 +274,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
                 // getTime is to get epoch
-                if (date.getTime() > dateToCheck.getTime()){
+                if (date.getTime() > dateToCheck.getTime()) {
                     //Tracy
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
@@ -302,8 +288,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     contentValues.put(RATE, "3.00");
                     pizza_driver_db.insert(RATE_TABLE, null, contentValues);
 
-                }
-                else {
+                } else {
                     //Tracy
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
@@ -321,7 +306,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteData(){
+    public void deleteData() {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         pizza_driver_db.execSQL("DELETE FROM " + ORDERS_TABLE);
         pizza_driver_db.execSQL("DELETE FROM " + TIPS_TABLE);
@@ -333,69 +318,69 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Log.d("TEST", "deleteData: ");
     }
 
-    public long insertOrder (String WorkingDate, Integer OrderNumber, Integer LocationID){
+    public long insertOrder(String WorkingDate, Integer OrderNumber, Integer LocationID) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DATE, WorkingDate);
         contentValues.put(ORDER_NUMBER, OrderNumber);
         contentValues.put(LOCATION_ID, LocationID);
-        long rowInserted  = pizza_driver_db.insert(ORDERS_TABLE, null, contentValues);
+        long rowInserted = pizza_driver_db.insert(ORDERS_TABLE, null, contentValues);
         Log.d("TEST", "insertOrder: " + rowInserted);
         return rowInserted;
     }
 
-    public long insertTip (String Amount,  String Type, Integer TipCashBool, long OrderId){
+    public long insertTip(String Amount, String Type, Integer TipCashBool, long OrderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(AMOUNT, Amount);
         contentValues.put(TYPE, Type);
         contentValues.put(CASH, TipCashBool);
         contentValues.put(ORDER_ID, OrderId);
-        long rowInserted  = pizza_driver_db.insert(TIPS_TABLE, null, contentValues);
+        long rowInserted = pizza_driver_db.insert(TIPS_TABLE, null, contentValues);
         Log.d("TEST", "insertTip: " + rowInserted);
         return rowInserted;
     }
 
-    public long insertCashOrder (String Total,  String Received, long TipId){
+    public long insertCashOrder(String Total, String Received, long TipId) {
         Log.d("TEST", "insertCashOrder: " + Total + " " + Received);
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TOTAL, Total);
         contentValues.put(RECEIVED, Received);
         contentValues.put(TIP_ID, TipId);
-        long rowInserted  = pizza_driver_db.insert(CASH_ORDERS_TABLE, null, contentValues);
+        long rowInserted = pizza_driver_db.insert(CASH_ORDERS_TABLE, null, contentValues);
         Log.d("TEST", "insertCash: " + rowInserted);
         return rowInserted;
     }
 
 
-    public long insertLocationAddress (String GoogleLocationId, String AddressName, String Address, String
-        AddressComponents){
+    public long insertLocationAddress(String GoogleLocationId, String AddressName, String Address, String
+            AddressComponents) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(GOOGLE_LOCATION_ID, GoogleLocationId);
         contentValues.put(ADDRESS_NAME, AddressName);
         contentValues.put(ADDRESS, Address);
         contentValues.put(ADDRESS_COMPONENTS, AddressComponents);
-        long rowInserted  = pizza_driver_db.insert(LOCATION_ADDRESSES_TABLE, null, contentValues);
+        long rowInserted = pizza_driver_db.insert(LOCATION_ADDRESSES_TABLE, null, contentValues);
         Log.d("TEST", "insertLocationAddress: " + rowInserted);
         return rowInserted;
     }
 
-    public long insertLocationNote (int AddressId, int SubdivisionId, String Note, String DateAdded){
+    public long insertLocationNote(int AddressId, int SubdivisionId, String Note, String DateAdded) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ADDRESS_ID, AddressId);
-        if (SubdivisionId > 0){
+        if (SubdivisionId > 0) {
             contentValues.put(SUBDIVISION_ID, SubdivisionId);
         }
         contentValues.put(NOTE, Note);
         contentValues.put(DATE_ADDED, DateAdded);
-        long rowInserted  = pizza_driver_db.insert(LOCATION_ADDRESS_NOTES_TABLE, null, contentValues);
+        long rowInserted = pizza_driver_db.insert(LOCATION_ADDRESS_NOTES_TABLE, null, contentValues);
         return rowInserted;
     }
 
-    public long insertSubDivisionAddress(int AddressId, String Subdivision ) {
+    public long insertSubDivisionAddress(int AddressId, String Subdivision) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ADDRESS_ID, AddressId);
@@ -404,7 +389,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
-    public long insertDate(String BusinessDayDate){
+    public long insertDate(String BusinessDayDate) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSINESS_DAY_DATE, BusinessDayDate);
@@ -412,7 +397,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
-    public long insertRate(long BusinessDayId, Integer LocationId,String Rate){
+    public long insertRate(long BusinessDayId, Integer LocationId, String Rate) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
@@ -422,7 +407,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowInserted;
     }
 
-    public long insertActiveBusinessDay(Long BusinessDayId){
+    public long insertActiveBusinessDay(Long BusinessDayId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
@@ -432,7 +417,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     public Cursor getOrderData(String WorkingDate, int orderNumber) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_NUMBER + " = " + orderNumber + " AND " + DATE + " = " + "\""+WorkingDate+"\"";
+        String sql = "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_NUMBER + " = " + orderNumber + " AND " + DATE + " = " + "\"" + WorkingDate + "\"";
         return pizza_driver_db.rawQuery(sql, null);
     }
 
@@ -478,7 +463,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return pizza_driver_db.rawQuery(sql, null);
     }
 
-    public Cursor getNoteData(int noteId){
+    public Cursor getNoteData(int noteId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + LOCATION_ADDRESS_NOTES_TABLE + " WHERE " + NOTE_ID + " = " + noteId;
         return pizza_driver_db.rawQuery(sql, null, null);
@@ -493,19 +478,18 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             int AddressID = cursor.getInt(cursor.getColumnIndex(ADDRESS_ID));
             Log.d("TAG", "getAddressIdByLocationId: " + AddressID);
             return AddressID;
-        }
-        else {
+        } else {
             return 0;
         }
     }
 
-    public ArrayList<Integer> getSubDivisionsByAddressID(int AddressID){
+    public ArrayList<Integer> getSubDivisionsByAddressID(int AddressID) {
         ArrayList<Integer> array_list = new ArrayList<>();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT " + SUBDIVISION_ID + " FROM " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressID + "'";
         Cursor res = pizza_driver_db.rawQuery(sql, null);
         res.moveToFirst();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(SUBDIVISION_ID))));
             res.moveToNext();
         }
@@ -514,7 +498,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public String getSubDivisionBySubId(int SubdivisionID){
+    public String getSubDivisionBySubId(int SubdivisionID) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT " + SUBDIVISION + " FROM " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " WHERE " + SUBDIVISION_ID + " = " + "'" + SubdivisionID + "'";
         Cursor res = pizza_driver_db.rawQuery(sql, null);
@@ -523,7 +507,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return SubNum;
     }
 
-    public String getRate(long BusinessDayId, long LocationId){
+    public String getRate(long BusinessDayId, long LocationId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql = "SELECT " + RATE + " FROM " + RATE_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + "'" + BusinessDayId + "'" + " AND " + LOCATION_ID + " = " + "'" + LocationId + "'";
         Cursor res = pizza_driver_db.rawQuery(sql, null);
@@ -533,51 +517,49 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public int updateOrder (long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID){
+    public int updateOrder(long OrderId, String WorkingDate, Integer OrderNumber, Integer LocationID) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DATE, WorkingDate);
         contentValues.put(ORDER_NUMBER, OrderNumber);
         contentValues.put(LOCATION_ID, LocationID);
-        int rowUpdated  = pizza_driver_db.update(ORDERS_TABLE, contentValues, ORDER_ID + " = ? ", new String[]{String.valueOf(OrderId)});
+        int rowUpdated = pizza_driver_db.update(ORDERS_TABLE, contentValues, ORDER_ID + " = ? ", new String[]{String.valueOf(OrderId)});
         Log.d("TEST", "rowUpdated: " + rowUpdated);
         return rowUpdated;
     }
 
-    public int updateTip (long TipId, String Amount,  String Type, Integer TipCashBool, long OrderId){
+    public int updateTip(long TipId, String Amount, String Type, Integer TipCashBool, long OrderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(AMOUNT, Amount);
         contentValues.put(TYPE, Type);
         contentValues.put(CASH, TipCashBool);
         contentValues.put(ORDER_ID, OrderId);
-        int rowUpdated  = pizza_driver_db.update(TIPS_TABLE, contentValues, TIP_ID + " = ? ", new String[]{String.valueOf(TipId)});
+        int rowUpdated = pizza_driver_db.update(TIPS_TABLE, contentValues, TIP_ID + " = ? ", new String[]{String.valueOf(TipId)});
         Log.d("TEST", "rowUpdated: " + rowUpdated);
         return rowUpdated;
     }
 
-    public int updateCashOrder (long CashOrderId, String Total,  String Received, long TipId){
+    public int updateCashOrder(long CashOrderId, String Total, String Received, long TipId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TOTAL, Total);
         contentValues.put(RECEIVED, Received);
         contentValues.put(TIP_ID, TipId);
-        int rowUpdated  = pizza_driver_db.update(CASH_ORDERS_TABLE, contentValues, CASH_ORDER_ID + " = ? ", new String[]{String.valueOf(CashOrderId)});
+        int rowUpdated = pizza_driver_db.update(CASH_ORDERS_TABLE, contentValues, CASH_ORDER_ID + " = ? ", new String[]{String.valueOf(CashOrderId)});
         Log.d("TEST", "rowUpdated: " + rowUpdated);
         return rowUpdated;
     }
 
 
-
-    public boolean updateOrderNumber (String WorkingDate, Integer OrderNumber, Integer OrderId){
+    public boolean updateOrderNumber(String WorkingDate, Integer OrderNumber, Integer OrderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ORDER_NUMBER, OrderNumber);
         boolean exists = checkAlreadyExist(WorkingDate, OrderNumber);
-        if (exists){
+        if (exists) {
             return false;
-        }
-        else {
+        } else {
             int rowUpdated = pizza_driver_db.update(ORDERS_TABLE, contentValues, ORDER_ID + " = ? ", new String[]{(String.valueOf(OrderId))});
             Log.v("Test", "row updated " + rowUpdated);
             return rowUpdated != -1;
@@ -588,11 +570,11 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         ArrayList<Integer> array_list = new ArrayList<>();
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select * from " + TIPS_TABLE + " where " + ORDER_ID + " = " + orderId, null );
+        Cursor res = pizza_driver_db.rawQuery("select * from " + TIPS_TABLE + " where " + ORDER_ID + " = " + orderId, null);
 
         res.moveToFirst();
 
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
             res.moveToNext();
         }
@@ -604,10 +586,10 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         ArrayList<Integer> array_list = new ArrayList<>();
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select * from " + CASH_ORDERS_TABLE + " where " + TIP_ID + " = " + tipId, null );
+        Cursor res = pizza_driver_db.rawQuery("select * from " + CASH_ORDERS_TABLE + " where " + TIP_ID + " = " + tipId, null);
         res.moveToFirst();
 
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(CASH_ORDER_ID))));
             res.moveToNext();
         }
@@ -620,18 +602,17 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         String sql;
-        if (SubId == 0){
+        if (SubId == 0) {
             sql = "SELECT " + NOTE_ID + " FROM " + LOCATION_ADDRESS_NOTES_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressId + "'" + " AND " + SUBDIVISION_ID + " is null";
-        }
-        else {
+        } else {
             sql = "SELECT " + NOTE_ID + " FROM " + LOCATION_ADDRESS_NOTES_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressId + "'" + " AND " + SUBDIVISION_ID + " = " + "'" + SubId + "'";
         }
 
-        Cursor res =  pizza_driver_db.rawQuery( sql, null );
+        Cursor res = pizza_driver_db.rawQuery(sql, null);
 
         res.moveToFirst();
 
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(NOTE_ID))));
             res.moveToNext();
         }
@@ -639,51 +620,50 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public boolean deleteCashOrder (Integer cashOrderId) {
+    public boolean deleteCashOrder(Integer cashOrderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(CASH_ORDERS_TABLE,
                 CASH_ORDER_ID + " = ? ",
-                new String[] { Integer.toString(cashOrderId) });
+                new String[]{Integer.toString(cashOrderId)});
         Log.v("Test", "row deleted " + row_deleted);
         return row_deleted == 1;
     }
 
-    public boolean deleteTip (Integer tipId) {
+    public boolean deleteTip(Integer tipId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(TIPS_TABLE,
                 TIP_ID + " = ? ",
-                new String[] { Integer.toString(tipId) });
+                new String[]{Integer.toString(tipId)});
         Log.v("Test", "row deleted " + row_deleted);
         return row_deleted == 1;
     }
 
-    public boolean deleteOrder (Integer orderId) {
+    public boolean deleteOrder(Integer orderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(ORDERS_TABLE,
                 ORDER_ID + " = ? ",
-                new String[] { Integer.toString(orderId) });
+                new String[]{Integer.toString(orderId)});
         Log.v("Test", "row deleted " + row_deleted);
         return row_deleted == 1;
     }
 
-    public boolean deleteLocationId (Integer AddressId) {
+    public boolean deleteLocationId(Integer AddressId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(LOCATION_ADDRESSES_TABLE,
                 ADDRESS_ID + " = ? ",
-                new String[] { Integer.toString(AddressId) });
+                new String[]{Integer.toString(AddressId)});
         Log.v("Test", "row deleted " + row_deleted);
         return row_deleted == 1;
     }
 
-    public boolean deleteNote (Integer NoteId){
+    public boolean deleteNote(Integer NoteId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(LOCATION_ADDRESS_NOTES_TABLE,
                 NOTE_ID + " = ? ",
-                new String[] { Integer.toString(NoteId) });
+                new String[]{Integer.toString(NoteId)});
         Log.v("Test", "row deleted " + row_deleted);
         return row_deleted == 1;
     }
-
 
 
     public ArrayList<Integer> getAllOrders(String workingDate) {
@@ -691,10 +671,10 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select * from " + ORDERS_TABLE + " where " + DATE + " = " + "\"" + workingDate + "\"", null );
+        Cursor res = pizza_driver_db.rawQuery("select * from " + ORDERS_TABLE + " where " + DATE + " = " + "\"" + workingDate + "\"", null);
         res.moveToFirst();
 
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_ID))));
             res.moveToNext();
         }
@@ -711,9 +691,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Log.d("TEST", "getAllCredit: " + ordersIdsString);
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ")", null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ")", null);
         res.moveToFirst();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
             res.moveToNext();
         }
@@ -729,9 +709,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Log.d("TEST", "getAllCredit: " + tipsIdsString);
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ") AND " + CASH + " = " + 0, null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ") AND " + CASH + " = " + 0, null);
         res.moveToFirst();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
             res.moveToNext();
         }
@@ -747,9 +727,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Log.d("TEST", "getAllCash: " + tipsIdsString);
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ") AND " + CASH + " = " + 1, null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ") AND " + CASH + " = " + 1, null);
         res.moveToFirst();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(TIP_ID))));
             res.moveToNext();
         }
@@ -763,9 +743,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ") AND " + LOCATION_ID + " = " + locationId, null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT * FROM " + ORDERS_TABLE + " WHERE " + ORDER_ID + " IN (" + ordersIdsString + ") AND " + LOCATION_ID + " = " + locationId, null);
         res.moveToFirst();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ORDER_ID))));
             res.moveToNext();
         }
@@ -779,9 +759,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         String tipsIdsString = tipsCashIds.stream().map(Object::toString).collect(Collectors.joining(", "));
 
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")", null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT * FROM " + CASH_ORDERS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")", null);
         res.moveToFirst();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(CASH_ORDER_ID))));
             res.moveToNext();
         }
@@ -789,63 +769,59 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public Cursor getTipDataPerTypeAndCashBool(ArrayList<Integer> tipsIds, String Type, String TipCashBool){
+    public Cursor getTipDataPerTypeAndCashBool(ArrayList<Integer> tipsIds, String Type, String TipCashBool) {
         String tipsIdsString = tipsIds.stream().map(Object::toString).collect(Collectors.joining(", "));
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
         Cursor res;
         if (TipCashBool.equals("*")) {
             res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = '" + Type + "'", null);
-        }
-        else {
+        } else {
             res = pizza_driver_db.rawQuery("SELECT * FROM " + TIPS_TABLE + " WHERE " + TIP_ID + " IN (" + tipsIdsString + ")" + " AND " + TYPE + " = '" + Type + "'" + " AND " + CASH + " = " + TipCashBool, null);
         }
         return res;
     }
 
 
-    public boolean checkAlreadyExist(String workingDate, int orderNumber){
+    public boolean checkAlreadyExist(String workingDate, int orderNumber) {
         Cursor cursor = getOrderData(workingDate, orderNumber);
         int count = cursor.getCount();
         Log.d("TEST", "checkAlreadyExist: " + count);
         return count > 0;
     }
 
-    public long getBusinessDay(String BusinessDayDate){
+    public long getBusinessDay(String BusinessDayDate) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_ID + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_DATE + " = '" + BusinessDayDate + "'", null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_ID + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_DATE + " = '" + BusinessDayDate + "'", null);
         if (res.getCount() > 0) {
             res.moveToFirst();
             long BusinessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
             return BusinessDayId;
-        }
-        else {
+        } else {
             return 0;
         }
     }
 
-    public String getBusinessDayById(long BusinessDayId){
+    public String getBusinessDayById(long BusinessDayId) {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
         res.moveToFirst();
         if (res.getCount() > 0) {
             res.moveToFirst();
             String BusinessDayDate = res.getString(res.getColumnIndex(BUSINESS_DAY_DATE));
             return BusinessDayDate;
-        }
-        else {
+        } else {
             return "0";
         }
     }
 
-    public long getActiveBusinessDay(){
+    public long getActiveBusinessDay() {
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "SELECT " + BUSINESS_DAY_ID + " FROM " + ACTIVE_BUSINESS_DAY_TABLE, null);
+        Cursor res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_ID + " FROM " + ACTIVE_BUSINESS_DAY_TABLE, null);
         if (res.getCount() > 0) {
             res.moveToLast();
             long BusinessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
             return BusinessDayId;
-        }
-        else {
+        } else {
             return (long) 0;
         }
     }
@@ -855,17 +831,16 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
-        Cursor res =  pizza_driver_db.rawQuery( "select * from " + LOCATION_ADDRESSES_TABLE, null );
+        Cursor res = pizza_driver_db.rawQuery("select * from " + LOCATION_ADDRESSES_TABLE, null);
         res.moveToFirst();
 
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             array_list.add(Integer.parseInt(res.getString(res.getColumnIndex(ADDRESS_ID))));
             res.moveToNext();
         }
         res.close();
         return array_list;
     }
-
 
 
 }
