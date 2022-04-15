@@ -6,7 +6,7 @@ localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdkVersion 32
-    buildToolsVersion '32.1.0-rc1'
+    buildToolsVersion '32.0.0'
     def versionPropsFile = file('version.properties')
     Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(versionPropsFile))
