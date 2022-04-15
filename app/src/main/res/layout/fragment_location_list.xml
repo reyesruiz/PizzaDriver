@@ -30,9 +30,9 @@
         <Button
             android:id="@+id/buttonBackToOrdersList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Back to order list" />
+            android:text="@string/back_to_order_list" />
 
     </LinearLayout>
 

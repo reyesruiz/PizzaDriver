@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -234,29 +235,30 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             pizza_driver_db.execSQL("INSERT INTO " + LOCATIONS_TABLE + " SELECT " + LOCATION_ID + "," + NAME + " FROM " + BACKUP_LOCATIONS_TABLE);
             pizza_driver_db.execSQL("DROP TABLE " + BACKUP_LOCATIONS_TABLE);
 
-            ArrayList<String> uniq_dates;
-            uniq_dates = new ArrayList<>();
+            ArrayList<String> unique_dates;
+            unique_dates = new ArrayList<>();
             Cursor res = pizza_driver_db.rawQuery("select distinct " + DATE + " from " + ORDERS_TABLE, null);
             res.moveToFirst();
             while (!res.isAfterLast()) {
-                uniq_dates.add(res.getString(res.getColumnIndex(DATE)));
+                unique_dates.add(res.getString(res.getColumnIndex(DATE)));
                 res.moveToNext();
             }
             res.close();
-            ArrayList<Long> uniq_dates_list;
-            uniq_dates_list = new ArrayList<>();
-            for (final String uniq_date : uniq_dates) {
+            ArrayList<Long> unique_dates_list;
+            unique_dates_list = new ArrayList<>();
+            for (final String unique_date : unique_dates) {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(BUSINESS_DAY_DATE, uniq_date);
+                contentValues.put(BUSINESS_DAY_DATE, unique_date);
                 long row = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
-                uniq_dates_list.add(row);
+                unique_dates_list.add(row);
                 contentValues.clear();
             }
-            for (final Long BusinessDayId : uniq_dates_list) {
+            for (final Long BusinessDayId : unique_dates_list) {
                 Cursor resDate = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
                 resDate.moveToFirst();
                 String workingDate = resDate.getString(resDate.getColumnIndex(BUSINESS_DAY_DATE));
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                resDate.close();
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date date;
                 try {
@@ -274,6 +276,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
                 // getTime is to get epoch
+                assert date != null;
+                assert dateToCheck != null;
                 if (date.getTime() > dateToCheck.getTime()) {
                     //Tracy
                     ContentValues contentValues = new ContentValues();
@@ -376,8 +380,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
         contentValues.put(NOTE, Note);
         contentValues.put(DATE_ADDED, DateAdded);
-        long rowInserted = pizza_driver_db.insert(LOCATION_ADDRESS_NOTES_TABLE, null, contentValues);
-        return rowInserted;
+        return pizza_driver_db.insert(LOCATION_ADDRESS_NOTES_TABLE, null, contentValues);
     }
 
     public long insertSubDivisionAddress(int AddressId, String Subdivision) {
@@ -385,34 +388,30 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ADDRESS_ID, AddressId);
         contentValues.put(SUBDIVISION, Subdivision);
-        long rowInserted = pizza_driver_db.insert(LOCATION_ADDRESS_SUBDIVISION_TABLE, null, contentValues);
-        return rowInserted;
+        return pizza_driver_db.insert(LOCATION_ADDRESS_SUBDIVISION_TABLE, null, contentValues);
     }
 
     public long insertDate(String BusinessDayDate) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSINESS_DAY_DATE, BusinessDayDate);
-        long rowInserted = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
-        return rowInserted;
+        return pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
     }
 
-    public long insertRate(long BusinessDayId, Integer LocationId, String Rate) {
+    public void insertRate(long BusinessDayId, Integer LocationId, String Rate) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
         contentValues.put(LOCATION_ID, LocationId);
         contentValues.put(RATE, Rate);
-        long rowInserted = pizza_driver_db.insert(RATE_TABLE, null, contentValues);
-        return rowInserted;
+        pizza_driver_db.insert(RATE_TABLE, null, contentValues);
     }
 
-    public long insertActiveBusinessDay(Long BusinessDayId) {
+    public void insertActiveBusinessDay(Long BusinessDayId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-        long rowInserted = pizza_driver_db.insert(ACTIVE_BUSINESS_DAY_TABLE, null, contentValues);
-        return rowInserted;
+        pizza_driver_db.insert(ACTIVE_BUSINESS_DAY_TABLE, null, contentValues);
     }
 
     public Cursor getOrderData(String WorkingDate, int orderNumber) {
@@ -477,8 +476,10 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             int AddressID = cursor.getInt(cursor.getColumnIndex(ADDRESS_ID));
             Log.d("TAG", "getAddressIdByLocationId: " + AddressID);
+            cursor.close();
             return AddressID;
         } else {
+            cursor.close();
             return 0;
         }
     }
@@ -503,8 +504,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         String sql = "SELECT " + SUBDIVISION + " FROM " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " WHERE " + SUBDIVISION_ID + " = " + "'" + SubdivisionID + "'";
         Cursor res = pizza_driver_db.rawQuery(sql, null);
         res.moveToFirst();
-        String SubNum = res.getString(res.getColumnIndex(SUBDIVISION));
-        return SubNum;
+        String subdivision = res.getString(res.getColumnIndex(SUBDIVISION));
+        res.close();
+        return subdivision;
     }
 
     public String getRate(long BusinessDayId, long LocationId) {
@@ -512,8 +514,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         String sql = "SELECT " + RATE + " FROM " + RATE_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + "'" + BusinessDayId + "'" + " AND " + LOCATION_ID + " = " + "'" + LocationId + "'";
         Cursor res = pizza_driver_db.rawQuery(sql, null);
         res.moveToFirst();
-        String Rate = res.getString(res.getColumnIndex(RATE));
-        return Rate;
+        String rate = res.getString(res.getColumnIndex(RATE));
+        res.close();
+        return rate;
     }
 
 
@@ -540,7 +543,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return rowUpdated;
     }
 
-    public int updateCashOrder(long CashOrderId, String Total, String Received, long TipId) {
+    public void updateCashOrder(long CashOrderId, String Total, String Received, long TipId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TOTAL, Total);
@@ -548,7 +551,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(TIP_ID, TipId);
         int rowUpdated = pizza_driver_db.update(CASH_ORDERS_TABLE, contentValues, CASH_ORDER_ID + " = ? ", new String[]{String.valueOf(CashOrderId)});
         Log.d("TEST", "rowUpdated: " + rowUpdated);
-        return rowUpdated;
     }
 
 
@@ -620,22 +622,20 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public boolean deleteCashOrder(Integer cashOrderId) {
+    public void deleteCashOrder(Integer cashOrderId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(CASH_ORDERS_TABLE,
                 CASH_ORDER_ID + " = ? ",
                 new String[]{Integer.toString(cashOrderId)});
         Log.v("Test", "row deleted " + row_deleted);
-        return row_deleted == 1;
     }
 
-    public boolean deleteTip(Integer tipId) {
+    public void deleteTip(Integer tipId) {
         SQLiteDatabase pizza_driver_db = this.getWritableDatabase();
         int row_deleted = pizza_driver_db.delete(TIPS_TABLE,
                 TIP_ID + " = ? ",
                 new String[]{Integer.toString(tipId)});
         Log.v("Test", "row deleted " + row_deleted);
-        return row_deleted == 1;
     }
 
     public boolean deleteOrder(Integer orderId) {
@@ -794,9 +794,11 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Cursor res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_ID + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_DATE + " = '" + BusinessDayDate + "'", null);
         if (res.getCount() > 0) {
             res.moveToFirst();
-            long BusinessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
-            return BusinessDayId;
+            int businessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
+            res.close();
+            return businessDayId;
         } else {
+            res.close();
             return 0;
         }
     }
@@ -807,9 +809,11 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
         if (res.getCount() > 0) {
             res.moveToFirst();
-            String BusinessDayDate = res.getString(res.getColumnIndex(BUSINESS_DAY_DATE));
-            return BusinessDayDate;
+            String businessDay = res.getString(res.getColumnIndex(BUSINESS_DAY_DATE));
+            res.close();
+            return businessDay;
         } else {
+            res.close();
             return "0";
         }
     }
@@ -819,10 +823,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         Cursor res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_ID + " FROM " + ACTIVE_BUSINESS_DAY_TABLE, null);
         if (res.getCount() > 0) {
             res.moveToLast();
-            long BusinessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
-            return BusinessDayId;
+            int businessDayId = res.getInt(res.getColumnIndex(BUSINESS_DAY_ID));
+            res.close();
+            return businessDayId;
         } else {
-            return (long) 0;
+            res.close();
+            return 0;
         }
     }
 

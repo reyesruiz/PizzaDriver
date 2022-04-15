@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class SummaryFragment extends Fragment {
 
@@ -42,12 +43,10 @@ public class SummaryFragment extends Fragment {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         } else {
             Date date = Calendar.getInstance().getTime();
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             workingDate = formatter.format(date);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0) {
-
-            } else {
+            if (BusinessDayId <= 0) {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
             }
@@ -115,7 +114,8 @@ public class SummaryFragment extends Fragment {
             BigDecimal TipCredit = new BigDecimal(tip_result.getString(tip_result.getColumnIndex("Amount")));
             CreditTotal = CreditTotal.add(TipCredit);
         }
-        TipsCreditText.setText("$" + CreditTotal.toString());
+        String TipsCreditString = "$" + CreditTotal.toString();
+        TipsCreditText.setText(TipsCreditString);
 
 
         ArrayList<Integer> tipsCash = pizzaDriverDB.getAllCash(allTips);
@@ -126,11 +126,13 @@ public class SummaryFragment extends Fragment {
             BigDecimal TipCash = new BigDecimal(result.getString(result.getColumnIndex("Amount")));
             CashTotal = CashTotal.add(TipCash);
         }
-        TipsCashText.setText("$" + CashTotal.toString());
+        String TipsCashString = "$" + CashTotal.toString();
+        TipsCashText.setText(TipsCashString);
 
         TipsTotal = CreditTotal.add(CashTotal);
 
-        TipsTotalText.setText("$" + TipsTotal.toString());
+        String TipsTotalString = "$" + TipsTotal.toString();
+        TipsTotalText.setText(TipsTotalString);
 
         //Tracy
         ArrayList<Integer> ordersTracy = pizzaDriverDB.getAllOrdersPerLocationId(orders_ids, "1");
@@ -156,10 +158,12 @@ public class SummaryFragment extends Fragment {
         MountainHouseText.setText(MountainHouseTotalString);
 
         ReimbursementTotal = TracyTotal.add(MountainHouseTotal);
-        ReimbursementTotalText.setText("$" + ReimbursementTotal.toString());
+        String ReimbursementTotalString = "$" + ReimbursementTotal.toString();
+        ReimbursementTotalText.setText(ReimbursementTotalString);
 
         CompensationTotal = TipsTotal.add(ReimbursementTotal);
-        CompensationTotalText.setText("$" + CompensationTotal.toString());
+        String CompensationTotalString = "$" + CompensationTotal.toString();
+        CompensationTotalText.setText(CompensationTotalString);
 
         ArrayList<Integer> cashOrdersIds = pizzaDriverDB.getAllCashOrders(tipsCash);
         for (final int cashOrderId : cashOrdersIds) {
@@ -170,17 +174,17 @@ public class SummaryFragment extends Fragment {
             CashOrdersTotal = CashOrdersTotal.add(OrderTotal);
         }
 
-        CashOrdersTotalText.setText("$" + CashOrdersTotal.toString());
+        String CashOrdersTotalString = "$" + CashOrdersTotal.toString();
+        CashOrdersTotalText.setText(CashOrdersTotalString);
 
         NetCash = (CreditTotal.add(ReimbursementTotal)).subtract(CashOrdersTotal);
-        netCashText.setText("$" + NetCash.toString());
-        if (NetCash.compareTo(BigDecimal.ZERO) > 0){
-            netCashText.setTextColor(Color.rgb(0,110,55));
-        }
-        else if (NetCash.compareTo(BigDecimal.ZERO) < 0){
+        String NetCashString = "$" + NetCash.toString();
+        netCashText.setText(NetCashString);
+        if (NetCash.compareTo(BigDecimal.ZERO) > 0) {
+            netCashText.setTextColor(Color.rgb(0, 110, 55));
+        } else if (NetCash.compareTo(BigDecimal.ZERO) < 0) {
             netCashText.setTextColor(Color.RED);
-        }
-        else {
+        } else {
             netCashText.setTextColor(Color.BLACK);
         }
 

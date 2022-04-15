@@ -21,52 +21,22 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link LocationAddNoteFragment#newInstance} factory method to
+ * <p>
  * create an instance of this fragment.
  */
 public class LocationAddNoteFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public LocationAddNoteFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LocationAddNoteFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LocationAddNoteFragment newInstance(String param1, String param2) {
-        LocationAddNoteFragment fragment = new LocationAddNoteFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -80,7 +50,7 @@ public class LocationAddNoteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = this.getArguments();
         Log.d("TAG", "Details: " + bundle);
-        Log.d("TAG", "onViewCreated: " + "BLAA");
+        assert bundle != null;
         int AddressId = bundle.getInt("ADDRESS_ID");
         int SubId = bundle.getInt("SUBDIVISION_ID");
 
@@ -114,35 +84,32 @@ public class LocationAddNoteFragment extends Fragment {
 
         NoteText.requestFocus();
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Note;
-                Log.v("Test", "Selected " + tipNoteStatusChipGroup.getCheckedChipId());
-                int tipNoteTypeSelected = tipNoteStatusChipGroup.getCheckedChipId();
-                if (tipNoteTypeSelected == -1) {
-                    Note = NoteText.getText().toString();
-                } else {
-                    Chip selected_chip = tipNoteStatusChipGroup.findViewById(tipNoteTypeSelected);
-                    String selected_value = selected_chip.getText().toString();
-                    Log.d("TAG", "onClick: " + selected_value);
-                    Note = selected_value + ": " + NoteText.getText().toString();
-                }
-                String DateAdded;
-                Date date = Calendar.getInstance().getTime();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                DateAdded = formatter.format(date);
-
-                long result = pizzaDriverDB.insertLocationNote(AddressId, SubId, Note, DateAdded);
-                if (result > 0) {
-                    //Success
-                    Log.d("TAG", "onClick: " + bundle);
-                    NavHostFragment.findNavController(LocationAddNoteFragment.this).navigate(R.id.action_locationAddNoteFragment_to_LocationDetailFragment, bundle);
-                } else {
-                    //Something wrong
-                }
-
+        saveBtn.setOnClickListener(view1 -> {
+            String Note;
+            Log.v("Test", "Selected " + tipNoteStatusChipGroup.getCheckedChipId());
+            int tipNoteTypeSelected = tipNoteStatusChipGroup.getCheckedChipId();
+            if (tipNoteTypeSelected == -1) {
+                Note = NoteText.getText().toString();
+            } else {
+                Chip selected_chip = tipNoteStatusChipGroup.findViewById(tipNoteTypeSelected);
+                String selected_value = selected_chip.getText().toString();
+                Log.d("TAG", "onClick: " + selected_value);
+                Note = selected_value + ": " + NoteText.getText().toString();
             }
+            String DateAdded;
+            Date date = Calendar.getInstance().getTime();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            DateAdded = formatter.format(date);
+
+            long result = pizzaDriverDB.insertLocationNote(AddressId, SubId, Note, DateAdded);
+            if (result > 0) {
+                //Success
+                Log.d("TAG", "onClick: " + bundle);
+                NavHostFragment.findNavController(LocationAddNoteFragment.this).navigate(R.id.action_locationAddNoteFragment_to_LocationDetailFragment, bundle);
+            } else {
+                Log.d("TAG", "Something wrong");
+            }
+
         });
 
 

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     tools:context=".LocationDetailsFragment">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <TextView
             android:id="@+id/AddressTextView"
@@ -21,9 +18,9 @@
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Apartment, Unit, Space?" />
+            android:text="@string/apt_space_unit" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +28,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinnerSubdivion"
+                android:id="@+id/spinnerSubDivision"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -39,7 +36,7 @@
                 android:id="@+id/buttonAddSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Apt, Space, etc?" />
+                android:text="@string/add_apt_space_unit" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,13 +48,13 @@
                 android:id="@+id/backButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Back to List" />
+                android:text="@string/back_to_list" />
 
             <Button
                 android:id="@+id/AddNoteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Note" />
+                android:text="@string/add_note" />
         </LinearLayout>
 
         <ScrollView
@@ -69,25 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
             </TableLayout>
         </ScrollView>
 
-    </LinearLayout>
-
-
-</FrameLayout>
+</LinearLayout>

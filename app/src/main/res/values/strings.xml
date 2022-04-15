@@ -61,7 +61,21 @@
     <string name="change_order_number">Change order number</string>
     <string name="add_location">Add Location</string>
     <string name="address_name">Name</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="delete_location">Delete Location</string>
+    <string name="apt_space_unit">Apartment, Unit, Space?</string>
+    <string name="tipping_type">Tipping Type</string>
+    <string name="prefilled_notes">Prefilled notes</string>
+    <string name="round_up">Round Up</string>
+    <string name="no_tip">No Tip</string>
+    <string name="round_down">Round Down</string>
+    <string name="cash_tip">Cash Tip</string>
+    <string name="good_tips">Good Tips</string>
+    <string name="add_note">Add Note</string>
+    <string name="add_apt_space_unit">Add Apt, Space, etc</string>
+    <string name="back_to_list">Back to List</string>
+    <string name="select_date">Select Date</string>
+    <string name="map">Map</string>
+    <string name="date_added">DateAdded</string>
+    <string name="note">Note</string>
 
 </resources>

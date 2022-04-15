@@ -6,17 +6,17 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class ValidatorOrderText  {
+class ValidatorOrderText {
 
     @Test
-    fun whenOrderNumberIsValid(){
+    fun whenOrderNumberIsValid() {
         val orderNumber = 100
         val result = Validator.validateOrderNumber(orderNumber)
         assertThat(result).isEqualTo(true)
     }
 
     @Test
-    fun whenOrderNumberIsInvalid(){
+    fun whenOrderNumberIsInvalid() {
         val orderNumber = -1
         val result = Validator.validateOrderNumber(orderNumber)
         assertThat(result).isEqualTo(false)
