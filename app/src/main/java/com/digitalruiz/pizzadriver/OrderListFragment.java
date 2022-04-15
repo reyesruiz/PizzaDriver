@@ -128,13 +128,13 @@ public class OrderListFragment extends Fragment {
         OrderTypeStatic.setText(R.string.type);
         OrderTypeStatic.setTypeface(OrderNumberStatic.getTypeface(), Typeface.BOLD);
         OrderTypeStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-        OrderTypeStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, Objects.requireNonNull(getContext()).getTheme()));
+        OrderTypeStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, requireContext().getTheme()));
 
         TextView CashStatic = new TextView(getContext());
         CashStatic.setText(R.string.cash_boolean);
         CashStatic.setTypeface(CashStatic.getTypeface(), Typeface.BOLD);
         CashStatic.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-        CashStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, getContext().getTheme()));
+        CashStatic.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white_50, Objects.requireNonNull(getContext()).getTheme()));
 
         TextView TipTextStatic = new TextView(getContext());
         TipTextStatic.setText(R.string.tip_text);
@@ -263,7 +263,7 @@ public class OrderListFragment extends Fragment {
         MenuItem change = popup.getMenu().findItem(R.id.order_change_number);
         change.setOnMenuItemClickListener(v -> {
             final String[] m_Text = {""};
-            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setTitle("New order number");
             final EditText input = new EditText(getContext());
             input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -275,8 +275,8 @@ public class OrderListFragment extends Fragment {
                 if (changed) {
                     Toast updateToast = Toast.makeText(getContext(), "Updated order number " + OrderNumber + " to " + NewOrderNumber, Toast.LENGTH_SHORT);
                     updateToast.show();
-                    Objects.requireNonNull(getActivity()).finish();
-                    startActivity(getActivity().getIntent());
+                    requireActivity().finish();
+                    startActivity(requireActivity().getIntent());
                 } else {
                     Toast updateToast = Toast.makeText(getContext(), "Unable to update order number " + OrderNumber + " to " + NewOrderNumber + " please check...", Toast.LENGTH_LONG);
                     updateToast.show();
@@ -321,8 +321,8 @@ public class OrderListFragment extends Fragment {
                 deletedToast.show();
             }
 
-            Objects.requireNonNull(getActivity()).finish();
-            startActivity(getActivity().getIntent());
+            requireActivity().finish();
+            startActivity(requireActivity().getIntent());
             return deleted;
         });
     }
