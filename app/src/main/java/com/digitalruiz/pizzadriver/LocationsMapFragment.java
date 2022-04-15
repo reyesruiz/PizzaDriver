@@ -1,6 +1,7 @@
 package com.digitalruiz.pizzadriver;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,16 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 /**
  * A simple {@link Fragment} subclass.
  * <p>
  * create an instance of this fragment.
  */
-public class LocationsMapFragment extends Fragment implements OnMapReadyCallback {
+public class LocationsMapFragment extends Fragment implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
     private static final String MAPVIEW_BUNDLE_KEY = BuildConfig.API_KEY;
     private MapView mMapView;
@@ -31,6 +35,7 @@ public class LocationsMapFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MapsInitializer.initialize(getActivity().getApplicationContext(), Renderer.LATEST, this);
     }
 
     @Override
@@ -107,5 +112,17 @@ public class LocationsMapFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         googleMap.addMarker(new MarkerOptions().position(new LatLng(37.7267762, -121.429317)).title("Marker"));
 
+    }
+
+    @Override
+    public void onMapsSdkInitialized(MapsInitializer.Renderer renderer){
+        switch (renderer){
+            case LATEST:
+                Log.d("MapsDemo", "The latest version of the renderer is used.");
+                break;
+            case LEGACY:
+                Log.d("MapsDemo", "The legacy version of the renderer is used.");
+                break;
+        }
     }
 }

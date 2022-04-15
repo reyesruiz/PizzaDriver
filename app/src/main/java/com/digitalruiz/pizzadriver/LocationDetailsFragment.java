@@ -1,7 +1,9 @@
 package com.digitalruiz.pizzadriver;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -28,7 +30,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class LocationDetailsFragment extends Fragment {
 
@@ -72,6 +73,17 @@ public class LocationDetailsFragment extends Fragment {
         Address = location_address_result.getString(location_address_result.getColumnIndex("Address"));
 
         AddressText.setText(Address);
+
+
+        AddressText.setOnClickListener(view12 -> {
+            String placeIdParameter = "place)id:" + AddressId;
+            Uri gmmIntentUri = Uri.parse(placeIdParameter);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(mapIntent);
+            }
+        });
 
         TableLayout WrapperTable = view.findViewById(R.id.wrapperTableNotes);
         TableRow HeadLine = new TableRow(getContext());
