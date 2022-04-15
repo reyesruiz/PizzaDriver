@@ -44,11 +44,16 @@
         <entry key="app/src/main/res/layout/content_order_list.xml" value="0.10131712259371833" />
         <entry key="app/src/main/res/layout/fragment_add_location_address.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/fragment_add_order.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/fragment_add_order_number.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/fragment_location_add_note.xml" value="0.10131712259371833" />
         <entry key="app/src/main/res/layout/fragment_location_details.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_location_list.xml" value="0.10131712259371833" />
+        <entry key="app/src/main/res/layout/fragment_locations_map.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/fragment_order_list.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/fragment_select_date.xml" value="0.10131712259371833" />
         <entry key="app/src/main/res/layout/fragment_summary.xml" value="0.33106884057971014" />
+        <entry key="app/src/main/res/layout/main_coordinator_layout.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/main_locations_coordinator_layout.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/menu/top_app_bar_locations.xml" value="0.14907407407407408" />
       </map>
     </option>

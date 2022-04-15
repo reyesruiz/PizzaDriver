@@ -85,13 +85,15 @@
 
             <EditText
                 android:id="@+id/tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
                 android:layout_weight="0"
                 android:ems="8"
                 android:hint="@string/zero_dot_zero_zero_text"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal"
+                android:minHeight="48dp"
+                android:textColorHint="#757575"
                 android:textSize="18sp" />
 
             <CheckBox
@@ -120,13 +122,14 @@
 
             <EditText
                 android:id="@+id/orderTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
                 android:layout_weight="0"
                 android:ems="8"
                 android:hint="@string/zero_dot_zero_zero_text"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal"
+                android:textColorHint="#757575"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -148,12 +151,13 @@
             <EditText
                 android:id="@+id/cashReceived"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_weight="0"
                 android:ems="8"
                 android:hint="@string/zero_dot_zero_zero_text"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal"
+                android:textColorHint="#757575"
                 android:textSize="18sp" />
         </LinearLayout>
 

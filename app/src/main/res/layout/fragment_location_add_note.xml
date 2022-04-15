@@ -3,106 +3,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:orientation="vertical"
     tools:context=".LocationAddNoteFragment">
 
 
-        <TextView
-            android:id="@+id/AddressTextViewAddNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/AddressTextViewAddNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/addressSubTextViewAddNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/addressSubTextViewAddNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/prefilled_notes"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/prefilled_notes"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tipping_type" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tipping_type" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/noteTipStatus"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/noteTipStatus"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:singleLine="false"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/roundUpChip"
             style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:singleLine="false"
-            app:singleSelection="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/roundUpChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/round_up" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/noTipChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_tip" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/runDownTipChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/round_down" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cashTipChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cash_tip" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/goodTipsChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/good_tips" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/creditManualChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/credit_manual" />
-
-        </com.google.android.material.chip.ChipGroup>
-
-        <EditText
-            android:id="@+id/locationNote"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/add_note"
-            android:importantForAutofill="no"
-            android:inputType="text" />
+            android:text="@string/round_up" />
 
-        <Button
-            android:id="@+id/saveNoteButton"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/noTipChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save" />
+            android:text="@string/no_tip" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/runDownTipChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/round_down" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cashTipChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cash_tip" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/goodTipsChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/good_tips" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/creditManualChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/credit_manual" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <EditText
+        android:id="@+id/locationNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_note"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/saveNoteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save" />
 
 </LinearLayout>
