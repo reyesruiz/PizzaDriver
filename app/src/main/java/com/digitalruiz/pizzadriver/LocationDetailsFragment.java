@@ -118,9 +118,9 @@ public class LocationDetailsFragment extends Fragment {
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
             if (counter % 2 == 0) {
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, requireContext().getTheme()));
             } else {
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, Objects.requireNonNull(getContext()).getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, requireContext().getTheme()));
 
             }
             Row.addView(DateAddedText);
@@ -145,7 +145,7 @@ public class LocationDetailsFragment extends Fragment {
                 subDiv = pizzaDriverDB.getSubDivisionBySubId(Integer.parseInt(subDivisionsId.toString()));
                 SubDivisions.add(subDiv);
             }
-            ArrayAdapter<String> adapterList = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, SubDivisions);
+            ArrayAdapter<String> adapterList = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, SubDivisions);
             adapterList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             int i;
             SubDivisionSpinner.setAdapter(adapterList);
@@ -204,7 +204,7 @@ public class LocationDetailsFragment extends Fragment {
 
         buttonAddSub.setOnClickListener(v -> {
             final String[] m_Text = {""};
-            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setTitle("New apt, space, unit, etc number");
             final EditText input = new EditText(getContext());
             input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -251,8 +251,8 @@ public class LocationDetailsFragment extends Fragment {
                 deletedToast.show();
             }
             //TODO TO self fragment
-            Objects.requireNonNull(getActivity()).finish();
-            startActivity(getActivity().getIntent());
+            requireActivity().finish();
+            startActivity(requireActivity().getIntent());
             return deleted;
         });
     }

@@ -98,9 +98,9 @@ public class LocationListFragment extends Fragment {
             Row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             Row.setPadding(0, 0, 0, 0);
             if (counter % 2 == 0) {
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, requireContext().getTheme()));
             } else {
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, Objects.requireNonNull(getContext()).getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, requireContext().getTheme()));
 
             }
 
@@ -152,8 +152,8 @@ public class LocationListFragment extends Fragment {
                 deletedToast.show();
             }
 
-            Objects.requireNonNull(getActivity()).finish();
-            startActivity(getActivity().getIntent());
+            requireActivity().finish();
+            startActivity(requireActivity().getIntent());
             return deleted;
         });
     }
