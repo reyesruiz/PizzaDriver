@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 
 public class LocationListFragment extends Fragment {
@@ -55,12 +57,10 @@ public class LocationListFragment extends Fragment {
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         } else {
             Date date = Calendar.getInstance().getTime();
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             workingDate = formatter.format(date);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0) {
-
-            } else {
+            if (BusinessDayId <= 0) {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
             }
@@ -100,7 +100,7 @@ public class LocationListFragment extends Fragment {
             if (counter % 2 == 0) {
                 Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_pine_green_shade_2, getContext().getTheme()));
             } else {
-                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, getContext().getTheme()));
+                Row.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.mm_wild_yellow_shade_2, Objects.requireNonNull(getContext()).getTheme()));
 
             }
 
@@ -112,13 +112,8 @@ public class LocationListFragment extends Fragment {
             bundle = new Bundle();
             bundle.putInt("ADDRESS_ID", AddressId);
 
-            addressNameChip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    NavHostFragment.findNavController(LocationListFragment.this)
-                            .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle);
-                }
-            });
+            addressNameChip.setOnClickListener(v -> NavHostFragment.findNavController(LocationListFragment.this)
+                    .navigate(R.id.action_LocationListFragment_to_DetailsFragment, bundle));
 
             addressNameChip.setOnLongClickListener(v -> {
                 showPopup(v, AddressId);
@@ -131,13 +126,8 @@ public class LocationListFragment extends Fragment {
             WrapperTable.addView(Row);
         }
 
-        view.findViewById(R.id.buttonBackToOrdersList).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(LocationListFragment.this)
-                        .navigate(R.id.action_LocationListFragment_to_mainActivity);
-            }
-        });
+        view.findViewById(R.id.buttonBackToOrdersList).setOnClickListener(v -> NavHostFragment.findNavController(LocationListFragment.this)
+                .navigate(R.id.action_LocationListFragment_to_mainActivity));
 
 
     }
@@ -162,7 +152,7 @@ public class LocationListFragment extends Fragment {
                 deletedToast.show();
             }
 
-            getActivity().finish();
+            Objects.requireNonNull(getActivity()).finish();
             startActivity(getActivity().getIntent());
             return deleted;
         });

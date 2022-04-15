@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AddOrderFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 
@@ -71,22 +71,6 @@ public class AddOrderFragment extends Fragment {
 
     public AddOrderFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment AddOrderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddOrderFragment newInstance(int param1) {
-        AddOrderFragment fragment = new AddOrderFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -327,7 +311,7 @@ public class AddOrderFragment extends Fragment {
             } else {
                 Chip OrderLocationSelectedChip = view.findViewById(OrderLocationSelectedChipID);
                 OrderLocation = OrderLocationSelectedChip.getText().toString();
-                //TODO set this programatically
+                //TODO set this programmatically
                 if (OrderLocation.equals("Tracy")) {
                     LocationID = 1;
                 } else if (OrderLocation.equals("Mountain House")) {
@@ -370,14 +354,14 @@ public class AddOrderFragment extends Fragment {
                             if (TipUpdateResult == 1) {
                                 if (orderType.equals("Cash")) {
                                     if (CashOrderId >= 1) {
-                                        int CashOrderUpdateResult = pizzaDriverDB.updateCashOrder(CashOrderId, OrderTotal.toString(), CashReceived.toString(), TipId);
+                                        pizzaDriverDB.updateCashOrder(CashOrderId, OrderTotal.toString(), CashReceived.toString(), TipId);
                                     } else {
-                                        long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), TipId);
+                                        pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), TipId);
                                     }
 
                                 } else {
                                     if (CashOrderId >= 1) {
-                                        boolean deleted = pizzaDriverDB.deleteCashOrder(CashOrderId);
+                                        pizzaDriverDB.deleteCashOrder(CashOrderId);
                                     }
                                 }
                             }
@@ -402,14 +386,10 @@ public class AddOrderFragment extends Fragment {
                             if (orderType.equals("Cash")) {
                                 long insert_result_cash = pizzaDriverDB.insertCashOrder(OrderTotal.toString(), CashReceived.toString(), insert_result_tip);
                                 Log.d(TAG, "insert cash: " + insert_result_cash);
-                                if (insert_result_cash != -1) {
-                                    //nothing all good
-                                } else {
+                                if (insert_result_cash == -1) {
                                     data_inserted = false;
                                 }
                             }
-                            //nothing
-
                         } else {
                             data_inserted = false;
                         }
@@ -439,7 +419,7 @@ public class AddOrderFragment extends Fragment {
 
     private void tipChangedText() {
         if (tipEditText.getText().toString().isEmpty() || tipEditText.getText().toString().equals("0")) {
-            tipEditText.setText("0.00");
+            tipEditText.setText(R.string.zero_dot_zero_zero_text);
         }
         tipEditText.setSelection(tipEditText.getText().toString().length());
 
@@ -513,7 +493,7 @@ public class AddOrderFragment extends Fragment {
 
     private void orderTotalChangedText() {
         if (orderTotalEditText.getText().toString().isEmpty() || orderTotalEditText.getText().toString().equals("0")) {
-            orderTotalEditText.setText("0.00");
+            orderTotalEditText.setText(R.string.zero_dot_zero_zero_text);
         }
         orderTotalEditText.setSelection(orderTotalEditText.getText().toString().length());
         orderTotalTextWatcher = new TextWatcher() {
@@ -584,7 +564,7 @@ public class AddOrderFragment extends Fragment {
 
     private void cashReceivedChangedText() {
         if (cashReceivedEditText.getText().toString().isEmpty() || cashReceivedEditText.getText().toString().equals("0")) {
-            cashReceivedEditText.setText("0.00");
+            cashReceivedEditText.setText(R.string.zero_dot_zero_zero_text);
         }
         cashReceivedEditText.setSelection(cashReceivedEditText.getText().toString().length());
         cashReceivedTextWatcher = new TextWatcher() {
@@ -716,12 +696,12 @@ public class AddOrderFragment extends Fragment {
             // Now Delete all information pertaining to the OrderNumber
             if (cashOrders.size() > 0) {
                 for (final Integer cashOrderId : cashOrders) {
-                    boolean deleted = pizzaDriverDB.deleteCashOrder(cashOrderId);
+                    pizzaDriverDB.deleteCashOrder(cashOrderId);
                 }
             }
             if (tipsInOrder.size() > 0) {
                 for (final Integer tipId : tipsInOrder) {
-                    boolean deleted = pizzaDriverDB.deleteTip(tipId);
+                    pizzaDriverDB.deleteTip(tipId);
                 }
             }
             boolean deleted = pizzaDriverDB.deleteOrder(OrderId);

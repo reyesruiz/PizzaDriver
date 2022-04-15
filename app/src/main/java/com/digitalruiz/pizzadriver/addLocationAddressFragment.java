@@ -15,7 +15,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link addLocationAddressFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class addLocationAddressFragment extends Fragment {
@@ -35,26 +34,6 @@ public class addLocationAddressFragment extends Fragment {
 
     public addLocationAddressFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment addLocationAddressFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static addLocationAddressFragment newInstance(String param1, String param2, String param3, String param4) {
-        addLocationAddressFragment fragment = new addLocationAddressFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putString(ARG_PARAM3, param3);
-        args.putString(ARG_PARAM4, param4);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -92,46 +71,42 @@ public class addLocationAddressFragment extends Fragment {
         EditText subDivision = view.findViewById(R.id.editTextSubdivision);
 
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Just go back
-                NavHostFragment.findNavController(addLocationAddressFragment.this).popBackStack();
-            }
+        cancelBtn.setOnClickListener(v -> {
+            //Just go back
+            NavHostFragment.findNavController(addLocationAddressFragment.this).popBackStack();
         });
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SQLiteDBHelper pizzaDriverDB;
-                pizzaDriverDB = new SQLiteDBHelper(getContext());
-                pizzaDriverDB.getWritableDatabase();
-                Log.d("TAG", "onClick: " + placeId);
-                long insert_result_location_address = pizzaDriverDB.insertLocationAddress(placeId, placeName, placeAddress, placeAddressComponents);
+        saveBtn.setOnClickListener(v -> {
+            SQLiteDBHelper pizzaDriverDB;
+            pizzaDriverDB = new SQLiteDBHelper(getContext());
+            pizzaDriverDB.getWritableDatabase();
+            Log.d("TAG", "onClick: " + placeId);
+            long insert_result_location_address = pizzaDriverDB.insertLocationAddress(placeId, placeName, placeAddress, placeAddressComponents);
 
-                if (insert_result_location_address > 0) {
-                    int AddressId = (int) insert_result_location_address;
-                    int SubdivisionId = 0;
-                    if (subDivision.length() > 0) {
-                        String subDivisionText = subDivision.getText().toString();
-                        long insert_subdivision_result = pizzaDriverDB.insertSubDivisionAddress(AddressId, subDivisionText);
-                        if (insert_subdivision_result > 0) {
-                            SubdivisionId = (int) insert_subdivision_result;
-                        } else {
-                            //TODO Toast failed
-                        }
+            if (insert_result_location_address > 0) {
+                int AddressId = (int) insert_result_location_address;
+                int SubdivisionId = 0;
+                if (subDivision.length() > 0) {
+                    String subDivisionText = subDivision.getText().toString();
+                    long insert_subdivision_result = pizzaDriverDB.insertSubDivisionAddress(AddressId, subDivisionText);
+                    if (insert_subdivision_result > 0) {
+                        SubdivisionId = (int) insert_subdivision_result;
+                    } else {
+                        //TODO Toast failed
+                        Log.d("TAG", "Do something here");
                     }
-                    Bundle bundle;
-                    bundle = new Bundle();
-                    bundle.putInt("ADDRESS_ID", AddressId);
-                    bundle.putInt("SUBDIVISION_ID", SubdivisionId);
-                    Log.d("TAG", "Bzz: " + bundle);
-                    NavHostFragment.findNavController(addLocationAddressFragment.this)
-                            .navigate(R.id.action_addLocationAddressFragment_to_LocationDetailFragment, bundle);
-
-                } else {
-                    //TODO check if exists in database otherwise show error.
                 }
+                Bundle bundle;
+                bundle = new Bundle();
+                bundle.putInt("ADDRESS_ID", AddressId);
+                bundle.putInt("SUBDIVISION_ID", SubdivisionId);
+                Log.d("TAG", "Bzz: " + bundle);
+                NavHostFragment.findNavController(addLocationAddressFragment.this)
+                        .navigate(R.id.action_addLocationAddressFragment_to_LocationDetailFragment, bundle);
+
+            } else {
+                //TODO check if exists in database otherwise show error.
+                Log.d("TAG", "Do something here");
             }
         });
 

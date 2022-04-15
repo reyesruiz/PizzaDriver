@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/show_map"
-        android:contentDescription="Map"
+        android:contentDescription="@string/map"
         android:icon="@drawable/ic_outline_map_24"
         android:title="@string/add_location"
         app:showAsAction="ifRoom" />

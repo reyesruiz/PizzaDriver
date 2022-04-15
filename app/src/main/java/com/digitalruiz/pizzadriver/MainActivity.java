@@ -16,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
@@ -39,13 +41,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             workingDate = pizzaDriverDB.getBusinessDayById(BusinessDayId);
         } else {
             Date date = Calendar.getInstance().getTime();
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             workingDate = formatter.format(date);
             Log.d("TAG", "onCreate: First " + workingDate);
             BusinessDayId = pizzaDriverDB.getBusinessDay(workingDate);
-            if (BusinessDayId > 0) {
-
-            } else {
+            if (BusinessDayId <= 0) {
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
                 //Tracy
@@ -71,49 +71,48 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         Bundle bundleAddOrderNumber;
         bundleAddOrderNumber = new Bundle();
 
-        addOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toolbar.setVisibility(View.GONE);
-                String currentFragment = (String) NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment()).getCurrentDestination().getLabel();
+        addOrder.setOnClickListener(v -> {
+            toolbar.setVisibility(View.GONE);
+            String currentFragment = (String) Objects.requireNonNull(NavHostFragment.findNavController(Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment())).getCurrentDestination()).getLabel();
+            Log.d("TAG", "onClick: " + currentFragment);
+            assert currentFragment != null;
+            if (currentFragment.equals("Order List Fragment")) {
                 Log.d("TAG", "onClick: " + currentFragment);
-                if (currentFragment.equals("Order List Fragment")) {
-                    Log.d("TAG", "onClick: " + currentFragment);
-                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_OrderListFragment_to_addOrderNumber, bundleAddOrderNumber);
-                } else if (currentFragment.equals("Summary Fragment")) {
-                    Log.d("TAG", "onClick: " + currentFragment);
-                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_SummaryFragment_to_addOrderNumber, bundleAddOrderNumber);
-                } else {
-                    Log.d("TAG", "onClick: " + "Something Wrong");
-                }
+                NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                        .navigate(R.id.action_OrderListFragment_to_addOrderNumber, bundleAddOrderNumber);
+            } else if (currentFragment.equals("Summary Fragment")) {
+                Log.d("TAG", "onClick: " + currentFragment);
+                NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                        .navigate(R.id.action_SummaryFragment_to_addOrderNumber, bundleAddOrderNumber);
+            } else {
+                Log.d("TAG", "onClick: " + "Something Wrong");
             }
         });
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        String currentFragment = (String) NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment()).getCurrentDestination().getLabel();
-        switch (menuItem.getItemId()) {
-            case R.id.settings:
-                if (currentFragment.equals("Order List Fragment")) {
-                    Log.d("TAG", "onClick: " + currentFragment);
-                    Log.d("TAG", "onMenuItemClick: " + workingDate);
-                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_OrderListFragment_to_selectDateFragment);
-                } else if (currentFragment.equals("Summary Fragment")) {
-                    Log.d("TAG", "onClick: " + currentFragment);
-                    NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
-                            .navigate(R.id.action_SummaryFragment_to_selectDateFragment);
-                } else {
-                    Log.d("TAG", "onClick: " + "Something Wrong");
-                }
-                return true;
-            case R.id.add_location:
-                Intent find_place = new Intent(MainActivity.this, MainLocationsActivity.class);
-                MainActivity.this.startActivity(find_place);
-                return true;
+        String currentFragment = (String) Objects.requireNonNull(NavHostFragment.findNavController(Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment())).getCurrentDestination()).getLabel();
+        int id = menuItem.getItemId();
+        if (id == R.id.settings) {
+            assert currentFragment != null;
+            if (currentFragment.equals("Order List Fragment")) {
+                Log.d("TAG", "onClick: " + currentFragment);
+                Log.d("TAG", "onMenuItemClick: " + workingDate);
+                NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                        .navigate(R.id.action_OrderListFragment_to_selectDateFragment);
+            } else if (currentFragment.equals("Summary Fragment")) {
+                Log.d("TAG", "onClick: " + currentFragment);
+                NavHostFragment.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment())
+                        .navigate(R.id.action_SummaryFragment_to_selectDateFragment);
+            } else {
+                Log.d("TAG", "onClick: " + "Something Wrong");
+            }
+            return true;
+        } else if (id == R.id.add_location) {
+            Intent find_place = new Intent(MainActivity.this, MainLocationsActivity.class);
+            MainActivity.this.startActivity(find_place);
+            return true;
         }
         return false;
     }

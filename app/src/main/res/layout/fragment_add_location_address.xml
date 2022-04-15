@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/subdivisionText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:autofillHints="Apt, Space, Room, etc"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     tools:context=".addLocationAddressFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <TextView
             android:id="@+id/AddressTextViewAdd"
@@ -23,7 +21,7 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Apartment, Unit, Space?" />
+            android:text="@string/apt_space_unit" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,11 +30,12 @@
 
             <EditText
                 android:id="@+id/editTextSubdivision"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Apt, Space, Room, etc"
+                android:hint="@string/apt_space_unit"
+                android:importantForAutofill="no"
                 android:inputType="textPersonName" />
         </LinearLayout>
 
@@ -61,6 +60,5 @@
                 android:text="@string/save" />
 
         </LinearLayout>
-    </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

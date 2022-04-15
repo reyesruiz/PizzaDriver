@@ -6,6 +6,6 @@
     android:orientation="vertical"
     tools:context=".MainLocationsActivity">
 
-    <include layout="@layout/main_locations_coordinator_layout"></include>
+    <include layout="@layout/main_locations_coordinator_layout" />
 
 </LinearLayout>
