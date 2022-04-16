@@ -29,13 +29,23 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LocationDetailsFragment extends Fragment {
 
     SQLiteDBHelper pizzaDriverDB;
     TextView AddressText;
     Spinner SubDivisionSpinner;
+    PlacesClient placesClient;
+    final String apiKey = BuildConfig.API_KEY;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,15 +84,41 @@ public class LocationDetailsFragment extends Fragment {
 
         AddressText.setText(Address);
 
+        String placeId = pizzaDriverDB.getPlaceIdByAddressId(AddressId);
+
+        Places.initialize(getActivity().getApplicationContext(), apiKey);
+        placesClient = Places.createClient(getContext());
+        final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+
+        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
 
         AddressText.setOnClickListener(view12 -> {
-            String placeIdParameter = "place)id:" + AddressId;
-            Uri gmmIntentUri = Uri.parse(placeIdParameter);
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivity(mapIntent);
-            }
+            placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                Place place = response.getPlace();
+                Log.i(TAG, "Place found: " + place.getName());
+                Log.i(TAG, "Place found: " + place.getLatLng());
+                String uriString = "geo:0,0?q=" + Uri.encode(place.getLatLng().latitude + "," + place.getLatLng().longitude + "(" + place.getName() + ")");
+                Uri gmmIntentUri = Uri.parse(uriString);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+                else{
+                    Log.d(TAG, "No google map app found");
+                    startActivity(mapIntent);
+                }
+
+            }).addOnFailureListener((exception) -> {
+                if (exception instanceof ApiException) {
+                    final ApiException apiException = (ApiException) exception;
+                    Log.e(TAG, "Place not found: " + exception.getMessage());
+                    final int statusCode = apiException.getStatusCode();
+                    // TODO: Handle error with given status code.
+                }
+            });
+            String placeIdParameter = "place_id:" + placeId;
+
         });
 
         TableLayout WrapperTable = view.findViewById(R.id.wrapperTableNotes);
