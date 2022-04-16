@@ -484,6 +484,21 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public String getPlaceIdByAddressId(int AddressId) {
+        SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
+        String sql = "SELECT " + GOOGLE_LOCATION_ID + " FROM " + LOCATION_ADDRESSES_TABLE + " WHERE " + ADDRESS_ID + " = " + "'" + AddressId + "'";
+        Cursor cursor = pizza_driver_db.rawQuery(sql, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String PlaceId = cursor.getString(cursor.getColumnIndex(GOOGLE_LOCATION_ID));
+            cursor.close();
+            return PlaceId;
+        } else {
+            cursor.close();
+            return "0";
+        }
+    }
+
     public ArrayList<Integer> getSubDivisionsByAddressID(int AddressID) {
         ArrayList<Integer> array_list = new ArrayList<>();
         SQLiteDatabase pizza_driver_db = this.getReadableDatabase();
