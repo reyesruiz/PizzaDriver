@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.AUTO_COMMIT }}
           ref: ${{ github.event.inputs.git_tag }}
@@ -36,7 +36,7 @@ jobs:
           property: 'VERSION_PATCH'
 
       - name: Access PLACES_API_KEY
-        uses: christian-draeger/write-properties@1.0.1
+        uses: christian-draeger/write-properties@1.1.0
         with:
           path: 'local.properties'
           property: 'places_api_key'
@@ -79,19 +79,19 @@ jobs:
         run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/release/output-metadata.json|sed 's/.apk/.aab/')"
 
       - name: Upload our APK
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{steps.apk_name.outputs.file_name}}
           path: ${{steps.signArtifactApk.outputs.signedReleaseFile}}
 
       - name: Upload our Bundle
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
 
       - name: Upload lint report
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: 'lint-results.html'
           path: app/build/reports/lint-results.html
@@ -102,13 +102,13 @@ jobs:
 
       - name: tag
         id: tag
-        uses: mathieudutour/github-tag-action@v5.6
+        uses: mathieudutour/github-tag-action@v6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.tag_name.outputs.value }}
 
       - name: Create Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.10.0
         with:
           artifacts: ${{steps.signArtifactApk.outputs.signedReleaseFile}}, ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
           token: ${{ secrets.GITHUB_TOKEN }}

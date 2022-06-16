@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.AUTO_COMMIT }}
       - name: version patch
@@ -47,20 +47,20 @@ jobs:
 
       # Not need to update version patch, it will be updated when doing release.
       - name: Update version code
-        uses: christian-draeger/write-properties@1.0.1
+        uses: christian-draeger/write-properties@1.1.0
         with:
           path: 'app/version.properties'
           property: 'VERSION_CODE_NUMBER'
           value: ${{ steps.new_version_code.outputs.value }}
       - name: Update version build
-        uses: christian-draeger/write-properties@1.0.1
+        uses: christian-draeger/write-properties@1.1.0
         with:
           path: 'app/version.properties'
           property: 'VERSION_BUILD'
           value: ${{ steps.new_version_build.outputs.value }}
 
       - name: Access PLACES_API_KEY
-        uses: christian-draeger/write-properties@1.0.1
+        uses: christian-draeger/write-properties@1.1.0
         with:
           path: 'local.properties'
           property: 'places_api_key'
@@ -83,19 +83,19 @@ jobs:
         run: echo "##[set-output name=file_name;]$(jq -r '.elements[].outputFile' app/build/outputs/apk/debug/output-metadata.json|sed 's/.apk/.aab/')"
 
       - name: Upload our APK
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{steps.apk_name.outputs.file_name}}
           path: app/build/outputs/apk/debug/${{steps.apk_name.outputs.file_name}}
 
       - name: Upload our Bundle
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{steps.bundle_name.outputs.file_name}}
           path: app/build/outputs/bundle/debug/${{steps.bundle_name.outputs.file_name}}
 
       - name: Upload lint report
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: 'lint-results.html'
           path: app/build/reports/lint-results.html

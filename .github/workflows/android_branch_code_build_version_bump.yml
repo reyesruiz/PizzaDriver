@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.AUTO_COMMIT }}
 
@@ -37,20 +37,20 @@ jobs:
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
       - name: Update version code
-        uses: christian-draeger/write-properties@1.0.1
+        uses: christian-draeger/write-properties@1.1.0
         with:
           path: 'app/version.properties'
           property: 'VERSION_CODE_NUMBER'
           value: ${{ steps.new_version_code.outputs.value }}
       - name: Update version build
-        uses: christian-draeger/write-properties@1.0.1
+        uses: christian-draeger/write-properties@1.1.0
         with:
           path: 'app/version.properties'
           property: 'VERSION_BUILD'
           value: ${{ steps.new_version_build.outputs.value }}
 
       - name: Push new files back to branch.
-        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        uses: stefanzweifel/git-auto-commit-action@v4.14.1
         with:
           commit_message: "Code and Build version bump, #skip-ci"
           status_options: '--untracked-files=no'

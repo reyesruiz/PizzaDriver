@@ -117,8 +117,6 @@ public class LocationDetailsFragment extends Fragment {
                     // TODO: Handle error with given status code.
                 }
             });
-            String placeIdParameter = "place_id:" + placeId;
-
         });
 
         TableLayout WrapperTable = view.findViewById(R.id.wrapperTableNotes);
