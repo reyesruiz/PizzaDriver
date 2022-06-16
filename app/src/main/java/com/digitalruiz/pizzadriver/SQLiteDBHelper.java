@@ -67,7 +67,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     //Active Business Day Table
     public static final String ACTIVE_BUSINESS_DAY_TABLE = "ActiveBusinessDay";
     public static final String ACTIVE_BUSINESS_DAY_ID = "ActiveBusinessDayId";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -305,6 +305,69 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     contentValues.put(LOCATION_ID, 2);
                     contentValues.put(RATE, "2.50");
                     pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+                }
+            }
+        }
+
+        if (newVersion == 6) {
+
+            ArrayList<String> unique_dates;
+            unique_dates = new ArrayList<>();
+            Cursor res = pizza_driver_db.rawQuery("select distinct " + DATE + " from " + ORDERS_TABLE, null);
+            res.moveToFirst();
+            while (!res.isAfterLast()) {
+                unique_dates.add(res.getString(res.getColumnIndex(DATE)));
+                res.moveToNext();
+            }
+            res.close();
+            ArrayList<Long> unique_dates_list;
+            unique_dates_list = new ArrayList<>();
+            for (final String unique_date : unique_dates) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(BUSINESS_DAY_DATE, unique_date);
+                long row = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
+                unique_dates_list.add(row);
+                contentValues.clear();
+            }
+            for (final Long BusinessDayId : unique_dates_list) {
+                Cursor resDate = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
+                resDate.moveToFirst();
+                String workingDate = resDate.getString(resDate.getColumnIndex(BUSINESS_DAY_DATE));
+                resDate.close();
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date date;
+                try {
+                    date = formatter.parse(workingDate);
+                } catch (ParseException e) {
+                    date = new Date();
+                    e.printStackTrace();
+                }
+                String DateToCheck = "2022-06-15";
+                Date dateToCheck;
+                try {
+                    dateToCheck = formatter.parse(DateToCheck);
+                } catch (ParseException e) {
+                    dateToCheck = new Date();
+                    e.printStackTrace();
+                }
+                // getTime is to get epoch
+                assert date != null;
+                assert dateToCheck != null;
+                if (date.getTime() > dateToCheck.getTime()) {
+                    //Tracy
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
+                    contentValues.put(LOCATION_ID, 1);
+                    contentValues.put(RATE, "2.50");
+                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+                    contentValues.clear();
+                    //Mountain House
+                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
+                    contentValues.put(LOCATION_ID, 2);
+                    contentValues.put(RATE, "3.50");
+                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
+
                 }
             }
         }
