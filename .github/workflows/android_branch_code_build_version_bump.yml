@@ -37,13 +37,13 @@ jobs:
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_build.outputs.value }} + 1" | bc)"
 
       - name: Update version code
-        uses: christian-draeger/write-properties@1.1.0
+        uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
           property: 'VERSION_CODE_NUMBER'
           value: ${{ steps.new_version_code.outputs.value }}
       - name: Update version build
-        uses: christian-draeger/write-properties@1.1.0
+        uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
           property: 'VERSION_BUILD'
