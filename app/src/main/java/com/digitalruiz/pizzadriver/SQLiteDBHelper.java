@@ -310,32 +310,38 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
 
         if (newVersion == 6) {
-
-            ArrayList<String> unique_dates;
-            unique_dates = new ArrayList<>();
-            Cursor res = pizza_driver_db.rawQuery("select distinct " + DATE + " from " + ORDERS_TABLE, null);
+            ArrayList<Long> rate_ids = new ArrayList<>();
+            Cursor res = pizza_driver_db.rawQuery("SELECT RateId FROM Rate", null);
             res.moveToFirst();
             while (!res.isAfterLast()) {
-                unique_dates.add(res.getString(res.getColumnIndex(DATE)));
+                rate_ids.add(res.getLong(res.getColumnIndex(RATE_ID)));
                 res.moveToNext();
             }
             res.close();
-            ArrayList<Long> unique_dates_list;
-            unique_dates_list = new ArrayList<>();
-            for (final String unique_date : unique_dates) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(BUSINESS_DAY_DATE, unique_date);
-                long row = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
-                unique_dates_list.add(row);
-                contentValues.clear();
+
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String DateToCheck = "2022-06-15";
+            Date dateToCheck;
+            try {
+                dateToCheck = formatter.parse(DateToCheck);
+            } catch (ParseException e) {
+                dateToCheck = new Date();
+                e.printStackTrace();
             }
-            for (final Long BusinessDayId : unique_dates_list) {
-                Cursor resDate = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
-                resDate.moveToFirst();
-                String workingDate = resDate.getString(resDate.getColumnIndex(BUSINESS_DAY_DATE));
-                resDate.close();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            // getTime is to get epoch
+
+            assert dateToCheck != null;
+            for (final long rate_id : rate_ids) {
+
+                res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_ID + " FROM " + RATE_TABLE + " WHERE " + RATE_ID +"=" + rate_id, null);
+                res.moveToFirst();
+                long BusinessDayId = res.getLong(res.getColumnIndex(BUSINESS_DAY_ID));
+                res.close();
+                res = pizza_driver_db.rawQuery("SELECT " + DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + "=" + BusinessDayId, null);
+                res.moveToFirst();
+                String workingDate = res.getString(res.getColumnIndex(DATE));
+                res.close();
                 Date date;
                 try {
                     date = formatter.parse(workingDate);
@@ -343,33 +349,31 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     date = new Date();
                     e.printStackTrace();
                 }
-                String DateToCheck = "2022-06-15";
-                Date dateToCheck;
-                try {
-                    dateToCheck = formatter.parse(DateToCheck);
-                } catch (ParseException e) {
-                    dateToCheck = new Date();
-                    e.printStackTrace();
-                }
-                // getTime is to get epoch
                 assert date != null;
-                assert dateToCheck != null;
-                if (date.getTime() > dateToCheck.getTime()) {
-                    //Tracy
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-                    contentValues.put(LOCATION_ID, 1);
-                    contentValues.put(RATE, "2.50");
-                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
-                    contentValues.clear();
-                    //Mountain House
-                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-                    contentValues.put(LOCATION_ID, 2);
-                    contentValues.put(RATE, "3.50");
-                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
 
+                if (date.getTime() > dateToCheck.getTime()) {
+                    res = pizza_driver_db.rawQuery("SELECT " + LOCATION_ID + " FROM " + RATE_TABLE + " WHERE " + RATE_ID + "=" + rate_id, null);
+                    res.moveToFirst();
+                    long locationId = res.getLong(res.getColumnIndex(LOCATION_ID));
+                    res.close();
+                    if (locationId == 1){
+                        //Tracy
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(RATE, "2.50");
+                        int rowUpdated = pizza_driver_db.update(RATE_TABLE, contentValues, RATE_ID + " = ? ", new String[]{String.valueOf(rate_id)});
+                        contentValues.clear();
+                        Log.d("TEST", "rowUpdated: " + rowUpdated);
+                    }
+                    else if (locationId == 2){
+                        //Mountain House
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(RATE, "3.50");
+                        int  rowUpdated = pizza_driver_db.update(RATE_TABLE, contentValues, RATE_ID + " = ? ", new String[]{String.valueOf(rate_id)});
+                        Log.d("TEST", "rowUpdated: " + rowUpdated);
+                    }
                 }
             }
+
         }
     }
 
