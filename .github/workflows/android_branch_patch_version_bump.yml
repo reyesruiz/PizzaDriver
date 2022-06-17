@@ -28,7 +28,7 @@ jobs:
         run: echo "##[set-output name=value;]$(echo "${{ steps.version_patch.outputs.value }} + 1" | bc)"
 
       - name: Update version patch
-        uses: christian-draeger/write-properties@1.1.0
+        uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'app/version.properties'
           property: 'VERSION_PATCH'

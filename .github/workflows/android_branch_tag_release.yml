@@ -108,7 +108,7 @@ jobs:
           custom_tag: ${{ steps.tag_name.outputs.value }}
 
       - name: Create Release
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1.0.1
         with:
           artifacts: ${{steps.signArtifactApk.outputs.signedReleaseFile}}, ${{steps.signArtifactBundle.outputs.signedReleaseFile}}
           token: ${{ secrets.GITHUB_TOKEN }}
