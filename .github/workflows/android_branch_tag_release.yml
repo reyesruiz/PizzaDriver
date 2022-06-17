@@ -36,7 +36,7 @@ jobs:
           property: 'VERSION_PATCH'
 
       - name: Access PLACES_API_KEY
-        uses: christian-draeger/write-properties@1.1.0
+        uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'local.properties'
           property: 'places_api_key'
