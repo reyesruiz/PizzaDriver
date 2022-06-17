@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 BusinessDayId = pizzaDriverDB.insertDate(workingDate);
                 pizzaDriverDB.insertActiveBusinessDay(BusinessDayId);
                 //Tracy
-                pizzaDriverDB.insertRate(BusinessDayId, 1, "2.00");
+                pizzaDriverDB.insertRate(BusinessDayId, 1, "2.50");
                 //Mountain House
-                pizzaDriverDB.insertRate(BusinessDayId, 2, "3.00");
+                pizzaDriverDB.insertRate(BusinessDayId, 2, "3.50");
             }
         }
 
