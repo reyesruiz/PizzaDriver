@@ -72,6 +72,7 @@ public class LocationDetailsFragment extends Fragment {
         SubDivisionSpinner = view.findViewById(R.id.spinnerSubDivision);
 
         Button backToListButton = view.findViewById(R.id.backButton);
+        Button backToOrdersListButton = view.findViewById(R.id.backToMainButton);
         Button addNoteButton = view.findViewById(R.id.AddNoteButton);
         Button buttonAddSub = view.findViewById(R.id.buttonAddSub);
 
@@ -243,6 +244,7 @@ public class LocationDetailsFragment extends Fragment {
 
 
         backToListButton.setOnClickListener(v -> NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_DetailsFragment_to_LocationListFragment));
+        backToOrdersListButton.setOnClickListener(view1 -> NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationListFragment_to_mainActivity));
 
         addNoteButton.setOnClickListener(v -> NavHostFragment.findNavController(LocationDetailsFragment.this).navigate(R.id.action_LocationDetailFragment_to_locationAddNoteFragment, bundle));
 

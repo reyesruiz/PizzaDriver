@@ -17,6 +17,9 @@
             android:id="@+id/action_LocationListFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
         <action
+            android:id="@+id/action_LocationDetailFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
             android:id="@+id/action_LocationListFragment_to_addLocationAddressFragment"
             app:destination="@id/addLocationAddressFragment" />
         <action

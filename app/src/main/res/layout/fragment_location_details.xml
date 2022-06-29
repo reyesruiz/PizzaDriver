@@ -40,12 +40,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back_to_list" />
-
-        <Button
             android:id="@+id/AddNoteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,4 +58,23 @@
         </TableLayout>
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/backToMainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_to_order_list" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_to_list" />
+    </LinearLayout>
+
 </LinearLayout>
+

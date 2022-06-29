@@ -66,6 +66,10 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
             MainLocationsActivity.this.startActivity(settings);
         });
 
+        boolean search_location = Objects.requireNonNull(getIntent().getExtras()).getBoolean("SearchLocation");
+        if (search_location){
+            search_location();
+        }
     }
 
     final ActivityResultLauncher<Intent> ActivityResultLauncher = registerForActivityResult(
@@ -130,20 +134,7 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
         String currentFragment = (String) Objects.requireNonNull(NavHostFragment.findNavController(Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment())).getCurrentDestination()).getLabel();
         int id = menuItem.getItemId();
         if (id == R.id.add_location) {
-            //Tracy and Mountain house
-            RectangularBounds bounds = RectangularBounds.newInstance(
-                    new LatLng(37.638889, -121.619722),
-                    new LatLng(37.858754, -121.286388));
-            // Set the fields to specify which types of place data to return.
-            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS);
-
-            // Start the autocomplete intent.
-            Intent auto_complete_intent = new Autocomplete.IntentBuilder(
-                    AutocompleteActivityMode.FULLSCREEN, fields).setLocationBias(bounds).setTypeFilter(TypeFilter.ADDRESS)
-                    .build(this);
-
-            //TODO work on on this deprecated call
-            ActivityResultLauncher.launch(auto_complete_intent);
+            search_location();
             return true;
         } else if (id == R.id.show_map) {
             assert currentFragment != null;
@@ -156,5 +147,22 @@ public class MainLocationsActivity extends AppCompatActivity implements Toolbar.
             }
         }
         return false;
+    }
+
+    private void search_location() {
+        //Tracy and Mountain house
+        RectangularBounds bounds = RectangularBounds.newInstance(
+                new LatLng(37.638889, -121.619722),
+                new LatLng(37.858754, -121.286388));
+        // Set the fields to specify which types of place data to return.
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS);
+
+        // Start the autocomplete intent.
+        Intent auto_complete_intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields).setLocationBias(bounds).setTypeFilter(TypeFilter.ADDRESS)
+                .build(this);
+
+        //TODO work on on this deprecated call
+        ActivityResultLauncher.launch(auto_complete_intent);
     }
 }
