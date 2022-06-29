@@ -109,8 +109,12 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 Log.d("TAG", "onClick: " + "Something Wrong");
             }
             return true;
-        } else if (id == R.id.add_location) {
+        } else if (id == R.id.search_location) {
+            Bundle bundleSearchLocation;
+            bundleSearchLocation = new Bundle();
+            bundleSearchLocation.putBoolean("SearchLocation", true);
             Intent find_place = new Intent(MainActivity.this, MainLocationsActivity.class);
+            find_place.putExtras(bundleSearchLocation);
             MainActivity.this.startActivity(find_place);
             return true;
         }
