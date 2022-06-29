@@ -60,14 +60,18 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String BUSINESS_DAY_TABLE = "BusinessDay";
     public static final String BUSINESS_DAY_ID = "BusinessDayId";
     public static final String BUSINESS_DAY_DATE = "Date";
+    public static final String BACKUP_BUSINESS_DAY_TABLE = "BackupBusinessDay";
+
     //Rate
     public static final String RATE_TABLE = "Rate";
     public static final String RATE_ID = "RateId";
     public static final String RATE = "Rate";
+    public static final String BACKUP_RATE_TABLE = "BackupRate";
+
     //Active Business Day Table
     public static final String ACTIVE_BUSINESS_DAY_TABLE = "ActiveBusinessDay";
     public static final String ACTIVE_BUSINESS_DAY_ID = "ActiveBusinessDayId";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -142,7 +146,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         pizza_driver_db.execSQL("CREATE TABLE " + BUSINESS_DAY_TABLE + " (" +
                 BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                BUSINESS_DAY_DATE + " STRING NOT NULL UNIQUE " +
+                BUSINESS_DAY_DATE + " TEXT NOT NULL UNIQUE " +
                 ")"
         );
 
@@ -150,7 +154,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 RATE_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 BUSINESS_DAY_ID + " INTEGER NOT NULL, " +
                 LOCATION_ID + " INTEGER NOT NULL, " +
-                RATE + " STRING NOT NULL, " +
+                RATE + " REAL NOT NULL, " +
                 "UNIQUE (" + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + ")" +
                 ")"
         );
@@ -166,214 +170,48 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase pizza_driver_db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + ORDERS_TABLE);
-            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + TIPS_TABLE);
-            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + CASH_ORDERS_TABLE);
-            pizza_driver_db.execSQL("DROP TABLE IF EXISTS " + LOCATIONS_TABLE);
-        }
-        if (newVersion == 3) {
-            pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESSES_TABLE + " (" +
-                    ADDRESS_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                    GOOGLE_LOCATION_ID + " TEXT NOT NULL UNIQUE, " +
-                    ADDRESS_NAME + " TEXT NOT NULL, " +
-                    ADDRESS + " TEXT NOT NULL, " +
-                    ADDRESS_COMPONENTS + " TEXT NOT NULL " +
-                    ")"
-            );
-        }
-        if (newVersion == 4) {
-            pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESS_SUBDIVISION_TABLE + " (" +
-                    SUBDIVISION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                    ADDRESS_ID + " INTEGER NOT NULL, " +
-                    SUBDIVISION + " TEXT NOT NULL, " +
-                    "UNIQUE (" + ADDRESS_ID + "," + SUBDIVISION + ")" +
-                    ")"
-            );
 
-            pizza_driver_db.execSQL("CREATE TABLE " + LOCATION_ADDRESS_NOTES_TABLE + " (" +
-                    NOTE_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                    ADDRESS_ID + " INTEGER NOT NULL, " +
-                    SUBDIVISION_ID + " INTEGER, " +
-                    NOTE + " TEXT NOT NULL, " +
-                    DATE_ADDED + " TEXT NOT NULL" +
-                    ")"
-            );
-        }
-
-        if (newVersion == 5) {
-            pizza_driver_db.execSQL("CREATE TABLE " + BUSINESS_DAY_TABLE + " (" +
+        //App support only from DB version 7 and up.
+        if (newVersion == 7) {
+            pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_BUSINESS_DAY_TABLE + " (" +
                     BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                    BUSINESS_DAY_DATE + " STRING NOT NULL, " +
-                    "UNIQUE (" + BUSINESS_DAY_ID + "," + BUSINESS_DAY_DATE + ")" +
+                    BUSINESS_DAY_DATE + " TEXT NOT NULL UNIQUE " +
                     ")"
             );
-
-            pizza_driver_db.execSQL("CREATE TABLE " + RATE_TABLE + " (" +
+            pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_RATE_TABLE + " (" +
                     RATE_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                     BUSINESS_DAY_ID + " INTEGER NOT NULL, " +
                     LOCATION_ID + " INTEGER NOT NULL, " +
-                    RATE + " STRING NOT NULL, " +
+                    RATE + " REAL NOT NULL, " +
                     "UNIQUE (" + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + ")" +
                     ")"
             );
 
-            pizza_driver_db.execSQL("CREATE TABLE " + ACTIVE_BUSINESS_DAY_TABLE + " (" +
-                    ACTIVE_BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                    BUSINESS_DAY_ID + " INTEGER " +
+            pizza_driver_db.execSQL("INSERT INTO " + BACKUP_BUSINESS_DAY_TABLE + " SELECT " + BUSINESS_DAY_ID + "," + DATE + " FROM " + BUSINESS_DAY_TABLE);
+            pizza_driver_db.execSQL("INSERT INTO " + BACKUP_RATE_TABLE + " SELECT " + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + "," + RATE + " FROM " + RATE_TABLE);
+
+            pizza_driver_db.execSQL("DROP TABLE " + BUSINESS_DAY_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE " + RATE_TABLE);
+
+            pizza_driver_db.execSQL("CREATE TABLE " + BUSINESS_DAY_TABLE + " (" +
+                    BUSINESS_DAY_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    BUSINESS_DAY_DATE + " TEXT NOT NULL UNIQUE " +
+                    ")"
+            );
+            pizza_driver_db.execSQL("CREATE TABLE " + RATE_TABLE + " (" +
+                    RATE_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
+                    BUSINESS_DAY_ID + " INTEGER NOT NULL, " +
+                    LOCATION_ID + " INTEGER NOT NULL, " +
+                    RATE + " REAL NOT NULL, " +
+                    "UNIQUE (" + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + ")" +
                     ")"
             );
 
+            pizza_driver_db.execSQL("INSERT INTO " + BUSINESS_DAY_TABLE + " SELECT " + BUSINESS_DAY_ID + "," + DATE + " FROM " + BACKUP_BUSINESS_DAY_TABLE);
+            pizza_driver_db.execSQL("INSERT INTO " + RATE_TABLE + " SELECT " + RATE_ID + "," + BUSINESS_DAY_ID + "," + LOCATION_ID + "," + RATE + " FROM " + BACKUP_RATE_TABLE);
 
-            pizza_driver_db.execSQL("CREATE TABLE " + BACKUP_LOCATIONS_TABLE + "(" + LOCATION_ID + "," + NAME + ")");
-            pizza_driver_db.execSQL("INSERT INTO " + BACKUP_LOCATIONS_TABLE + " SELECT " + LOCATION_ID + "," + NAME + " FROM " + LOCATIONS_TABLE);
-            pizza_driver_db.execSQL("DROP TABLE " + LOCATIONS_TABLE);
-            pizza_driver_db.execSQL("CREATE TABLE " + LOCATIONS_TABLE + " (" +
-                    LOCATION_ID + " INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
-                    NAME + " TEXT NOT NULL " +
-                    ")");
-            pizza_driver_db.execSQL("INSERT INTO " + LOCATIONS_TABLE + " SELECT " + LOCATION_ID + "," + NAME + " FROM " + BACKUP_LOCATIONS_TABLE);
-            pizza_driver_db.execSQL("DROP TABLE " + BACKUP_LOCATIONS_TABLE);
-
-            ArrayList<String> unique_dates;
-            unique_dates = new ArrayList<>();
-            Cursor res = pizza_driver_db.rawQuery("select distinct " + DATE + " from " + ORDERS_TABLE, null);
-            res.moveToFirst();
-            while (!res.isAfterLast()) {
-                unique_dates.add(res.getString(res.getColumnIndex(DATE)));
-                res.moveToNext();
-            }
-            res.close();
-            ArrayList<Long> unique_dates_list;
-            unique_dates_list = new ArrayList<>();
-            for (final String unique_date : unique_dates) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(BUSINESS_DAY_DATE, unique_date);
-                long row = pizza_driver_db.insert(BUSINESS_DAY_TABLE, null, contentValues);
-                unique_dates_list.add(row);
-                contentValues.clear();
-            }
-            for (final Long BusinessDayId : unique_dates_list) {
-                Cursor resDate = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + " = " + BusinessDayId, null);
-                resDate.moveToFirst();
-                String workingDate = resDate.getString(resDate.getColumnIndex(BUSINESS_DAY_DATE));
-                resDate.close();
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date date;
-                try {
-                    date = formatter.parse(workingDate);
-                } catch (ParseException e) {
-                    date = new Date();
-                    e.printStackTrace();
-                }
-                String DateToCheck = "2022-03-08";
-                Date dateToCheck;
-                try {
-                    dateToCheck = formatter.parse(DateToCheck);
-                } catch (ParseException e) {
-                    dateToCheck = new Date();
-                    e.printStackTrace();
-                }
-                // getTime is to get epoch
-                assert date != null;
-                assert dateToCheck != null;
-                if (date.getTime() > dateToCheck.getTime()) {
-                    //Tracy
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-                    contentValues.put(LOCATION_ID, 1);
-                    contentValues.put(RATE, "2.00");
-                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
-                    contentValues.clear();
-                    //Mountain House
-                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-                    contentValues.put(LOCATION_ID, 2);
-                    contentValues.put(RATE, "3.00");
-                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
-
-                } else {
-                    //Tracy
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-                    contentValues.put(LOCATION_ID, 1);
-                    contentValues.put(RATE, "1.75");
-                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
-                    contentValues.clear();
-                    //Mountain House
-                    contentValues.put(BUSINESS_DAY_ID, BusinessDayId);
-                    contentValues.put(LOCATION_ID, 2);
-                    contentValues.put(RATE, "2.50");
-                    pizza_driver_db.insert(RATE_TABLE, null, contentValues);
-                }
-            }
-        }
-
-        if (newVersion == 6) {
-            ArrayList<Long> rate_ids = new ArrayList<>();
-            Cursor res = pizza_driver_db.rawQuery("SELECT RateId FROM Rate", null);
-            res.moveToFirst();
-            while (!res.isAfterLast()) {
-                rate_ids.add(res.getLong(res.getColumnIndex(RATE_ID)));
-                res.moveToNext();
-            }
-            res.close();
-
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String DateToCheck = "2022-06-15";
-            Date dateToCheck;
-            try {
-                dateToCheck = formatter.parse(DateToCheck);
-            } catch (ParseException e) {
-                dateToCheck = new Date();
-                e.printStackTrace();
-            }
-            // getTime is to get epoch
-
-            assert dateToCheck != null;
-            for (final long rate_id : rate_ids) {
-
-                res = pizza_driver_db.rawQuery("SELECT " + BUSINESS_DAY_ID + " FROM " + RATE_TABLE + " WHERE " + RATE_ID +"=" + rate_id, null);
-                res.moveToFirst();
-                long BusinessDayId = res.getLong(res.getColumnIndex(BUSINESS_DAY_ID));
-                res.close();
-                res = pizza_driver_db.rawQuery("SELECT " + DATE + " FROM " + BUSINESS_DAY_TABLE + " WHERE " + BUSINESS_DAY_ID + "=" + BusinessDayId, null);
-                res.moveToFirst();
-                String workingDate = res.getString(res.getColumnIndex(DATE));
-                res.close();
-                Date date;
-                try {
-                    date = formatter.parse(workingDate);
-                } catch (ParseException e) {
-                    date = new Date();
-                    e.printStackTrace();
-                }
-                assert date != null;
-
-                if (date.getTime() > dateToCheck.getTime()) {
-                    res = pizza_driver_db.rawQuery("SELECT " + LOCATION_ID + " FROM " + RATE_TABLE + " WHERE " + RATE_ID + "=" + rate_id, null);
-                    res.moveToFirst();
-                    long locationId = res.getLong(res.getColumnIndex(LOCATION_ID));
-                    res.close();
-                    if (locationId == 1){
-                        //Tracy
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(RATE, "2.50");
-                        int rowUpdated = pizza_driver_db.update(RATE_TABLE, contentValues, RATE_ID + " = ? ", new String[]{String.valueOf(rate_id)});
-                        contentValues.clear();
-                        Log.d("TEST", "rowUpdated: " + rowUpdated);
-                    }
-                    else if (locationId == 2){
-                        //Mountain House
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(RATE, "3.50");
-                        int  rowUpdated = pizza_driver_db.update(RATE_TABLE, contentValues, RATE_ID + " = ? ", new String[]{String.valueOf(rate_id)});
-                        Log.d("TEST", "rowUpdated: " + rowUpdated);
-                    }
-                }
-            }
-
+            pizza_driver_db.execSQL("DROP TABLE " + BACKUP_BUSINESS_DAY_TABLE);
+            pizza_driver_db.execSQL("DROP TABLE " + BACKUP_RATE_TABLE);
         }
     }
 

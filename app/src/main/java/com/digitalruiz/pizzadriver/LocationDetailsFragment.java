@@ -92,32 +92,30 @@ public class LocationDetailsFragment extends Fragment {
 
         final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
 
-        AddressText.setOnClickListener(view12 -> {
-            placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-                Place place = response.getPlace();
-                Log.i(TAG, "Place found: " + place.getName());
-                Log.i(TAG, "Place found: " + place.getLatLng());
-                String uriString = "geo:0,0?q=" + Uri.encode(place.getLatLng().latitude + "," + place.getLatLng().longitude + "(" + place.getName() + ")");
-                Uri gmmIntentUri = Uri.parse(uriString);
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                }
-                else{
-                    Log.d(TAG, "No google map app found");
-                    startActivity(mapIntent);
-                }
+        AddressText.setOnClickListener(view12 -> placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+            Place place = response.getPlace();
+            Log.i(TAG, "Place found: " + place.getName());
+            Log.i(TAG, "Place found: " + place.getLatLng());
+            String uriString = "geo:0,0?q=" + Uri.encode(place.getLatLng().latitude + "," + place.getLatLng().longitude + "(" + place.getName() + ")");
+            Uri gmmIntentUri = Uri.parse(uriString);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(mapIntent);
+            }
+            else{
+                Log.d(TAG, "No google map app found");
+                startActivity(mapIntent);
+            }
 
-            }).addOnFailureListener((exception) -> {
-                if (exception instanceof ApiException) {
-                    final ApiException apiException = (ApiException) exception;
-                    Log.e(TAG, "Place not found: " + exception.getMessage());
-                    final int statusCode = apiException.getStatusCode();
-                    // TODO: Handle error with given status code.
-                }
-            });
-        });
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                final ApiException apiException = (ApiException) exception;
+                Log.e(TAG, "Place not found: " + exception.getMessage());
+                final int statusCode = apiException.getStatusCode();
+                // TODO: Handle error with given status code.
+            }
+        }));
 
         TableLayout WrapperTable = view.findViewById(R.id.wrapperTableNotes);
         TableRow HeadLine = new TableRow(getContext());
